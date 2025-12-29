@@ -1,4 +1,4 @@
-import { Editor, TldrawFile } from "tldraw";
+import { Editor, TldrawFile, STROKE_SIZES, DefaultSizeStyle, DefaultDashStyle } from "tldraw";
 import * as React from "react";
 import TldrawPlugin from "src/main";
 import { TldrawPluginMetaData } from "src/utils/document";
@@ -93,5 +93,22 @@ export function useTldrawAppEffects({
         editor.user.updateUserPreferences({
             isPasteAtCursorMode: settings.clipboard?.pasteAtCursor
         });
+
+        // Apply stroke settings
+        const strokeSizes = settings.tldrawOptions?.strokeSizes;
+        if (strokeSizes) {
+            STROKE_SIZES.s = strokeSizes.s;
+            STROKE_SIZES.m = strokeSizes.m;
+            STROKE_SIZES.l = strokeSizes.l;
+            STROKE_SIZES.xl = strokeSizes.xl;
+        }
+
+        if (settings.tldrawOptions?.defaultStrokeSize) {
+            editor.setStyleForNextShapes(DefaultSizeStyle, settings.tldrawOptions.defaultStrokeSize);
+        }
+
+        if (settings.tldrawOptions?.defaultStrokeStyle) {
+            editor.setStyleForNextShapes(DefaultDashStyle, settings.tldrawOptions.defaultStrokeStyle);
+        }
     }, [editor, settings]);
 }

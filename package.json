@@ -39,7 +39,7 @@
 		"monkey-around": "^2.3.0",
 		"react": "^18.3.1",
 		"react-dom": "^18.3.1",
-		"tldraw": "^3.15.3",
+		"tldraw": "^4.2.1",
 		"zustand": "^4.3.9"
 	}
 }

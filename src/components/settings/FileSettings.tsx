@@ -1,4 +1,4 @@
-import React, { ComponentPropsWithoutRef, memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import React, { ComponentPropsWithoutRef, memo, useCallback, useEffect, useMemo, useState } from "react";
 import useUserPluginSettings from "src/hooks/useUserPluginSettings";
 import Setting from "./Setting";
 import { validateFolderPath } from "src/obsidian/helpers/app";
@@ -10,7 +10,6 @@ import UserSettingsManager from "src/obsidian/settings/UserSettingsManager";
 import useSettingsManager from "src/hooks/useSettingsManager";
 import { destinationMethods, destinationMethodsRecord } from "src/obsidian/settings/constants";
 import { isValidFrontmatterTag } from "src/obsidian/helpers/front-matter";
-import { pathBasenameNoExt } from "src/utils/path";
 
 const DEFAULT_TAGS = ['tldraw']
 
@@ -103,6 +102,11 @@ function FileSettingsGroup() {
         await settingsManager.updateSettings(settingsManager.settings);
     }, [settingsManager]);
 
+    const onPrefixChanged = useCallback(async (value: string) => {
+        settingsManager.settings.newFilePrefix = value;
+        await settingsManager.updateSettings(settingsManager.settings);
+    }, [settingsManager]);
+
     return (
         <>
             <Setting
@@ -192,42 +196,6 @@ function FileSettingsGroup() {
                     )
                 }}
             />
-            <NewFilePrefix settingsManager={settingsManager} />
-            <NewFileTimeFormat settingsManager={settingsManager} />
-        </>
-    )
-}
-
-function NewFilePrefix({
-    settingsManager,
-}: {
-    settingsManager: UserSettingsManager,
-}) {
-    const settings = useUserPluginSettings(settingsManager);
-
-    const onPrefixChanged = useCallback(async (value: string) => {
-        settingsManager.settings.newFilePrefix = value;
-        await settingsManager.updateSettings(settingsManager.settings);
-    }, [settingsManager]);
-
-    const [previewWithExampleNote, setPreviewWithExampleNote] = useState(true);
-
-    const exampleNote = useRef((() => {
-        const path = 'Path/To/ExampleNote.md';
-        return {
-            path,
-            basename: pathBasenameNoExt(path)
-        }
-    })());
-
-    const previewCreateOptions = useMemo(() => {
-        return ({
-            currentFile: previewWithExampleNote ? exampleNote.current : undefined,
-        });
-    }, [previewWithExampleNote]);
-
-    return (
-        <>
             <Setting
                 slots={{
                     name: 'New file prefix',
@@ -237,48 +205,6 @@ function NewFilePrefix({
                             <code className="ptl-default-code">
                                 {`DEFAULT: [${DEFAULT_SETTINGS.newFilePrefix} ]`}
                             </code>
-                            <div className="ptl-new-file-prefix-template-preview">
-                                <p>
-                                    Preview (filename):
-                                    {/* <input type={'checkbox'} checked={ } */}
-                                    <code>{settingsManager.plugin.createDefaultFilename(previewCreateOptions)}</code>
-                                </p>
-                                <p>
-                                    Available template variables:
-                                </p>
-                                <div className="ptl-new-file-prefix-templates">
-                                    {[
-                                        {
-                                            template: '{{ currentFileBasename }}',
-                                            description: 'The basename of the current active file without extension.',
-                                            children: (
-                                                <>
-                                                    <p>
-                                                        <i>Note: If there is no active file then this variable will evaluate to an empty string.</i>
-                                                    </p>
-                                                    <input type="checkbox"
-                                                        checked={previewWithExampleNote}
-                                                        onChange={(e) => setPreviewWithExampleNote(e.currentTarget.checked)}
-                                                    />
-                                                    <span>Preview with example note ({exampleNote.current.path})</span>
-                                                </>
-                                            )
-                                        }
-                                    ].map(({ template, description, children }) => (
-                                        <div key={template} className="ptl-new-file-prefix-template-item">
-                                            <div className="ptl-new-file-prefix-template-main">
-                                                <code className="ptl-new-file-prefix-template-code">{template}</code>
-                                                <span className="ptl-new-file-prefix-template-description">{description}</span>
-                                            </div>
-                                            {children &&
-                                                <div className="ptl-new-file-prefix-template-children">
-                                                    {children}
-                                                </div>
-                                            }
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
                         </>
                     ),
                     control: (
@@ -292,6 +218,7 @@ function NewFilePrefix({
                     )
                 }}
             />
+            <NewFileTimeFormat settingsManager={settingsManager} />
         </>
     )
 }

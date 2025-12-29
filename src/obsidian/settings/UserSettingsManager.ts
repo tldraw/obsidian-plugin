@@ -36,6 +36,7 @@ export default class UserSettingsManager {
             embeds: embedsDefault,
             fileDestinations: fileDestinationsDefault,
             file: fileDefault,
+            tldrawOptions: tldrawOptionsDefault,
             ...restDefault
         } = DEFAULT_SETTINGS;
         const {
@@ -52,6 +53,17 @@ export default class UserSettingsManager {
             {}, fileDefault, file
         );
 
+
+        const tldrawOptionsMerged = Object.assign({}, tldrawOptionsDefault, tldrawOptions);
+
+        // Ensure toolbarTools is properly initialized (migration for old settings)
+        if (!tldrawOptionsMerged.toolbarTools || !Array.isArray(tldrawOptionsMerged.toolbarTools)) {
+            tldrawOptionsMerged.toolbarTools = [...(tldrawOptionsDefault.toolbarTools || [])] as any;
+        } else if ((tldrawOptionsMerged.toolbarTools as any[]).length === 0) {
+            tldrawOptionsMerged.toolbarTools = [...(tldrawOptionsDefault.toolbarTools || [])] as any;
+        }
+
+
         const fileDestinationsMerged = Object.assign({}, fileDestinationsDefault,
             (() => {
                 // Do not migrate if the the old file destination settings were already migrated.
@@ -61,6 +73,7 @@ export default class UserSettingsManager {
 
                 if (rest.folder !== undefined) {
                     migrated.defaultFolder = rest.folder;
+                    migrated.destinationMethod = 'default-folder';
                 }
 
                 if (rest.assetsFolder !== undefined) {
@@ -70,6 +83,7 @@ export default class UserSettingsManager {
                 if (rest.useAttachmentsFolder !== undefined && rest.useAttachmentsFolder) {
                     migrated.destinationMethod = 'attachments-folder';
                 }
+                return migrated;
             })(),
             fileDestinations,
         );
@@ -81,7 +95,7 @@ export default class UserSettingsManager {
         const settings = {
             embeds: embedsMerged,
             fileDestinations: fileDestinationsMerged,
-            tldrawOptions,
+            tldrawOptions: tldrawOptionsMerged,
             file: fileMerged,
             ...restMerged
         };

@@ -1,23 +1,35 @@
 import * as React from "react";
 import { createRoot } from "react-dom/client";
 import {
-	DefaultMainMenu,
+	STROKE_SIZES, DefaultMainMenu,
 	DefaultMainMenuContent,
 	Editor,
+	Rectangle2d,
 	TLComponents,
 	Tldraw,
 	TldrawEditorStoreProps,
 	TldrawUiMenuItem,
 	TldrawUiMenuSubmenu,
 	TLStateNodeConstructor,
-	TLStoreSnapshot,
 	TLUiAssetUrlOverrides,
 	TLUiEventHandler,
 	TLUiOverrides,
 	useActions,
+	AssetRecordType,
+	StoreSnapshot,
+	TLAssetStore,
+	TLRecord,
+	createTLStore,
+	defaultShapeTools,
+	defaultTools,
+	throttle,
+	uniqueId
 } from "tldraw";
+
+// Mutate the built-in stroke sizes - Moved to useTldrawAppHook
 import { OPEN_FILE_ACTION, SAVE_FILE_COPY_ACTION, SAVE_FILE_COPY_IN_VAULT_ACTION } from "src/utils/file";
 import { PLUGIN_ACTION_TOGGLE_ZOOM_LOCK, uiOverrides } from "src/tldraw/ui-overrides";
+import { CustomToolbar } from "./CustomToolbar";
 import TldrawPlugin from "src/main";
 import { Platform } from "obsidian";
 import { useTldrawAppEffects } from "src/hooks/useTldrawAppHook";
@@ -29,6 +41,8 @@ import { lockZoomIcon } from "src/assets/data-icons";
 import { isObsidianThemeDark } from "src/utils/utils";
 import { TldrawInObsidianPluginProvider } from "src/contexts/plugin";
 import { PTLEditorBlockBlur } from "src/utils/dom-attributes";
+import { LassoSelectTool } from "src/tldraw/tools/lasso-select-tool";
+import LassoOverlays from "./LassoOverlays";
 
 type TldrawAppOptions = {
 	iconAssetUrls?: TLUiAssetUrlOverrides['icons'],
@@ -53,7 +67,7 @@ type TldrawAppOptions = {
 	 * @param snapshot The snapshot that is initially loaded into the editor.
 	 * @returns 
 	 */
-	onInitialSnapshot?: (snapshot: TLStoreSnapshot) => void,
+	onInitialSnapshot?: (snapshot: StoreSnapshot<TLRecord>) => void,
 	/**
 	 * 
 	 * @param event 
@@ -100,6 +114,8 @@ const components = (plugin: TldrawPlugin): TLComponents => ({
 	),
 	KeyboardShortcutsDialog: PluginKeyboardShortcutsDialog,
 	QuickActions: PluginQuickActions,
+	Toolbar: CustomToolbar,
+	Overlays: LassoOverlays,
 });
 
 function LocalFileMenu(props: { plugin: TldrawPlugin }) {
@@ -146,6 +162,7 @@ const TldrawApp = ({ plugin, store,
 		fonts: plugin.getFontOverrides(),
 		icons: {
 			...plugin.getIconOverrides(),
+			...iconAssetUrls,
 			...iconAssetUrls,
 			[PLUGIN_ACTION_TOGGLE_ZOOM_LOCK]: lockZoomIcon
 		},
@@ -196,19 +213,90 @@ const TldrawApp = ({ plugin, store,
 		}
 	}
 
+	const setFocusedEditorForHook = React.useCallback((editor: Editor) => {
+		setFocusedEditor(true, editor);
+	}, [setFocusedEditor]);
+
 	useTldrawAppEffects({
-		editor, initialTool, isReadonly,
-		selectNone,
+		editor,
 		settingsManager: plugin.settingsManager,
+		selectNone,
+		initialTool,
 		onEditorMount,
-		setFocusedEditor: (editor) => setFocusedEditor(true, editor),
+		isReadonly,
+		setFocusedEditor: setFocusedEditorForHook,
 	});
+
+	React.useEffect(() => {
+		if (!editor) return;
+
+		const pointingCanvasState = editor.getStateDescendant('select.pointing_canvas');
+		if (!pointingCanvasState) return;
+
+		const originalOnEnter = pointingCanvasState.onEnter;
+
+		pointingCanvasState.onEnter = function (info) {
+			const selectedShapeIds = editor.getSelectedShapeIds();
+			const selectionBounds = editor.getSelectionPageBounds();
+
+			if (selectedShapeIds.length === 0 || (selectionBounds && !selectionBounds.containsPoint(info.point))) {
+				editor.setCurrentTool('lasso-select');
+				return;
+			}
+
+			originalOnEnter?.call(this, info);
+		};
+
+		return () => {
+			if (originalOnEnter) {
+				pointingCanvasState.onEnter = originalOnEnter;
+			}
+		};
+	}, [editor]);
+
+	// Inject stroke parameters into window for patched getPath
+	React.useEffect(() => {
+		(window as any).tldrawStrokeOptions = plugin.settings.tldrawOptions?.strokeParameters;
+	}, [plugin.settings.tldrawOptions?.strokeParameters]);
+
+	const enabledTools = React.useMemo(() => {
+		const toolbarTools = plugin.settings.tldrawOptions?.toolbarTools;
+		const defaults = [...defaultTools, ...defaultShapeTools];
+
+		// Always include LassoSelectTool
+		const allTools = [...defaults, LassoSelectTool];
+
+		if (!toolbarTools || !Array.isArray(toolbarTools) || toolbarTools.length === 0) {
+			// No settings or empty array - return all tools
+			return allTools;
+		}
+
+		// Create a map for quick access to default tools
+		const toolMap = new Map<string, TLStateNodeConstructor>(defaults.map(t => [t.id, t]));
+		// Add custom tools
+		toolMap.set(LassoSelectTool.id, LassoSelectTool);
+
+		// Map ordered settings to tool definitions
+		const orderedTools: TLStateNodeConstructor[] = [];
+
+		toolbarTools.forEach(setting => {
+			if (setting.enabled) {
+				const tool = toolMap.get(setting.id);
+				if (tool) {
+					orderedTools.push(tool);
+				}
+			}
+		});
+
+		// Fallback to all tools if orderedTools is empty
+		return orderedTools.length > 0 ? orderedTools : allTools;
+	}, [plugin.settings.tldrawOptions?.toolbarTools]);
 
 	const editorContainerRef = useClickAwayListener<HTMLDivElement>({
 		enableClickAwayListener: isFocused,
 		handler(ev) {
 			// We allow event targets to specify if they should block the editor from being blurred.
-			if(PTLEditorBlockBlur.shouldEventBlockBlur(ev)) return;
+			if (PTLEditorBlockBlur.shouldEventBlockBlur(ev)) return;
 
 			const blurEditor = onClickAwayBlur?.(ev);
 			if (blurEditor !== undefined && !blurEditor) return;
@@ -232,9 +320,12 @@ const TldrawApp = ({ plugin, store,
 	 */
 	const fbWorkAroundClassname = React.useMemo(() => {
 		const themeMode = plugin.settings.themeMode;
-		if (themeMode === "dark") return 'tl-theme__dark';
-		else if (themeMode === "light") return;
-		else return !isObsidianThemeDark() ? undefined : 'tl-theme__dark';
+		const classes = [];
+		if (themeMode === "dark") classes.push('tl-theme__dark');
+		else if (themeMode === "light") { }
+		else if (isObsidianThemeDark()) classes.push('tl-theme__dark');
+
+		return classes.join(' ');
 	}, [plugin]);
 
 	return (
@@ -260,8 +351,9 @@ const TldrawApp = ({ plugin, store,
 				components={overridesUiComponents.current}
 				// Set this flag to false when a tldraw document is embed into markdown to prevent it from gaining focus when it is loaded.
 				autoFocus={false}
+				forceMobile={plugin.settings.tldrawOptions?.forceCompactMode}
 				onMount={setAppState}
-				tools={tools}
+				tools={enabledTools}
 				className={fbWorkAroundClassname}
 			/>
 		</div>
