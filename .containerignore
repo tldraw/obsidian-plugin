@@ -1,0 +1,40 @@
+# Container Ignore Datei (analog zu .dockerignore)
+# Verhindert, dass unnötige Dateien in den Build-Kontext kopiert werden
+
+# Git
+.git
+.github
+.gitignore
+
+# Node
+node_modules
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Build Output
+main.js
+styles.css
+*.map
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+
+# Dokumentation
+README.md
+LICENSE
+
+# Container files (nicht in sich selbst kopieren)
+Containerfile
+Dockerfile
+compose.yaml
+docker-compose.yml
+.containerignore
+.dockerignore

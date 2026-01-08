@@ -1,5 +1,6 @@
-import { TldrawFile, TLStore, parseTldrawJsonFile, createTLSchema, JsonObject, UnknownRecord } from "tldraw";
+import { TldrawFile, TLStore, parseTldrawJsonFile, createTLSchema, JsonObject, UnknownRecord, defaultShapeUtils } from "tldraw";
 import { TLData } from "../document";
+import { PdfPageShapeUtil } from "src/tldraw/shapes/PdfPageShapeUtil";
 
 /**
  * Tldraw handles the migration here.
@@ -9,7 +10,9 @@ import { TLData } from "../document";
 export function migrateTldrawFileDataIfNecessary(tldrawFileData: string | TldrawFile): TLStore {
     const res = parseTldrawJsonFile(
         {
-            schema: createTLSchema(),
+            schema: createTLSchema({
+                shapeUtils: [...defaultShapeUtils, PdfPageShapeUtil]
+            }),
             json: typeof tldrawFileData === 'string'
                 ? tldrawFileData
                 : JSON.stringify(tldrawFileData)
@@ -25,7 +28,7 @@ export function migrateTldrawFileDataIfNecessary(tldrawFileData: string | Tldraw
 
 function isJsonUnknownRecord(json: JsonObject): json is JsonObject & UnknownRecord {
     const { id, typeName } = json as Partial<UnknownRecord>;
-    if(id === undefined || typeName === undefined) return false;
+    if (id === undefined || typeName === undefined) return false;
     return true;
 }
 
@@ -37,7 +40,7 @@ function isJsonUnknownRecord(json: JsonObject): json is JsonObject & UnknownReco
 export function tLDataToTLStore(tldata: TLData): TLStore {
     const { tldrawFileFormatVersion, schema, records } = tldata.raw as Partial<TldrawFile>;
 
-    if(tldrawFileFormatVersion && schema && records) {
+    if (tldrawFileFormatVersion && schema && records) {
         return migrateTldrawFileDataIfNecessary({
             tldrawFileFormatVersion, schema, records
         })
@@ -48,15 +51,15 @@ export function tLDataToTLStore(tldata: TLData): TLStore {
     }
 
     const oldRecords = Object.values(tldata.raw ?? {})
-    .filter((e) => e !== undefined && e !== null)
-    .filter((e) => typeof e === 'object')
-    .filter((e): e is JsonObject => !Array.isArray(e))
-    .map((e) => {
-        if(!isJsonUnknownRecord(e)) {
-            throw new Error(`Invalid json object found while parsing: ${e}`)
-        }
-        return e;
-    });
+        .filter((e) => e !== undefined && e !== null)
+        .filter((e) => typeof e === 'object')
+        .filter((e): e is JsonObject => !Array.isArray(e))
+        .map((e) => {
+            if (!isJsonUnknownRecord(e)) {
+                throw new Error(`Invalid json object found while parsing: ${e}`)
+            }
+            return e;
+        });
 
     /**
      * tldrawFileFormatVersion and schema were obtained by exporting a tldr file using tldraw version 2.1.4 and extracting the values.

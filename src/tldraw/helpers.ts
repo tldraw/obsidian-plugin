@@ -10,12 +10,14 @@ export function processInitialData(initialData: TLDataDocument): TLDataDocumentS
 			return initialData;
 		}
 
+		const store = createTLStore({
+			shapeUtils: defaultShapeUtils,
+			initialData: initialData.raw,
+		});
+
 		return {
 			meta: initialData.meta,
-			store: createTLStore({
-				shapeUtils: defaultShapeUtils,
-				initialData: initialData.raw,
-			})
+			store
 		}
 	})();
 

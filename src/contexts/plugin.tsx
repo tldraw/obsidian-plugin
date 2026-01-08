@@ -1,7 +1,7 @@
 import React, {
     createContext, ReactNode, useContext, useMemo
 } from "react";
-import TldrawPlugin from "src/main";
+import type TldrawPlugin from "src/main";
 import TldrawInObsidianPluginInstance from "src/obsidian/plugin/instance";
 
 export const PluginContext = createContext<TldrawInObsidianPluginInstance | undefined>(undefined);
