@@ -94,4 +94,31 @@ export function useTldrawAppEffects({
             isPasteAtCursorMode: settings.clipboard?.pasteAtCursor
         });
     }, [editor, settings]);
+
+    /**
+     * Effect for syncing with Obsidian theme changes
+     */
+    React.useEffect(() => {
+        if (!editor) return;
+
+        const { themeMode } = settingsManager.settings;
+
+        // Sync with Obsidian unless user explicitly set a fixed theme
+        if (themeMode === 'light' || themeMode === 'dark') return;
+
+        // Watch for theme changes on the body element
+        const observer = new MutationObserver(() => {
+            const isDark = isObsidianThemeDark();
+            editor.user.updateUserPreferences({
+                colorScheme: isDark ? 'dark' : 'light',
+            });
+        });
+
+        observer.observe(document.body, {
+            attributes: true,
+            attributeFilter: ['class']
+        });
+
+        return () => observer.disconnect();
+    }, [editor, settingsManager.settings.themeMode]);
 }

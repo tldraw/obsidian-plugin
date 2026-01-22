@@ -1,4 +1,5 @@
-import { createTLStore, TldrawFile, TLStore } from "tldraw"
+import { createTLStore, TldrawFile, TLStore, defaultShapeUtils } from "tldraw"
+import { PdfPageShapeUtil } from "src/tldraw/shapes/PdfPageShapeUtil";
 
 /**
  * 
@@ -6,7 +7,9 @@ import { createTLStore, TldrawFile, TLStore } from "tldraw"
  * @returns 
  */
 export function createRawTldrawFile(store?: TLStore): TldrawFile {
-    store ??= createTLStore();
+	store ??= createTLStore({
+		shapeUtils: [...defaultShapeUtils, PdfPageShapeUtil]
+	});
 	return {
 		tldrawFileFormatVersion: 1,
 		schema: store.schema.serialize(),

@@ -72,7 +72,8 @@
 }
 
 /* OVERRIDING Obsidian's CSS */
-.tldraw-view-root ol > li::marker, .tldraw-view-root ul > li::marker {
+.tldraw-view-root ol>li::marker,
+.tldraw-view-root ul>li::marker {
 	color: inherit;
 }
 
@@ -80,6 +81,7 @@ div[data-type="tldraw-view"] .view-content.tldraw-view-content,
 div[data-type="tldraw-read-only"] .view-content.tldraw-view-content {
 	/* gets rid of the padding so the canvas can bleed against the edges */
 	padding: 0;
+
 	@container style(--status-bar-position: fixed) {
 		/* creates a space at the bottom so that the status bar isn't covering the canvas */
 		padding-bottom: calc(var(--size-4-1) * 2 + var(--status-bar-font-size) + 8px);
@@ -373,7 +375,7 @@ div[data-type="tldraw-read-only"] .view-content.tldraw-view-content {
 }
 
 .ptl-settings-tab-item[data-is-active=false]:hover {
-    background-color: var(--interactive-hover);
+	background-color: var(--interactive-hover);
 }
 
 .ptl-settings-tab-item[data-is-active=true] {
@@ -404,28 +406,178 @@ div[data-type="tldraw-read-only"] .view-content.tldraw-view-content {
 
 /* Copied from tldraw.com */
 .tl-shape[data-shape-type="arrow"] .tl-text {
-    height: max-content;
+	height: max-content;
 }
 
 /* Copied from tldraw.com */
 .tl-shape[data-shape-type="arrow"] .tl-text-label {
-    position: absolute;
-    top: -1px;
-    left: -1px;
-    width: 2px;
-    height: 2px;
-    padding: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    color: var(--tl-color-text);
-    text-shadow: var(--tl-text-outline);
+	position: absolute;
+	top: -1px;
+	left: -1px;
+	width: 2px;
+	height: 2px;
+	padding: 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+	color: var(--tl-color-text);
+	text-shadow: var(--tl-text-outline);
 }
 
 /* Copied from tldraw.com */
 .tl-shape[data-shape-type="arrow"] .tl-text-label__inner {
-    height: max-content;
-    box-sizing: content-box;
-    border-radius: var(--tl-radius-1);
+	height: max-content;
+	box-sizing: content-box;
+	border-radius: var(--tl-radius-1);
+}
+
+/* ==================== PDF Editor Styles ==================== */
+
+.ptl-pdf-editor {
+	position: absolute;
+	inset: 0;
+}
+
+.ptl-pdf-picker {
+	position: absolute;
+	inset: 1rem;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	text-align: center;
+	flex-direction: column;
+	gap: 1rem;
+}
+
+.ptl-pdf-picker button {
+	padding: 0.5rem 1rem;
+	border: none;
+	background: var(--background-secondary);
+	cursor: pointer;
+	font: inherit;
+	border-radius: var(--radius-m);
+}
+
+.ptl-pdf-picker button:hover {
+	opacity: 0.9;
+}
+
+/* Page overlay screen - dims areas outside PDF pages */
+.PageOverlayScreen-screen {
+	pointer-events: none;
+	fill: var(--tl-color-background);
+	fill-opacity: 0.8;
+	stroke: none;
+}
+
+.PageOverlayScreen-outline {
+	position: absolute;
+	pointer-events: none;
+	box-shadow: var(--tl-shadow-2);
+}
+
+/* Dark mode support for PDF pages - targets image shapes with pdf in their ID */
+body.theme-dark .tl-shape[data-shape-type="image"][data-shape-id*="pdf"] {
+	filter: invert(1) hue-rotate(180deg) !important;
+}
+
+/* Export PDF button */
+.ExportPdfButton {
+	font: inherit;
+	background: var(--tl-color-primary);
+	border: none;
+	color: var(--tl-color-selected-contrast);
+	font-size: 1rem;
+	padding: 0.5rem 1rem;
+	border-radius: 6px;
+	margin: 6px;
+	margin-bottom: 0;
+	pointer-events: all;
+	z-index: var(--tl-layer-panels);
+	border: 2px solid var(--tl-color-background);
+	cursor: pointer;
+}
+
+.ExportPdfButton:hover {
+	filter: brightness(1.1);
+}
+
+/* ==================== PDF Import Modal ==================== */
+
+.ptl-pdf-import-modal {
+	padding: 1rem;
+}
+
+.ptl-pdf-import-modal h2 {
+	margin: 0 0 1rem 0;
+}
+
+.ptl-pdf-import-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 0.5rem;
+}
+
+.ptl-pdf-import-header h4 {
+	margin: 0;
+}
+
+.ptl-pdf-import-select-btns {
+	display: flex;
+	gap: 0.5rem;
+}
+
+.ptl-pdf-import-select-btns button {
+	padding: 0.25rem 0.75rem;
+	font-size: 0.8rem;
+}
+
+.ptl-pdf-import-pages {
+	max-height: 200px;
+	overflow-y: auto;
+	border: 1px solid var(--background-modifier-border);
+	border-radius: var(--radius-m);
+	padding: 0.5rem;
+	margin-bottom: 1rem;
+}
+
+.ptl-pdf-import-page-item {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	padding: 0.25rem 0;
+}
+
+.ptl-pdf-import-page-item input[type="checkbox"] {
+	margin: 0;
+}
+
+.ptl-pdf-import-page-size {
+	color: var(--text-muted);
+	font-size: 0.85rem;
+}
+
+.ptl-pdf-import-buttons {
+	display: flex;
+	justify-content: flex-end;
+	gap: 0.5rem;
+	margin-top: 1rem;
+}
+
+.ptl-pdf-import-buttons button {
+	padding: 0.5rem 1rem;
+}
+
+.ptl-pdf-import-range {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	margin-bottom: 0.5rem;
+}
+
+.ptl-pdf-import-range-input {
+	flex: 1;
+	padding: 0.25rem 0.5rem;
 }

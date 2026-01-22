@@ -1,5 +1,5 @@
 import { logFn, TLDRAW_STORES_MANAGER_LOGGING } from "src/utils/logging";
-import { createTLStore, HistoryEntry, TLRecord, TLStore } from "tldraw";
+import { createTLStore, HistoryEntry, TLRecord, TLStore, defaultShapeUtils } from "tldraw";
 
 export type StoreInstanceInfo<T> = {
     instanceId: string,
@@ -188,10 +188,11 @@ export default class TldrawStoresManager<MainData, InstanceData> {
  * @param storeGroup Contains the store to synchronize to
  */
 function createSourceStore<Group extends StoreGroup>(storeGroup: Group): TLStore {
-    const snapshot = storeGroup.main.store.getStoreSnapshot();
     const store = createTLStore({
-        snapshot: snapshot,
+        shapeUtils: defaultShapeUtils,
     });
+
+    store.put(storeGroup.main.store.allRecords());
 
     // NOTE: We want to preserve the assets object that is attached to props, otherwise the context will be lost if provided as a param in createTLStore
     store.props.assets = storeGroup.main.store.props.assets;

@@ -6,6 +6,90 @@ import { DEFAULT_SUPPORTED_IMAGE_TYPES, TLAsset, TLAssetContext, TLAssetStore, T
 import { TldrawStoreIndexedDB } from "./indexeddb-store";
 import { vaultFileToBlob } from "src/obsidian/helpers/vault";
 import { createImageAsset } from "./helpers/create-asset";
+import * as PdfJS from "pdfjs-dist";
+
+// @ts-ignore - imported as text via esbuild loader config
+import pdfWorkerCode from "pdfjs-dist/build/pdf.worker.min.mjs";
+
+// Create a blob URL from the real worker code (only once)
+const workerBlob = new Blob([pdfWorkerCode], { type: 'application/javascript' });
+PdfJS.GlobalWorkerOptions.workerSrc = URL.createObjectURL(workerBlob);
+
+// PDF document cache
+const pdfDocumentCache = new Map<string, Promise<PdfJS.PDFDocumentProxy>>();
+
+// PDF rendered page cache (blob URLs)
+const pdfRenderedCache = new Map<string, string>();
+
+/**
+ * Render a PDF page to a Blob URL
+ */
+async function renderPdfPageToBlob(
+    plugin: TldrawPlugin,
+    pdfPath: string,
+    pageNumber: number,
+    width: number,
+    height: number,
+    dpi: number = 150
+): Promise<string> {
+    const cacheKey = `${pdfPath}#${pageNumber}@${dpi}`;
+
+    // Check cache
+    if (pdfRenderedCache.has(cacheKey)) {
+        return pdfRenderedCache.get(cacheKey)!;
+    }
+
+    // Load PDF document
+    let pdfPromise = pdfDocumentCache.get(pdfPath);
+    if (!pdfPromise) {
+        pdfPromise = (async () => {
+            const file = plugin.app.vault.getAbstractFileByPath(pdfPath);
+            if (!file || !(file instanceof TFile)) {
+                throw new Error(`PDF not found: ${pdfPath}`);
+            }
+            const arrayBuffer = await plugin.app.vault.readBinary(file);
+            return PdfJS.getDocument({ data: new Uint8Array(arrayBuffer) }).promise;
+        })();
+        pdfDocumentCache.set(pdfPath, pdfPromise);
+    }
+
+    const pdf = await pdfPromise;
+    const page = await pdf.getPage(pageNumber);
+
+    // Calculate render scale using DPI (72 DPI = 1x scale in PDF)
+    const baseViewport = page.getViewport({ scale: 1 });
+    const fitScale = Math.min(width / baseViewport.width, height / baseViewport.height);
+    // Convert DPI to scale factor (PDF default is 72 DPI)
+    const dpiScale = dpi / 72;
+    const renderScale = fitScale * dpiScale;
+    const viewport = page.getViewport({ scale: renderScale });
+
+    // Create offscreen canvas
+    const canvas = document.createElement('canvas');
+    canvas.width = viewport.width;
+    canvas.height = viewport.height;
+    const context = canvas.getContext('2d', { alpha: false });
+    if (!context) throw new Error('Failed to get canvas context');
+
+    // White background
+    context.fillStyle = 'white';
+    context.fillRect(0, 0, canvas.width, canvas.height);
+
+    // Render
+    await page.render({ canvasContext: context, viewport }).promise;
+
+    // Convert to blob URL - use JPEG for smaller size and faster rendering
+    const blob = await new Promise<Blob>((resolve, reject) => {
+        canvas.toBlob((b) => b ? resolve(b) : reject(new Error('toBlob failed')), 'image/jpeg', 0.85);
+    });
+    const blobUrl = URL.createObjectURL(blob);
+
+    // Cache it
+    pdfRenderedCache.set(cacheKey, blobUrl);
+
+    return blobUrl;
+}
+
 
 const blockRefAssetPrefix = 'obsidian.blockref.';
 type BlockRefAssetId = `${typeof blockRefAssetPrefix}${string}`;
@@ -181,7 +265,7 @@ export class ObsidianMarkdownFileTLAssetStoreProxy {
         immediatelyCache?: boolean,
     } = {}): Promise<TLImageAsset> {
         const assetBlob = await vaultFileToBlob(assetFile);
-        
+
         if (!(DEFAULT_SUPPORTED_IMAGE_TYPES as readonly string[]).includes(assetBlob.type)) {
             throw new Error(`Expected an image mime-type, got ${assetBlob.type}`, {
                 cause: {
@@ -221,7 +305,7 @@ export class ObsidianMarkdownFileTLAssetStoreProxy {
                 },
             });
         } finally {
-            if(!immediatelyCache) {
+            if (!immediatelyCache) {
                 // We only needed the object url for getting the width and height.
                 URL.revokeObjectURL(assetUri);
             }
@@ -278,6 +362,46 @@ export class ObsidianTLAssetStore implements TLAssetStore {
     async resolve(asset: TLAsset, ctx: TLAssetContext): Promise<null | string> {
         const assetSrc = asset.props.src;
         if (!assetSrc) return null;
+
+        // Handle PDF asset: asset:pdf.[[wikilink]]#pageNumber or asset:pdf.path#pageNumber
+        if (assetSrc.startsWith('asset:pdf.')) {
+            try {
+                const rest = assetSrc.slice(10); // Remove "asset:pdf."
+                const hashIndex = rest.lastIndexOf('#');
+                let pdfRef = hashIndex >= 0 ? rest.slice(0, hashIndex) : rest;
+                const pageNumber = hashIndex >= 0 ? parseInt(rest.slice(hashIndex + 1)) || 1 : 1;
+
+                // Check if it's a WikiLink format [[name]]
+                let pdfPath: string;
+                const wikiLinkMatch = pdfRef.match(/^\[\[(.+?)\]\]$/);
+                if (wikiLinkMatch) {
+                    // Resolve WikiLink using Obsidian's metadataCache
+                    const linkName = wikiLinkMatch[1];
+                    const plugin = this.proxy['plugin'];
+                    // Use the Tldraw file's path as source for relative resolution
+                    const sourcePath = this.proxy['tFile']?.path || '';
+                    const resolvedFile = plugin.app.metadataCache.getFirstLinkpathDest(linkName, sourcePath);
+                    if (!resolvedFile) {
+                        console.error('[PDF Resolve] WikiLink not found:', linkName);
+                        return null;
+                    }
+                    pdfPath = resolvedFile.path;
+                } else {
+                    // Direct path format
+                    pdfPath = pdfRef;
+                }
+
+                // Get dimensions and DPI from asset
+                const w = (asset.props as any).w || 595;
+                const h = (asset.props as any).h || 842;
+                const dpi = (asset.meta as any)?.dpi || 150;
+
+                return await renderPdfPageToBlob(this.proxy['plugin'], pdfPath, pageNumber, w, h, dpi);
+            } catch (err) {
+                console.error('[PDF Resolve] Error:', err);
+                return null;
+            }
+        }
 
         if (!assetSrc.startsWith('asset:')) return assetSrc;
 

@@ -1,0 +1,27 @@
+# Podman Compose / Docker Compose für tldraw-in-obsidian Entwicklung
+# Verwendung: podman-compose up
+#             ODER: podman compose up
+
+services:
+  dev:
+    build:
+      context: .
+      dockerfile: Containerfile
+    container_name: tldraw-dev
+    volumes:
+      # Source code mounten für Hot-Reload
+      - .:/app:Z
+      # node_modules im Container belassen (Performance)
+      - node_modules:/app/node_modules
+    ports:
+      - "3000:3000"
+    # Interaktives Terminal für Entwicklung
+    stdin_open: true
+    tty: true
+    # Automatisch neu starten falls Container abstürzt
+    restart: unless-stopped
+    # Befehl: npm run dev
+    command: npm run dev
+
+volumes:
+  node_modules:

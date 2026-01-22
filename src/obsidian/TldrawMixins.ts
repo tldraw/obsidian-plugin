@@ -100,7 +100,7 @@ export function TldrawLoadableMixin<T extends abstract new (...args: any[]) => F
                         editor.navigateToDeepLink(this.#deepLink);
                         return;
                     }
-                    return editor.zoomToFit();
+                    return editor.resetZoom();
                 }
             };
         }
