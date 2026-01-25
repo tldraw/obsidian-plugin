@@ -44,7 +44,7 @@ function shouldShowSuggestions(suggestionTextShape: TLTextShape) {
 const TextSuggestions = track(() => {
     const editor = useEditor()
     const app = useObsidian();
-    const inputSuggestRef = useRef<TldrawTipTapInputSuggest>();
+    const inputSuggestRef = useRef<TldrawTipTapInputSuggest | null>(null);
     const [portals, setPortals] = useState<ReactPortal[]>([]);
 
     const editingShapeId = editor.getEditingShapeId();
@@ -64,7 +64,7 @@ const TextSuggestions = track(() => {
                 tipTap.view.dom !== inputSuggestRef.current?.contentEditable
             ) {
                 inputSuggestRef.current?.close();
-                inputSuggestRef.current = undefined;
+                inputSuggestRef.current = null;
             }
 
             if (!shouldShowSuggestions(next as TLTextShape)) return;
@@ -73,7 +73,7 @@ const TextSuggestions = track(() => {
                 !tipTap ||
                 // To satisfy Obsidian API type definition we check the instance type.
                 !tipTap.view.dom.instanceOf(HTMLDivElement)
-            ) ? undefined : inputSuggestRef.current ??= (
+            ) ? null : inputSuggestRef.current ??= (
                 // We assume user is actually entering text at this point
                 new TldrawTipTapInputSuggest(
                     app,

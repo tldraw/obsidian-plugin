@@ -1,10 +1,11 @@
 import { MarkdownRenderChild, TFile } from "obsidian";
 import BoundsTool from "src/components/BoundsTool";
 import BoundsToolSelectedShapeIndicator from "src/components/BoundsToolSelectedShapesIndicator";
-import EmbedTldrawToolBar from "src/components/EmbedTldrawToolBar";
+
 import TldrawApp from "src/components/TldrawApp";
 import TldrawPlugin from "src/main";
 import BoundsSelectorTool from "src/tldraw/tools/bounds-selector-tool";
+import { LassoSelectTool } from "src/tldraw/tools/lasso-select-tool";
 import { ImageViewModeOptions, ViewMode } from "../../helpers/TldrawAppEmbedViewController";
 import { BoxLike, createDeepLinkString, Editor, TLDeepLink, TLPageId } from "tldraw";
 import TLDataDocumentStoreManager from "../../plugin/TLDataDocumentStoreManager";
@@ -20,6 +21,7 @@ import { MarkdownEmbed } from "../../markdown-embed";
 import deepLinkListener from "./deep-link-listener";
 import toPageId from "src/tldraw/helpers/string-to-page-id";
 import InFrontOfTheCanvas from "src/components/InFrontOfTheCanvas";
+import LassoOverlays from "src/components/LassoOverlays";
 
 const boundsSelectorToolIconName = `tool-${BoundsSelectorTool.id}`;
 
@@ -140,8 +142,9 @@ export class TldrawMarkdownRenderChild extends MarkdownRenderChild {
                             children: createElement(BoundsTool)
                         })
                     ),
+                    Overlays: LassoOverlays,
                     OnTheCanvas: BoundsToolSelectedShapeIndicator,
-                    Toolbar: EmbedTldrawToolBar,
+
                 },
                 selectNone: true,
                 iconAssetUrls: {
@@ -176,6 +179,7 @@ export class TldrawMarkdownRenderChild extends MarkdownRenderChild {
                             }))(pageId.substring(5), bounds)
                         },
                     }),
+                    LassoSelectTool,
                 ],
                 uiOverrides: {
                     tools: (editor, tools, _) => {
@@ -189,7 +193,16 @@ export class TldrawMarkdownRenderChild extends MarkdownRenderChild {
                                 onSelect(_) {
                                     editor.setCurrentTool(BoundsSelectorTool.id)
                                 },
-                            }
+                            },
+                            ['lasso-select']: {
+                                id: 'lasso-select',
+                                icon: 'tool-select',
+                                label: 'Lasso Select',
+                                kbd: 'w',
+                                onSelect: () => {
+                                    editor.setCurrentTool('lasso-select')
+                                },
+                            },
                         }
                     },
                 },

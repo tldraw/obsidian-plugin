@@ -1,0 +1,694 @@
+diff --git a/node_modules/tldraw/LICENSE.md b/node_modules/tldraw/LICENSE.md
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/README.md b/node_modules/tldraw/README.md
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/index.d.ts b/node_modules/tldraw/dist-cjs/index.d.ts
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/index.js b/node_modules/tldraw/dist-cjs/index.js
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/index.js.map b/node_modules/tldraw/dist-cjs/index.js.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/Tldraw.js b/node_modules/tldraw/dist-cjs/lib/Tldraw.js
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/Tldraw.js.map b/node_modules/tldraw/dist-cjs/lib/Tldraw.js.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/TldrawImage.js b/node_modules/tldraw/dist-cjs/lib/TldrawImage.js
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/TldrawImage.js.map b/node_modules/tldraw/dist-cjs/lib/TldrawImage.js.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/bindings/arrow/ArrowBindingUtil.js b/node_modules/tldraw/dist-cjs/lib/bindings/arrow/ArrowBindingUtil.js
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/bindings/arrow/ArrowBindingUtil.js.map b/node_modules/tldraw/dist-cjs/lib/bindings/arrow/ArrowBindingUtil.js.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/canvas/TldrawCropHandles.js b/node_modules/tldraw/dist-cjs/lib/canvas/TldrawCropHandles.js
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/canvas/TldrawCropHandles.js.map b/node_modules/tldraw/dist-cjs/lib/canvas/TldrawCropHandles.js.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/canvas/TldrawHandles.js b/node_modules/tldraw/dist-cjs/lib/canvas/TldrawHandles.js
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/canvas/TldrawHandles.js.map b/node_modules/tldraw/dist-cjs/lib/canvas/TldrawHandles.js.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/canvas/TldrawOverlays.js b/node_modules/tldraw/dist-cjs/lib/canvas/TldrawOverlays.js
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/canvas/TldrawOverlays.js.map b/node_modules/tldraw/dist-cjs/lib/canvas/TldrawOverlays.js.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/canvas/TldrawScribble.js b/node_modules/tldraw/dist-cjs/lib/canvas/TldrawScribble.js
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/canvas/TldrawScribble.js.map b/node_modules/tldraw/dist-cjs/lib/canvas/TldrawScribble.js.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/canvas/TldrawSelectionForeground.js b/node_modules/tldraw/dist-cjs/lib/canvas/TldrawSelectionForeground.js
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/canvas/TldrawSelectionForeground.js.map b/node_modules/tldraw/dist-cjs/lib/canvas/TldrawSelectionForeground.js.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/canvas/TldrawShapeIndicators.js b/node_modules/tldraw/dist-cjs/lib/canvas/TldrawShapeIndicators.js
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/canvas/TldrawShapeIndicators.js.map b/node_modules/tldraw/dist-cjs/lib/canvas/TldrawShapeIndicators.js.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/defaultBindingUtils.js b/node_modules/tldraw/dist-cjs/lib/defaultBindingUtils.js
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/defaultBindingUtils.js.map b/node_modules/tldraw/dist-cjs/lib/defaultBindingUtils.js.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/defaultEmbedDefinitions.js b/node_modules/tldraw/dist-cjs/lib/defaultEmbedDefinitions.js
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/defaultEmbedDefinitions.js.map b/node_modules/tldraw/dist-cjs/lib/defaultEmbedDefinitions.js.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/defaultExternalContentHandlers.js b/node_modules/tldraw/dist-cjs/lib/defaultExternalContentHandlers.js
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/defaultExternalContentHandlers.js.map b/node_modules/tldraw/dist-cjs/lib/defaultExternalContentHandlers.js.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/defaultShapeTools.js b/node_modules/tldraw/dist-cjs/lib/defaultShapeTools.js
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/defaultShapeTools.js.map b/node_modules/tldraw/dist-cjs/lib/defaultShapeTools.js.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/defaultShapeUtils.js b/node_modules/tldraw/dist-cjs/lib/defaultShapeUtils.js
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/defaultShapeUtils.js.map b/node_modules/tldraw/dist-cjs/lib/defaultShapeUtils.js.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/defaultSideEffects.js b/node_modules/tldraw/dist-cjs/lib/defaultSideEffects.js
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/defaultSideEffects.js.map b/node_modules/tldraw/dist-cjs/lib/defaultSideEffects.js.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/defaultTools.js b/node_modules/tldraw/dist-cjs/lib/defaultTools.js
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/defaultTools.js.map b/node_modules/tldraw/dist-cjs/lib/defaultTools.js.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/arrow/ArrowPath.js b/node_modules/tldraw/dist-cjs/lib/shapes/arrow/ArrowPath.js
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/arrow/ArrowPath.js.map b/node_modules/tldraw/dist-cjs/lib/shapes/arrow/ArrowPath.js.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/arrow/ArrowShapeTool.js b/node_modules/tldraw/dist-cjs/lib/shapes/arrow/ArrowShapeTool.js
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/arrow/ArrowShapeTool.js.map b/node_modules/tldraw/dist-cjs/lib/shapes/arrow/ArrowShapeTool.js.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/arrow/ArrowShapeUtil.js b/node_modules/tldraw/dist-cjs/lib/shapes/arrow/ArrowShapeUtil.js
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/arrow/ArrowShapeUtil.js.map b/node_modules/tldraw/dist-cjs/lib/shapes/arrow/ArrowShapeUtil.js.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/arrow/arrow-types.js b/node_modules/tldraw/dist-cjs/lib/shapes/arrow/arrow-types.js
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/arrow/arrow-types.js.map b/node_modules/tldraw/dist-cjs/lib/shapes/arrow/arrow-types.js.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/arrow/arrowLabel.js b/node_modules/tldraw/dist-cjs/lib/shapes/arrow/arrowLabel.js
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/arrow/arrowLabel.js.map b/node_modules/tldraw/dist-cjs/lib/shapes/arrow/arrowLabel.js.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/arrow/arrowTargetState.js b/node_modules/tldraw/dist-cjs/lib/shapes/arrow/arrowTargetState.js
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/arrow/arrowTargetState.js.map b/node_modules/tldraw/dist-cjs/lib/shapes/arrow/arrowTargetState.js.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/arrow/arrowheads.js b/node_modules/tldraw/dist-cjs/lib/shapes/arrow/arrowheads.js
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/arrow/arrowheads.js.map b/node_modules/tldraw/dist-cjs/lib/shapes/arrow/arrowheads.js.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/arrow/curved-arrow.js b/node_modules/tldraw/dist-cjs/lib/shapes/arrow/curved-arrow.js
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/arrow/curved-arrow.js.map b/node_modules/tldraw/dist-cjs/lib/shapes/arrow/curved-arrow.js.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/arrow/elbow/ElbowArrowDebug.js b/node_modules/tldraw/dist-cjs/lib/shapes/arrow/elbow/ElbowArrowDebug.js
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/arrow/elbow/ElbowArrowDebug.js.map b/node_modules/tldraw/dist-cjs/lib/shapes/arrow/elbow/ElbowArrowDebug.js.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/arrow/elbow/definitions.js b/node_modules/tldraw/dist-cjs/lib/shapes/arrow/elbow/definitions.js
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/arrow/elbow/definitions.js.map b/node_modules/tldraw/dist-cjs/lib/shapes/arrow/elbow/definitions.js.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/arrow/elbow/elbowArrowSnapLines.js b/node_modules/tldraw/dist-cjs/lib/shapes/arrow/elbow/elbowArrowSnapLines.js
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/arrow/elbow/elbowArrowSnapLines.js.map b/node_modules/tldraw/dist-cjs/lib/shapes/arrow/elbow/elbowArrowSnapLines.js.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/arrow/elbow/getElbowArrowInfo.js b/node_modules/tldraw/dist-cjs/lib/shapes/arrow/elbow/getElbowArrowInfo.js
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/arrow/elbow/getElbowArrowInfo.js.map b/node_modules/tldraw/dist-cjs/lib/shapes/arrow/elbow/getElbowArrowInfo.js.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/arrow/elbow/range.js b/node_modules/tldraw/dist-cjs/lib/shapes/arrow/elbow/range.js
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/arrow/elbow/range.js.map b/node_modules/tldraw/dist-cjs/lib/shapes/arrow/elbow/range.js.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/arrow/elbow/routes/ElbowArrowRouteBuilder.js b/node_modules/tldraw/dist-cjs/lib/shapes/arrow/elbow/routes/ElbowArrowRouteBuilder.js
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/arrow/elbow/routes/ElbowArrowRouteBuilder.js.map b/node_modules/tldraw/dist-cjs/lib/shapes/arrow/elbow/routes/ElbowArrowRouteBuilder.js.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/arrow/elbow/routes/ElbowArrowWorkingInfo.js b/node_modules/tldraw/dist-cjs/lib/shapes/arrow/elbow/routes/ElbowArrowWorkingInfo.js
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/arrow/elbow/routes/ElbowArrowWorkingInfo.js.map b/node_modules/tldraw/dist-cjs/lib/shapes/arrow/elbow/routes/ElbowArrowWorkingInfo.js.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/arrow/elbow/routes/elbowArrowRoutes.js b/node_modules/tldraw/dist-cjs/lib/shapes/arrow/elbow/routes/elbowArrowRoutes.js
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/arrow/elbow/routes/elbowArrowRoutes.js.map b/node_modules/tldraw/dist-cjs/lib/shapes/arrow/elbow/routes/elbowArrowRoutes.js.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/arrow/elbow/routes/routeArrowWithAutoEdgePicking.js b/node_modules/tldraw/dist-cjs/lib/shapes/arrow/elbow/routes/routeArrowWithAutoEdgePicking.js
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/arrow/elbow/routes/routeArrowWithAutoEdgePicking.js.map b/node_modules/tldraw/dist-cjs/lib/shapes/arrow/elbow/routes/routeArrowWithAutoEdgePicking.js.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/arrow/shared.js b/node_modules/tldraw/dist-cjs/lib/shapes/arrow/shared.js
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/arrow/shared.js.map b/node_modules/tldraw/dist-cjs/lib/shapes/arrow/shared.js.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/arrow/straight-arrow.js b/node_modules/tldraw/dist-cjs/lib/shapes/arrow/straight-arrow.js
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/arrow/straight-arrow.js.map b/node_modules/tldraw/dist-cjs/lib/shapes/arrow/straight-arrow.js.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/arrow/toolStates/Idle.js b/node_modules/tldraw/dist-cjs/lib/shapes/arrow/toolStates/Idle.js
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/arrow/toolStates/Idle.js.map b/node_modules/tldraw/dist-cjs/lib/shapes/arrow/toolStates/Idle.js.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/arrow/toolStates/Pointing.js b/node_modules/tldraw/dist-cjs/lib/shapes/arrow/toolStates/Pointing.js
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/arrow/toolStates/Pointing.js.map b/node_modules/tldraw/dist-cjs/lib/shapes/arrow/toolStates/Pointing.js.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/bookmark/BookmarkShapeUtil.js b/node_modules/tldraw/dist-cjs/lib/shapes/bookmark/BookmarkShapeUtil.js
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/bookmark/BookmarkShapeUtil.js.map b/node_modules/tldraw/dist-cjs/lib/shapes/bookmark/BookmarkShapeUtil.js.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/bookmark/bookmarks.js b/node_modules/tldraw/dist-cjs/lib/shapes/bookmark/bookmarks.js
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/bookmark/bookmarks.js.map b/node_modules/tldraw/dist-cjs/lib/shapes/bookmark/bookmarks.js.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/draw/DrawShapeTool.js b/node_modules/tldraw/dist-cjs/lib/shapes/draw/DrawShapeTool.js
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/draw/DrawShapeTool.js.map b/node_modules/tldraw/dist-cjs/lib/shapes/draw/DrawShapeTool.js.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/draw/DrawShapeUtil.js b/node_modules/tldraw/dist-cjs/lib/shapes/draw/DrawShapeUtil.js
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/draw/DrawShapeUtil.js.map b/node_modules/tldraw/dist-cjs/lib/shapes/draw/DrawShapeUtil.js.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/draw/getPath.js b/node_modules/tldraw/dist-cjs/lib/shapes/draw/getPath.js
+old mode 100644
+new mode 100755
+index 502a3d2..cd11bb0
+--- a/node_modules/tldraw/dist-cjs/lib/shapes/draw/getPath.js
++++ b/node_modules/tldraw/dist-cjs/lib/shapes/draw/getPath.js
+@@ -33,7 +33,7 @@ const simulatePressureSettings = (strokeWidth) => {
+     thinning: 0.5,
+     streamline: (0, import_editor.modulate)(strokeWidth, [9, 16], [0.64, 0.74], true),
+     // 0.62 + ((1 + strokeWidth) / 8) * 0.06,
+-    smoothing: 0.62,
++    smoothing: 0,
+     easing: import_editor.EASINGS.easeOutSine,
+     simulatePressure: true
+   };
+@@ -43,7 +43,7 @@ const realPressureSettings = (strokeWidth) => {
+     size: 1 + strokeWidth * 1.2,
+     thinning: 0.62,
+     streamline: 0.62,
+-    smoothing: 0.62,
++    smoothing: 0,
+     simulatePressure: false,
+     easing: PEN_EASING
+   };
+@@ -54,7 +54,7 @@ const solidSettings = (strokeWidth) => {
+     thinning: 0,
+     streamline: (0, import_editor.modulate)(strokeWidth, [9, 16], [0.64, 0.74], true),
+     // 0.62 + ((1 + strokeWidth) / 8) * 0.06,
+-    smoothing: 0.62,
++    smoothing: 0,
+     simulatePressure: false,
+     easing: import_editor.EASINGS.linear
+   };
+@@ -64,7 +64,7 @@ const solidRealPressureSettings = (strokeWidth) => {
+     size: strokeWidth,
+     thinning: 0,
+     streamline: 0.62,
+-    smoothing: 0.62,
++    smoothing: 0,
+     simulatePressure: false,
+     easing: import_editor.EASINGS.linear
+   };
+@@ -77,7 +77,7 @@ function getHighlightFreehandSettings({
+     size: 1 + strokeWidth,
+     thinning: 0,
+     streamline: 0.5,
+-    smoothing: 0.5,
++    smoothing: 0,
+     simulatePressure: false,
+     easing: import_editor.EASINGS.easeOutSine,
+     last: showAsComplete
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/draw/getPath.js.map b/node_modules/tldraw/dist-cjs/lib/shapes/draw/getPath.js.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/draw/toolStates/Drawing.js b/node_modules/tldraw/dist-cjs/lib/shapes/draw/toolStates/Drawing.js
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/draw/toolStates/Drawing.js.map b/node_modules/tldraw/dist-cjs/lib/shapes/draw/toolStates/Drawing.js.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/draw/toolStates/Idle.js b/node_modules/tldraw/dist-cjs/lib/shapes/draw/toolStates/Idle.js
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/draw/toolStates/Idle.js.map b/node_modules/tldraw/dist-cjs/lib/shapes/draw/toolStates/Idle.js.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/embed/EmbedShapeUtil.js b/node_modules/tldraw/dist-cjs/lib/shapes/embed/EmbedShapeUtil.js
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/embed/EmbedShapeUtil.js.map b/node_modules/tldraw/dist-cjs/lib/shapes/embed/EmbedShapeUtil.js.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/frame/FrameShapeTool.js b/node_modules/tldraw/dist-cjs/lib/shapes/frame/FrameShapeTool.js
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/frame/FrameShapeTool.js.map b/node_modules/tldraw/dist-cjs/lib/shapes/frame/FrameShapeTool.js.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/frame/FrameShapeUtil.js b/node_modules/tldraw/dist-cjs/lib/shapes/frame/FrameShapeUtil.js
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/frame/FrameShapeUtil.js.map b/node_modules/tldraw/dist-cjs/lib/shapes/frame/FrameShapeUtil.js.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/frame/components/FrameHeading.js b/node_modules/tldraw/dist-cjs/lib/shapes/frame/components/FrameHeading.js
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/frame/components/FrameHeading.js.map b/node_modules/tldraw/dist-cjs/lib/shapes/frame/components/FrameHeading.js.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/frame/components/FrameLabelInput.js b/node_modules/tldraw/dist-cjs/lib/shapes/frame/components/FrameLabelInput.js
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/frame/components/FrameLabelInput.js.map b/node_modules/tldraw/dist-cjs/lib/shapes/frame/components/FrameLabelInput.js.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/frame/frameHelpers.js b/node_modules/tldraw/dist-cjs/lib/shapes/frame/frameHelpers.js
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/frame/frameHelpers.js.map b/node_modules/tldraw/dist-cjs/lib/shapes/frame/frameHelpers.js.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/geo/GeoShapeTool.js b/node_modules/tldraw/dist-cjs/lib/shapes/geo/GeoShapeTool.js
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/geo/GeoShapeTool.js.map b/node_modules/tldraw/dist-cjs/lib/shapes/geo/GeoShapeTool.js.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/geo/GeoShapeUtil.js b/node_modules/tldraw/dist-cjs/lib/shapes/geo/GeoShapeUtil.js
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/geo/GeoShapeUtil.js.map b/node_modules/tldraw/dist-cjs/lib/shapes/geo/GeoShapeUtil.js.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/geo/components/GeoShapeBody.js b/node_modules/tldraw/dist-cjs/lib/shapes/geo/components/GeoShapeBody.js
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/geo/components/GeoShapeBody.js.map b/node_modules/tldraw/dist-cjs/lib/shapes/geo/components/GeoShapeBody.js.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/geo/getGeoShapePath.js b/node_modules/tldraw/dist-cjs/lib/shapes/geo/getGeoShapePath.js
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/geo/getGeoShapePath.js.map b/node_modules/tldraw/dist-cjs/lib/shapes/geo/getGeoShapePath.js.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/geo/toolStates/Idle.js b/node_modules/tldraw/dist-cjs/lib/shapes/geo/toolStates/Idle.js
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/geo/toolStates/Idle.js.map b/node_modules/tldraw/dist-cjs/lib/shapes/geo/toolStates/Idle.js.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/geo/toolStates/Pointing.js b/node_modules/tldraw/dist-cjs/lib/shapes/geo/toolStates/Pointing.js
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/geo/toolStates/Pointing.js.map b/node_modules/tldraw/dist-cjs/lib/shapes/geo/toolStates/Pointing.js.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/highlight/HighlightShapeTool.js b/node_modules/tldraw/dist-cjs/lib/shapes/highlight/HighlightShapeTool.js
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/highlight/HighlightShapeTool.js.map b/node_modules/tldraw/dist-cjs/lib/shapes/highlight/HighlightShapeTool.js.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/highlight/HighlightShapeUtil.js b/node_modules/tldraw/dist-cjs/lib/shapes/highlight/HighlightShapeUtil.js
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/highlight/HighlightShapeUtil.js.map b/node_modules/tldraw/dist-cjs/lib/shapes/highlight/HighlightShapeUtil.js.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/image/ImageShapeUtil.js b/node_modules/tldraw/dist-cjs/lib/shapes/image/ImageShapeUtil.js
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/image/ImageShapeUtil.js.map b/node_modules/tldraw/dist-cjs/lib/shapes/image/ImageShapeUtil.js.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/line/LineShapeTool.js b/node_modules/tldraw/dist-cjs/lib/shapes/line/LineShapeTool.js
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/line/LineShapeTool.js.map b/node_modules/tldraw/dist-cjs/lib/shapes/line/LineShapeTool.js.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/line/LineShapeUtil.js b/node_modules/tldraw/dist-cjs/lib/shapes/line/LineShapeUtil.js
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/line/LineShapeUtil.js.map b/node_modules/tldraw/dist-cjs/lib/shapes/line/LineShapeUtil.js.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/line/toolStates/Idle.js b/node_modules/tldraw/dist-cjs/lib/shapes/line/toolStates/Idle.js
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/line/toolStates/Idle.js.map b/node_modules/tldraw/dist-cjs/lib/shapes/line/toolStates/Idle.js.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/line/toolStates/Pointing.js b/node_modules/tldraw/dist-cjs/lib/shapes/line/toolStates/Pointing.js
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/line/toolStates/Pointing.js.map b/node_modules/tldraw/dist-cjs/lib/shapes/line/toolStates/Pointing.js.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/note/NoteShapeTool.js b/node_modules/tldraw/dist-cjs/lib/shapes/note/NoteShapeTool.js
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/note/NoteShapeTool.js.map b/node_modules/tldraw/dist-cjs/lib/shapes/note/NoteShapeTool.js.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/note/NoteShapeUtil.js b/node_modules/tldraw/dist-cjs/lib/shapes/note/NoteShapeUtil.js
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/note/NoteShapeUtil.js.map b/node_modules/tldraw/dist-cjs/lib/shapes/note/NoteShapeUtil.js.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/note/noteHelpers.js b/node_modules/tldraw/dist-cjs/lib/shapes/note/noteHelpers.js
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/note/noteHelpers.js.map b/node_modules/tldraw/dist-cjs/lib/shapes/note/noteHelpers.js.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/note/toolStates/Idle.js b/node_modules/tldraw/dist-cjs/lib/shapes/note/toolStates/Idle.js
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/note/toolStates/Idle.js.map b/node_modules/tldraw/dist-cjs/lib/shapes/note/toolStates/Idle.js.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/note/toolStates/Pointing.js b/node_modules/tldraw/dist-cjs/lib/shapes/note/toolStates/Pointing.js
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/note/toolStates/Pointing.js.map b/node_modules/tldraw/dist-cjs/lib/shapes/note/toolStates/Pointing.js.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/shared/BrokenAssetIcon.js b/node_modules/tldraw/dist-cjs/lib/shapes/shared/BrokenAssetIcon.js
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/shared/BrokenAssetIcon.js.map b/node_modules/tldraw/dist-cjs/lib/shapes/shared/BrokenAssetIcon.js.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/shared/HyperlinkButton.js b/node_modules/tldraw/dist-cjs/lib/shapes/shared/HyperlinkButton.js
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/shared/HyperlinkButton.js.map b/node_modules/tldraw/dist-cjs/lib/shapes/shared/HyperlinkButton.js.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/shared/PathBuilder.js b/node_modules/tldraw/dist-cjs/lib/shapes/shared/PathBuilder.js
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/shared/PathBuilder.js.map b/node_modules/tldraw/dist-cjs/lib/shapes/shared/PathBuilder.js.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/shared/PlainTextLabel.js b/node_modules/tldraw/dist-cjs/lib/shapes/shared/PlainTextLabel.js
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/shared/PlainTextLabel.js.map b/node_modules/tldraw/dist-cjs/lib/shapes/shared/PlainTextLabel.js.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/shared/RichTextLabel.js b/node_modules/tldraw/dist-cjs/lib/shapes/shared/RichTextLabel.js
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/shared/RichTextLabel.js.map b/node_modules/tldraw/dist-cjs/lib/shapes/shared/RichTextLabel.js.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/shared/ShapeFill.js b/node_modules/tldraw/dist-cjs/lib/shapes/shared/ShapeFill.js
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/shared/ShapeFill.js.map b/node_modules/tldraw/dist-cjs/lib/shapes/shared/ShapeFill.js.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/shared/SvgTextLabel.js b/node_modules/tldraw/dist-cjs/lib/shapes/shared/SvgTextLabel.js
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/shared/SvgTextLabel.js.map b/node_modules/tldraw/dist-cjs/lib/shapes/shared/SvgTextLabel.js.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/shared/TextHelpers.js b/node_modules/tldraw/dist-cjs/lib/shapes/shared/TextHelpers.js
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/shared/TextHelpers.js.map b/node_modules/tldraw/dist-cjs/lib/shapes/shared/TextHelpers.js.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/shared/createTextJsxFromSpans.js b/node_modules/tldraw/dist-cjs/lib/shapes/shared/createTextJsxFromSpans.js
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/shared/createTextJsxFromSpans.js.map b/node_modules/tldraw/dist-cjs/lib/shapes/shared/createTextJsxFromSpans.js.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/shared/crop.js b/node_modules/tldraw/dist-cjs/lib/shapes/shared/crop.js
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/shared/crop.js.map b/node_modules/tldraw/dist-cjs/lib/shapes/shared/crop.js.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/shared/default-shape-constants.js b/node_modules/tldraw/dist-cjs/lib/shapes/shared/default-shape-constants.js
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/shared/default-shape-constants.js.map b/node_modules/tldraw/dist-cjs/lib/shapes/shared/default-shape-constants.js.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/shared/defaultFonts.js b/node_modules/tldraw/dist-cjs/lib/shapes/shared/defaultFonts.js
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/shared/defaultFonts.js.map b/node_modules/tldraw/dist-cjs/lib/shapes/shared/defaultFonts.js.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/shared/defaultStyleDefs.js b/node_modules/tldraw/dist-cjs/lib/shapes/shared/defaultStyleDefs.js
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/shared/defaultStyleDefs.js.map b/node_modules/tldraw/dist-cjs/lib/shapes/shared/defaultStyleDefs.js.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/shared/freehand/getStroke.js b/node_modules/tldraw/dist-cjs/lib/shapes/shared/freehand/getStroke.js
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/shared/freehand/getStroke.js.map b/node_modules/tldraw/dist-cjs/lib/shapes/shared/freehand/getStroke.js.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/shared/freehand/getStrokeOutlinePoints.js b/node_modules/tldraw/dist-cjs/lib/shapes/shared/freehand/getStrokeOutlinePoints.js
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/shared/freehand/getStrokeOutlinePoints.js.map b/node_modules/tldraw/dist-cjs/lib/shapes/shared/freehand/getStrokeOutlinePoints.js.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/shared/freehand/getStrokePoints.js b/node_modules/tldraw/dist-cjs/lib/shapes/shared/freehand/getStrokePoints.js
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/shared/freehand/getStrokePoints.js.map b/node_modules/tldraw/dist-cjs/lib/shapes/shared/freehand/getStrokePoints.js.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/shared/freehand/getStrokeRadius.js b/node_modules/tldraw/dist-cjs/lib/shapes/shared/freehand/getStrokeRadius.js
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/shared/freehand/getStrokeRadius.js.map b/node_modules/tldraw/dist-cjs/lib/shapes/shared/freehand/getStrokeRadius.js.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/shared/freehand/setStrokePointRadii.js b/node_modules/tldraw/dist-cjs/lib/shapes/shared/freehand/setStrokePointRadii.js
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/shared/freehand/setStrokePointRadii.js.map b/node_modules/tldraw/dist-cjs/lib/shapes/shared/freehand/setStrokePointRadii.js.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/shared/freehand/svg.js b/node_modules/tldraw/dist-cjs/lib/shapes/shared/freehand/svg.js
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/shared/freehand/svg.js.map b/node_modules/tldraw/dist-cjs/lib/shapes/shared/freehand/svg.js.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/shared/freehand/svgInk.js b/node_modules/tldraw/dist-cjs/lib/shapes/shared/freehand/svgInk.js
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/shared/freehand/svgInk.js.map b/node_modules/tldraw/dist-cjs/lib/shapes/shared/freehand/svgInk.js.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/shared/freehand/types.js b/node_modules/tldraw/dist-cjs/lib/shapes/shared/freehand/types.js
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/shared/freehand/types.js.map b/node_modules/tldraw/dist-cjs/lib/shapes/shared/freehand/types.js.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/shared/icons-editor.js b/node_modules/tldraw/dist-cjs/lib/shapes/shared/icons-editor.js
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/shared/icons-editor.js.map b/node_modules/tldraw/dist-cjs/lib/shapes/shared/icons-editor.js.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/shared/interpolate-props.js b/node_modules/tldraw/dist-cjs/lib/shapes/shared/interpolate-props.js
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/shared/interpolate-props.js.map b/node_modules/tldraw/dist-cjs/lib/shapes/shared/interpolate-props.js.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/shared/legacyProps.js b/node_modules/tldraw/dist-cjs/lib/shapes/shared/legacyProps.js
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/shared/legacyProps.js.map b/node_modules/tldraw/dist-cjs/lib/shapes/shared/legacyProps.js.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/shared/rotated-box-shadow.js b/node_modules/tldraw/dist-cjs/lib/shapes/shared/rotated-box-shadow.js
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/shared/rotated-box-shadow.js.map b/node_modules/tldraw/dist-cjs/lib/shapes/shared/rotated-box-shadow.js.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/shared/useColorSpace.js b/node_modules/tldraw/dist-cjs/lib/shapes/shared/useColorSpace.js
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/shared/useColorSpace.js.map b/node_modules/tldraw/dist-cjs/lib/shapes/shared/useColorSpace.js.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/shared/useDefaultColorTheme.js b/node_modules/tldraw/dist-cjs/lib/shapes/shared/useDefaultColorTheme.js
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/shared/useDefaultColorTheme.js.map b/node_modules/tldraw/dist-cjs/lib/shapes/shared/useDefaultColorTheme.js.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/shared/useEditablePlainText.js b/node_modules/tldraw/dist-cjs/lib/shapes/shared/useEditablePlainText.js
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/shared/useEditablePlainText.js.map b/node_modules/tldraw/dist-cjs/lib/shapes/shared/useEditablePlainText.js.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/shared/useEditableRichText.js b/node_modules/tldraw/dist-cjs/lib/shapes/shared/useEditableRichText.js
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/shared/useEditableRichText.js.map b/node_modules/tldraw/dist-cjs/lib/shapes/shared/useEditableRichText.js.map
+old mode 100644
+new mode 100755
+diff --git a/node_modules/tldraw/dist-esm/lib/shapes/draw/getPath.mjs b/node_modules/tldraw/dist-esm/lib/shapes/draw/getPath.mjs
+index 744956a..239683d 100644
+--- a/node_modules/tldraw/dist-esm/lib/shapes/draw/getPath.mjs
++++ b/node_modules/tldraw/dist-esm/lib/shapes/draw/getPath.mjs
+@@ -13,7 +13,7 @@ const simulatePressureSettings = (strokeWidth) => {
+     thinning: 0.5,
+     streamline: modulate(strokeWidth, [9, 16], [0.64, 0.74], true),
+     // 0.62 + ((1 + strokeWidth) / 8) * 0.06,
+-    smoothing: 0.62,
++    smoothing: 0,
+     easing: EASINGS.easeOutSine,
+     simulatePressure: true
+   };
+@@ -23,7 +23,7 @@ const realPressureSettings = (strokeWidth) => {
+     size: 1 + strokeWidth * 1.2,
+     thinning: 0.62,
+     streamline: 0.62,
+-    smoothing: 0.62,
++    smoothing: 0,
+     simulatePressure: false,
+     easing: PEN_EASING
+   };
+@@ -34,7 +34,7 @@ const solidSettings = (strokeWidth) => {
+     thinning: 0,
+     streamline: modulate(strokeWidth, [9, 16], [0.64, 0.74], true),
+     // 0.62 + ((1 + strokeWidth) / 8) * 0.06,
+-    smoothing: 0.62,
++    smoothing: 0,
+     simulatePressure: false,
+     easing: EASINGS.linear
+   };
+@@ -44,7 +44,7 @@ const solidRealPressureSettings = (strokeWidth) => {
+     size: strokeWidth,
+     thinning: 0,
+     streamline: 0.62,
+-    smoothing: 0.62,
++    smoothing: 0,
+     simulatePressure: false,
+     easing: EASINGS.linear
+   };
+@@ -57,7 +57,7 @@ function getHighlightFreehandSettings({
+     size: 1 + strokeWidth,
+     thinning: 0,
+     streamline: 0.5,
+-    smoothing: 0.5,
++    smoothing: 0,
+     simulatePressure: false,
+     easing: EASINGS.easeOutSine,
+     last: showAsComplete

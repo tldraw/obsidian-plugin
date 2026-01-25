@@ -2,7 +2,7 @@ import { CachedMetadata, Notice, TFile } from "obsidian";
 import TldrawPlugin from "src/main";
 import { TldrawFileListener } from "src/obsidian/plugin/TldrawFileListenerMap";
 import { createAttachmentFilepath } from "src/utils/utils";
-import { DEFAULT_SUPPORTED_IMAGE_TYPES, TLAsset, TLAssetContext, TLAssetStore, TLImageAsset } from "tldraw";
+import { DEFAULT_SUPPORTED_IMAGE_TYPES, TLAsset, TLAssetContext, TLAssetId, TLAssetStore, TLImageAsset } from "tldraw";
 import { TldrawStoreIndexedDB } from "./indexeddb-store";
 import { vaultFileToBlob } from "src/obsidian/helpers/vault";
 import { createImageAsset } from "./helpers/create-asset";
@@ -325,5 +325,11 @@ export class ObsidianTLAssetStore implements TLAssetStore {
 
     async getAllFromMarkdownFile(): Promise<BlockRefAssetId[]> {
         return this.proxy.getAll();
+    }
+
+    async remove(assetIds: TLAssetId[]): Promise<void> {
+        // No-op removal; assets are referenced within markdown via block refs.
+        // Implementing removal would require editing the markdown file and attachment store.
+        return;
     }
 }

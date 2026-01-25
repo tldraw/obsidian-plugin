@@ -15,10 +15,3 @@ export function pathBasename(path: string) {
     if(lastIndex === -1) return path;
 	return path.slice(lastIndex + 1);
 }
-
-export function pathBasenameNoExt(path: string) {
-    const basename = pathBasename(path);
-    const lastDotIndex = basename.lastIndexOf('.');
-    if(lastDotIndex === -1) return basename;
-    return basename.slice(0, lastDotIndex);
-}

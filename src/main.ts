@@ -115,10 +115,7 @@ export default class TldrawPlugin extends Plugin {
 
 		// this creates an icon in the left ribbon:
 		this.addRibbonIcon(TLDRAW_ICON_NAME, RIBBON_NEW_FILE, async () => {
-			const activeFile = this.app.workspace.activeEditor?.file;
-			const file = await this.createUntitledTldrFile({
-				attachTo: activeFile || undefined,
-			});
+			const file = await this.createUntitledTldrFile();
 			await this.openTldrFile(file, "current-tab");
 		});
 
@@ -296,7 +293,7 @@ export default class TldrawPlugin extends Plugin {
 				const fileFromState = leafViewState.state?.file;
 				const file = this.app.workspace.getActiveFile();
 
-				if(typeof fileFromState !== 'string') return;
+				if (typeof fileFromState !== 'string') return;
 
 				// even more guard clauses:
 				if (!file || !fileFromState) return;
@@ -468,7 +465,7 @@ export default class TldrawPlugin extends Plugin {
 		currentFile
 	}: {
 		currentFile?: Pick<TFile, 'basename'>
-	}) {
+	} = {}) {
 		const { newFilePrefix, newFileTimeFormat } = this.settings;
 
 		const date =
@@ -503,7 +500,9 @@ export default class TldrawPlugin extends Plugin {
 		 */
 		inMarkdown?: boolean
 	} = {}) => {
-		const filename = this.createDefaultFilename({ currentFile: attachTo });
+		const filename = this.createDefaultFilename({
+			currentFile: attachTo
+		});
 		const res = await getTldrawFileDestination(this, filename, attachTo);
 		return this.createTldrFile(res.filename, {
 			tlStore,
