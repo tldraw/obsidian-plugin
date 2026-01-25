@@ -30,6 +30,19 @@
 	--no-tooltip: true;
 }
 
+/* Custom Cursors */
+.tldraw-view-root[data-active-tool="draw"] .tl-canvas {
+	cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="%23333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 15l2-2 10-10 2 2-10 10-2 2z"></path><path d="M11 3l2 2"></path></svg>') 0 16, crosshair !important;
+}
+
+.tldraw-view-root[data-active-tool="lasso-select"] .tl-canvas {
+	cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="%232f80ed" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="8" r="7" stroke-dasharray="2 2"></circle><path d="M8 5v6M5 8h6"></path></svg>') 8 8, crosshair !important;
+}
+
+.tldraw-view-root[data-active-tool="eraser"] .tl-canvas {
+	cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="%23eb5757" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="12" height="12" rx="2"></rect><path d="M2 8h12"></path></svg>') 8 8, cell !important;
+}
+
 /* OVERRIDING button:not(.clickable-icon) back to tldraw's original styles: */
 .tldraw-view-root .tlui-button {
 	background-color: transparent;

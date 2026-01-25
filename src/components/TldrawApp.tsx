@@ -179,15 +179,30 @@ const TldrawApp = ({ plugin, store,
 	const storeProps = React.useMemo(() => !store ? undefined : getEditorStoreProps(store), [store])
 
 	const [editor, setEditor] = React.useState<Editor>();
+	const [activeTool, setActiveTool] = React.useState<string>('select');
 
 	const [_onInitialSnapshot, setOnInitialSnapshot] = React.useState<typeof onInitialSnapshot>(() => onInitialSnapshot);
 	const setAppState = React.useCallback((editor: Editor) => {
 		setEditor(editor);
+		setActiveTool(editor.getCurrentToolId());
 		if (_onInitialSnapshot) {
 			_onInitialSnapshot(editor.store.getStoreSnapshot());
 			setOnInitialSnapshot(undefined);
 		}
 	}, [_onInitialSnapshot])
+
+	React.useEffect(() => {
+		if (!editor) return;
+
+		const unlisten = editor.store.listen(() => {
+			const currentToolId = editor.getCurrentToolId();
+			if (currentToolId !== activeTool) {
+				setActiveTool(currentToolId);
+			}
+		});
+
+		return unlisten;
+	}, [editor, activeTool]);
 
 	const onUiEvent = React.useCallback<TLUiEventHandler>((...args) => {
 		_onUiEvent?.(editor, ...args)
@@ -331,6 +346,7 @@ const TldrawApp = ({ plugin, store,
 	return (
 		<div
 			className="tldraw-view-root"
+			data-active-tool={activeTool}
 			// e.stopPropagation(); this line should solve the mobile swipe menus bug
 			// The bug only happens on the mobile version of Obsidian.
 			// When a user tries to interact with the tldraw canvas,

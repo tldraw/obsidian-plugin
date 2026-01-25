@@ -32,10 +32,10 @@ export default function LassoOverlays() {
         <svg className="tl-overlays__item" aria-hidden="true">
           <path
             d={svgPath}
-            fill="var(--color-selection-fill)"
-            opacity={0.5}
-            stroke="var(--color-selection-stroke)"
-            strokeWidth="calc(2px / var(--tl-zoom))"
+            fill="#2f80ed"
+            fillOpacity="0.2"
+            stroke="#2f80ed"
+            strokeWidth="calc(1.5px / var(--tl-zoom))"
           />
         </svg>
       )}
