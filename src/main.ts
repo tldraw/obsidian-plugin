@@ -51,7 +51,7 @@ import { pluginBuild } from "./utils/decorators/plugin";
 import { markdownPostProcessor } from "./obsidian/plugin/markdown-post-processor";
 import { processFontOverrides, processIconOverrides } from "./obsidian/plugin/settings";
 import { createRawTldrawFile } from "./utils/tldraw-file";
-import { Editor, TLDRAW_FILE_EXTENSION, TLStore } from "tldraw";
+import { Editor, STROKE_SIZES, TLDRAW_FILE_EXTENSION, TLStore } from "tldraw";
 import { registerCommands } from "./obsidian/plugin/commands";
 import { migrateTldrawFileDataIfNecessary } from "./utils/migrate/tl-data-to-tlstore";
 import { pluginMenuLabel } from "./obsidian/menu";
@@ -105,6 +105,15 @@ export default class TldrawPlugin extends Plugin {
 		// settings:
 		await this.settingsManager.loadSettings();
 		this.addSettingTab(new TldrawSettingsTab(this.app, this));
+
+		// Apply global stroke settings as early as possible
+		const strokeSizes = this.settings.tldrawOptions?.strokeSizes;
+		if (strokeSizes) {
+			STROKE_SIZES.s = strokeSizes.s;
+			STROKE_SIZES.m = strokeSizes.m;
+			STROKE_SIZES.l = strokeSizes.l;
+			STROKE_SIZES.xl = strokeSizes.xl;
+		}
 
 		// icons:
 		addIcon(TLDRAW_ICON_NAME, TLDRAW_ICON);

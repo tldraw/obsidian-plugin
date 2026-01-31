@@ -85,7 +85,8 @@
 }
 
 /* OVERRIDING Obsidian's CSS */
-.tldraw-view-root ol > li::marker, .tldraw-view-root ul > li::marker {
+.tldraw-view-root ol>li::marker,
+.tldraw-view-root ul>li::marker {
 	color: inherit;
 }
 
@@ -93,15 +94,17 @@ div[data-type="tldraw-view"] .view-content.tldraw-view-content,
 div[data-type="tldraw-read-only"] .view-content.tldraw-view-content {
 	/* gets rid of the padding so the canvas can bleed against the edges */
 	padding: 0;
+
 	@container style(--status-bar-position: fixed) {
 		/* creates a space at the bottom so that the status bar isn't covering the canvas */
 		padding-bottom: calc(var(--size-4-1) * 2 + var(--status-bar-font-size) + 8px);
 	}
 }
 
-.is-mobile div[data-type="tldraw-view"] .view-content.tldraw-view-content {
-	/* There is a bit of padding that shows up on mobile which we can remove. */
-	padding-bottom: 0;
+.is-mobile div[data-type="tldraw-view"] .view-content.tldraw-view-content,
+.is-mobile div[data-type="tldraw-read-only"] .view-content.tldraw-view-content {
+	/* Move everything up on mobile so it's not hidden by the Obsidian toolbar. */
+	padding-bottom: var(--mobile-toolbar-height, 48px);
 }
 
 .ptl-statusbar-viewmode-box {
@@ -386,7 +389,7 @@ div[data-type="tldraw-read-only"] .view-content.tldraw-view-content {
 }
 
 .ptl-settings-tab-item[data-is-active=false]:hover {
-    background-color: var(--interactive-hover);
+	background-color: var(--interactive-hover);
 }
 
 .ptl-settings-tab-item[data-is-active=true] {
@@ -417,28 +420,28 @@ div[data-type="tldraw-read-only"] .view-content.tldraw-view-content {
 
 /* Copied from tldraw.com */
 .tl-shape[data-shape-type="arrow"] .tl-text {
-    height: max-content;
+	height: max-content;
 }
 
 /* Copied from tldraw.com */
 .tl-shape[data-shape-type="arrow"] .tl-text-label {
-    position: absolute;
-    top: -1px;
-    left: -1px;
-    width: 2px;
-    height: 2px;
-    padding: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    color: var(--tl-color-text);
-    text-shadow: var(--tl-text-outline);
+	position: absolute;
+	top: -1px;
+	left: -1px;
+	width: 2px;
+	height: 2px;
+	padding: 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+	color: var(--tl-color-text);
+	text-shadow: var(--tl-text-outline);
 }
 
 /* Copied from tldraw.com */
 .tl-shape[data-shape-type="arrow"] .tl-text-label__inner {
-    height: max-content;
-    box-sizing: content-box;
-    border-radius: var(--tl-radius-1);
+	height: max-content;
+	box-sizing: content-box;
+	border-radius: var(--tl-radius-1);
 }

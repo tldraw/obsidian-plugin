@@ -45,7 +45,17 @@ export function useTldrawAppEffects({
             snapMode,
             focusMode,
             toolSelected,
+            tldrawOptions,
         } = settingsManager.settings;
+
+        // Apply default styles before setting the tool to ensure the tool picks up the correct styles
+        if (tldrawOptions?.defaultStrokeSize) {
+            editor.setStyleForNextShapes(DefaultSizeStyle, tldrawOptions.defaultStrokeSize);
+        }
+
+        if (tldrawOptions?.defaultStrokeStyle) {
+            editor.setStyleForNextShapes(DefaultDashStyle, tldrawOptions.defaultStrokeStyle);
+        }
 
         editor.setCurrentTool(initialTool ?? toolSelected)
 

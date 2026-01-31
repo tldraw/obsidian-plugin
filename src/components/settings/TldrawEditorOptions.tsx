@@ -6,7 +6,7 @@ import useSettingsManager from "src/hooks/useSettingsManager";
 import useUserPluginSettings from "src/hooks/useUserPluginSettings";
 import { defaultTldrawOptions } from "tldraw";
 import { DEFAULT_SETTINGS } from "src/obsidian/TldrawSettingsTab";
-import { DEFAULT_SAVE_DELAY, MIN_SAVE_DELAY, MAX_SAVE_DELAY } from "src/utils/constants";
+import { DEFAULT_SAVE_DELAY, MIN_SAVE_DELAY, MAX_SAVE_DELAY, MIN_STROKE_SIZE, MAX_STROKE_SIZE } from "src/utils/constants";
 import { clamp, msToSeconds } from "src/utils/utils";
 
 function StrokeParametersGroup() {
@@ -436,14 +436,41 @@ function ClipboardOptionsGroup() {
 function StrokeOptionsGroup() {
     const settingsManager = useSettingsManager();
     const settings = useUserPluginSettings(settingsManager);
-    const strokeSizes = {
+    const strokeSizes = useMemo(() => ({
         s: 0.1, m: 0.3, l: 0.6, xl: 1.2,
         ...settings.tldrawOptions?.strokeSizes
+    }), [settings.tldrawOptions?.strokeSizes]);
+
+    const [localSizes, setLocalSizes] = React.useState<Record<string, string>>({
+        s: String(strokeSizes.s),
+        m: String(strokeSizes.m),
+        l: String(strokeSizes.l),
+        xl: String(strokeSizes.xl),
+    });
+
+    React.useEffect(() => {
+        setLocalSizes({
+            s: String(strokeSizes.s),
+            m: String(strokeSizes.m),
+            l: String(strokeSizes.l),
+            xl: String(strokeSizes.xl),
+        });
+    }, [strokeSizes]);
+
+    const handleLocalSizeChange = (key: string, val: string) => {
+        setLocalSizes(prev => ({ ...prev, [key]: val }));
     };
 
-    const updateStrokeSize = useCallback(async (key: keyof typeof strokeSizes, val: string) => {
+    const saveStrokeSize = useCallback(async (key: string) => {
+        const val = localSizes[key];
         const num = parseFloat(val);
-        if (isNaN(num)) return;
+        if (isNaN(num)) {
+            // Reset to current setting if invalid
+            setLocalSizes(prev => ({ ...prev, [key]: String((strokeSizes as any)[key]) }));
+            return;
+        }
+        const clampedNum = clamp(num, MIN_STROKE_SIZE, MAX_STROKE_SIZE);
+
         await settingsManager.updateSettings({
             ...settings,
             tldrawOptions: {
@@ -451,11 +478,14 @@ function StrokeOptionsGroup() {
                 strokeSizes: {
                     s: 0.1, m: 0.3, l: 0.6, xl: 1.2,
                     ...settings.tldrawOptions?.strokeSizes,
-                    [key]: num
+                    [key]: clampedNum
                 }
             }
         });
-    }, [settings, settingsManager]);
+
+        // Update local state to the clamped value
+        setLocalSizes(prev => ({ ...prev, [key]: String(clampedNum) }));
+    }, [localSizes, settings, settingsManager, strokeSizes]);
 
     const updateDefaultSize = useCallback(async (val: string) => {
         await settingsManager.updateSettings({
@@ -482,18 +512,22 @@ function StrokeOptionsGroup() {
             <Setting
                 slots={{
                     name: 'Stroke Sizes',
-                    desc: 'Customize the thickness for S, M, L, XL sizes.',
+                    desc: (
+                        <>
+                            {`Customize the thickness for S, M, L, XL sizes. Must be a value between ${MIN_STROKE_SIZE} and ${MAX_STROKE_SIZE}.`}
+                        </>
+                    ),
                     control: (
                         <div style={{ display: 'flex', gap: '8px', flexDirection: 'column' }}>
-                            {Object.entries(strokeSizes).map(([key, val]) => (
+                            {Object.entries(localSizes).map(([key, val]) => (
                                 <div key={key} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                                     <span style={{ width: '20px', textTransform: 'uppercase' }}>{key}</span>
                                     <input
-                                        type="number"
-                                        step="0.1"
+                                        type="text"
                                         value={val}
-                                        onChange={(e) => updateStrokeSize(key as any, e.target.value)}
-                                        style={{ width: '60px' }} // Optional styling
+                                        onChange={(e) => handleLocalSizeChange(key, e.target.value)}
+                                        onBlur={() => saveStrokeSize(key)}
+                                        style={{ width: '60px' }}
                                     />
                                 </div>
                             ))}
