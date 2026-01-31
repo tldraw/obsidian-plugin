@@ -12,6 +12,8 @@ import { destinationMethods, themePreferenceRecord } from "./settings/constants"
 import { VIEW_TYPE_TLDRAW, ViewType } from "src/utils/constants";
 
 export type ThemePreference = keyof typeof themePreferenceRecord;
+export type StrokeSize = 's' | 'm' | 'l' | 'xl';
+export type StrokeStyle = 'draw' | 'dashed' | 'dotted' | 'solid';
 
 export type DestinationMethod = typeof destinationMethods[number];
 
@@ -122,6 +124,43 @@ export interface TldrawPluginSettings extends DeprecatedFileDestinationSettings 
 		 * When the laser tool is stopped, whether to keep the delay defined by `laserDelayMs`
 		 */
 		laserKeepDelayAfterStop?: boolean,
+		/**
+		 * Force the compact mode (mobile layout) on desktop.
+		 */
+		forceCompactMode?: boolean,
+		/**
+		 * Custom stroke sizes
+		 */
+		strokeSizes?: Record<StrokeSize, number>,
+		/**
+		 * Default stroke size for new shapes
+		 */
+		defaultStrokeSize?: StrokeSize,
+		/**
+		 * Default stroke style for new shapes
+		 */
+		defaultStrokeStyle?: StrokeStyle,
+		/**
+		 * Custom stroke parameters
+		 */
+		strokeParameters?: {
+			streamline?: number;
+			smoothing?: number;
+			thinning?: number;
+			simulatePressure?: boolean;
+		},
+		/**
+		 * Orientation of the toolbar
+		 */
+		toolbarOrientation?: 'vertical' | 'horizontal',
+		/**
+		 * Visibility and order of tools in the toolbar
+		 */
+		toolbarTools?: { id: string, enabled: boolean }[];
+		/**
+		 * Whether to lower the quality of shapes during zoom/camera movements to improve performance.
+		 */
+		lowQualityDuringZoom?: boolean,
 	}
 	/**
 	 * Options that apply to the editor camera
@@ -186,8 +225,54 @@ export const DEFAULT_SETTINGS = {
 	},
 	file: {
 		insertTags: true,
+	},
+	tldrawOptions: {
+		lowQualityDuringZoom: false,
+		strokeSizes: {
+			s: 0.1,
+			m: 0.3,
+			l: 0.6,
+			xl: 1.2
+		},
+		defaultStrokeSize: 'm',
+		defaultStrokeStyle: 'draw',
+		strokeParameters: {
+			streamline: 0.2, // Default derived from grep
+			smoothing: 0.5,
+			thinning: 0.5,
+			simulatePressure: true,
+		},
+		toolbarOrientation: 'horizontal',
+		toolbarTools: [
+			{ id: 'select', enabled: true },
+			{ id: 'hand', enabled: true },
+			{ id: 'draw', enabled: true },
+			{ id: 'eraser', enabled: true },
+			{ id: 'arrow', enabled: true },
+			{ id: 'text', enabled: true },
+			{ id: 'note', enabled: true },
+			{ id: 'asset', enabled: true },
+			{ id: 'rectangle', enabled: true },
+			{ id: 'ellipse', enabled: true },
+			{ id: 'triangle', enabled: true },
+			{ id: 'diamond', enabled: true },
+			{ id: 'hexagon', enabled: true },
+			{ id: 'oval', enabled: true },
+			{ id: 'rhombus', enabled: true },
+			{ id: 'star', enabled: true },
+			{ id: 'cloud', enabled: true },
+			{ id: 'heart', enabled: true },
+			{ id: 'x-box', enabled: true },
+			{ id: 'check-box', enabled: true },
+			{ id: 'line', enabled: true },
+			{ id: 'highlight', enabled: true },
+			{ id: 'laser', enabled: true },
+			{ id: 'frame', enabled: true },
+			{ id: 'lasso-select', enabled: true },
+		]
 	}
 } as const satisfies Partial<TldrawPluginSettings>;
+
 
 export class TldrawSettingsTab extends PluginSettingTab {
 	plugin: TldrawPlugin;

@@ -4,7 +4,10 @@ import React, {
 import TldrawPlugin from "src/main";
 import TldrawInObsidianPluginInstance from "src/obsidian/plugin/instance";
 
-export const PluginContext = createContext<TldrawInObsidianPluginInstance | undefined>(undefined);
+export const PluginContext = createContext<{
+    instance: TldrawInObsidianPluginInstance,
+    plugin: TldrawPlugin
+} | undefined>(undefined);
 
 export function useTldrawInObsdianPlugin() {
     return useContext(PluginContext) ?? (() => {
@@ -13,7 +16,7 @@ export function useTldrawInObsdianPlugin() {
 }
 
 export function useObsidian() {
-    return useTldrawInObsdianPlugin().app;
+    return useTldrawInObsdianPlugin().instance.app;
 }
 
 export function TldrawInObsidianPluginProvider({
@@ -23,11 +26,14 @@ export function TldrawInObsidianPluginProvider({
     children?: ReactNode
     plugin: TldrawPlugin,
 }) {
-    const instance = useMemo(() => {
-        return new TldrawInObsidianPluginInstance(plugin.app)
+    const value = useMemo(() => {
+        return {
+            instance: new TldrawInObsidianPluginInstance(plugin.app),
+            plugin
+        }
     }, [plugin])
     return (
-        <PluginContext.Provider value={instance}>
+        <PluginContext.Provider value={value}>
             {children}
         </PluginContext.Provider>
     )

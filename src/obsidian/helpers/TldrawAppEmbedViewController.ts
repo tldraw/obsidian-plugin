@@ -9,7 +9,10 @@ export type OnChangeViewMode = (mode: ViewMode) => void;
  */
 export type ImageViewModeOptions = {
     bounds?: BoxLike;
-} & Omit<TldrawImageProps, 'bounds' | 'snapshot'>;
+} & Omit<TldrawImageProps, 'bounds' | 'snapshot'> & {
+    targetDocument?: Document;
+    assets?: any;
+};
 
 export type TldrawAppViewModeController = {
     getViewMode: () => ViewMode;

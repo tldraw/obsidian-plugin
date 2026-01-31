@@ -51,7 +51,7 @@ import { pluginBuild } from "./utils/decorators/plugin";
 import { markdownPostProcessor } from "./obsidian/plugin/markdown-post-processor";
 import { processFontOverrides, processIconOverrides } from "./obsidian/plugin/settings";
 import { createRawTldrawFile } from "./utils/tldraw-file";
-import { Editor, TLDRAW_FILE_EXTENSION, TLStore } from "tldraw";
+import { Editor, STROKE_SIZES, TLDRAW_FILE_EXTENSION, TLStore } from "tldraw";
 import { registerCommands } from "./obsidian/plugin/commands";
 import { migrateTldrawFileDataIfNecessary } from "./utils/migrate/tl-data-to-tlstore";
 import { pluginMenuLabel } from "./obsidian/menu";
@@ -106,6 +106,15 @@ export default class TldrawPlugin extends Plugin {
 		await this.settingsManager.loadSettings();
 		this.addSettingTab(new TldrawSettingsTab(this.app, this));
 
+		// Apply global stroke settings as early as possible
+		const strokeSizes = this.settings.tldrawOptions?.strokeSizes;
+		if (strokeSizes) {
+			STROKE_SIZES.s = strokeSizes.s;
+			STROKE_SIZES.m = strokeSizes.m;
+			STROKE_SIZES.l = strokeSizes.l;
+			STROKE_SIZES.xl = strokeSizes.xl;
+		}
+
 		// icons:
 		addIcon(TLDRAW_ICON_NAME, TLDRAW_ICON);
 		addIcon(MARKDOWN_ICON_NAME, MARKDOWN_ICON);
@@ -115,10 +124,7 @@ export default class TldrawPlugin extends Plugin {
 
 		// this creates an icon in the left ribbon:
 		this.addRibbonIcon(TLDRAW_ICON_NAME, RIBBON_NEW_FILE, async () => {
-			const activeFile = this.app.workspace.activeEditor?.file;
-			const file = await this.createUntitledTldrFile({
-				attachTo: activeFile || undefined,
-			});
+			const file = await this.createUntitledTldrFile();
 			await this.openTldrFile(file, "current-tab");
 		});
 
@@ -296,7 +302,7 @@ export default class TldrawPlugin extends Plugin {
 				const fileFromState = leafViewState.state?.file;
 				const file = this.app.workspace.getActiveFile();
 
-				if(typeof fileFromState !== 'string') return;
+				if (typeof fileFromState !== 'string') return;
 
 				// even more guard clauses:
 				if (!file || !fileFromState) return;
@@ -468,7 +474,7 @@ export default class TldrawPlugin extends Plugin {
 		currentFile
 	}: {
 		currentFile?: Pick<TFile, 'basename'>
-	}) {
+	} = {}) {
 		const { newFilePrefix, newFileTimeFormat } = this.settings;
 
 		const date =
@@ -503,7 +509,9 @@ export default class TldrawPlugin extends Plugin {
 		 */
 		inMarkdown?: boolean
 	} = {}) => {
-		const filename = this.createDefaultFilename({ currentFile: attachTo });
+		const filename = this.createDefaultFilename({
+			currentFile: attachTo
+		});
 		const res = await getTldrawFileDestination(this, filename, attachTo);
 		return this.createTldrFile(res.filename, {
 			tlStore,

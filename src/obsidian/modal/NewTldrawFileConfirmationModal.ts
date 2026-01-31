@@ -11,7 +11,7 @@ type Result = {
     folder: string,
 };
 
-const choices = ['confirm', 'edit', 'active-file-dir', ...destinationMethods] as const;
+const choices = ['confirm', 'edit', ...destinationMethods] as const;
 
 type Choice = typeof choices[number];
 
@@ -111,15 +111,6 @@ export default class NewTldrawFileConfirmationModal extends SuggestModal<Suggest
                         folder: attachmentsFolder
                     });
                 } break;
-                case "active-file-dir": {
-                    const activeFile = this.app.workspace.activeEditor?.file;
-                    if (activeFile?.parent) {
-                        suggestions.push({
-                            choice: "active-file-dir",
-                            folder: activeFile.parent
-                        });
-                    }
-                }
             }
         }
         return suggestions;
@@ -142,33 +133,16 @@ export default class NewTldrawFileConfirmationModal extends SuggestModal<Suggest
         div.createDiv({
             text: value.choice === 'confirm' ? 'Confirm'
                 : value.choice === 'edit' ? 'Edit'
-                    : value.choice === 'active-file-dir' ?
-                        'In active file directory'
-                        : destinationMethodsRecord[value.choice]
+                    : destinationMethodsRecord[value.choice]
         });
         el.createDiv({
             cls: 'ptl-suggestion-label',
-        }, (div) => {
-
-            div.createDiv({
-                cls: 'ptl-suggestion-sub-label',
-                text: value.folder instanceof TFolder
-                    ? this.folderPathLabel(value.folder)
-                    : typeof value.folder.folder === 'string' ? `New folder: ${value.folder.folder}`
-                        : value.folder.folder instanceof TFolder ? this.folderPathLabel(value.folder.folder)
-                            : `Invalid folder: ${value.folder.path}`
-            })
-
-            const fileLabel = value.folder instanceof TFolder || value.folder.folder instanceof TFolder || typeof value.folder.folder === 'string' ? `File: ${value.folder.path}/${this.toConfirm.filename}`
-                    : undefined
-
-            if (!fileLabel) return;
-
-            div.createDiv({
-                cls: 'ptl-suggestion-sub-label',
-                text: fileLabel
-            });
-        });
+            text: value.folder instanceof TFolder
+                ? this.folderPathLabel(value.folder)
+                : typeof value.folder.folder === 'string' ? `New folder: ${value.folder.folder}`
+                    : value.folder.folder instanceof TFolder ? this.folderPathLabel(value.folder.folder)
+                        : `Invalid folder: ${value.folder.path}`
+        })
     }
 
     selectSuggestion(value: SuggestOption, evt: MouseEvent | KeyboardEvent): void {
@@ -196,7 +170,6 @@ export default class NewTldrawFileConfirmationModal extends SuggestModal<Suggest
             case "attachments-folder":
             case "colocate":
             case "default-folder":
-            case "active-file-dir":
                 this.confirmFolder(item.folder)
                 return;
             case "edit":

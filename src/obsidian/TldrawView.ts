@@ -30,11 +30,19 @@ export class TldrawView extends TldrawLoadableMixin(TextFileView) {
 		return this.data;
 	}
 
+	private storeInstance?: ReturnType<TldrawPlugin['tlDataDocumentStoreManager']['register']>;
+
 	setViewData(data: string, clear: boolean): void {
 		if (!this.file) {
 			// Bad state
 			return;
 		}
+
+		if (this.storeInstance) {
+			this.data = data;
+			return;
+		}
+
 		// All this initialization is done here because this.data is null in onload() and the constructor().
 		// However, setViewData() gets called by obsidian right after onload() with its data parameter having the file's data (yay)
 		// so we can somewhat safely do initialization stuff in this function.
@@ -46,8 +54,12 @@ export class TldrawView extends TldrawLoadableMixin(TextFileView) {
 			},
 			true
 		);
+		this.storeInstance = storeInstance;
 
-		this.registerOnUnloadFile(() => storeInstance.unregister());
+		this.registerOnUnloadFile(() => {
+			storeInstance.unregister();
+			this.storeInstance = undefined;
+		});
 
 		this.checkConflictingData(this.file, storeInstance.documentStore).then(
 			(snapshot) => this.loadStore(storeInstance.documentStore, snapshot)
@@ -87,7 +99,7 @@ export class TldrawView extends TldrawLoadableMixin(TextFileView) {
 	 * @returns A promise that resolves with undefined, or a snapshot that can be used to replace the contents of the store in {@linkcode documentStore}
 	 */
 	private async checkConflictingData(tFile: TFile, documentStore: TLDataDocumentStore) {
-		if(TldrawStoreExistsIndexedDBModal.ignoreIndexedDBStoreModal(this.app.metadataCache, tFile)) {
+		if (TldrawStoreExistsIndexedDBModal.ignoreIndexedDBStoreModal(this.app.metadataCache, tFile)) {
 			return;
 		}
 		const exists = await TldrawStoreIndexedDB.exists(documentStore.meta.uuid);

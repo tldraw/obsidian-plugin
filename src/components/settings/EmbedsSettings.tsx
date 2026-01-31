@@ -2,84 +2,105 @@ import React, { useCallback } from "react";
 import Setting from "./Setting";
 import useSettingsManager from "src/hooks/useSettingsManager";
 import useUserPluginSettings from "src/hooks/useUserPluginSettings";
+import { DEFAULT_SETTINGS } from "src/obsidian/TldrawSettingsTab";
 
-function EmbedsSettingsGroup() {
+export default function EmbedsSettings() {
     const settingsManager = useSettingsManager();
     const settings = useUserPluginSettings(settingsManager);
 
     const onPaddingChange = useCallback(async (value: string) => {
-        const padding = parseInt(value);
-        if (isNaN(padding) || padding < 0) {
-            return;
-        }
-        settingsManager.settings.embeds.padding = padding;
-        await settingsManager.updateSettings(settingsManager.settings);
-    }, [settingsManager]);
+        const parsedValue = parseInt(value);
+        if (isNaN(parsedValue)) return;
+
+        await settingsManager.updateSettings({
+            ...settings,
+            embeds: {
+                ...settings.embeds,
+                padding: parsedValue
+            }
+        });
+    }, [settings, settingsManager]);
 
     const onShowBgChange = useCallback(async (value: boolean) => {
-        settingsManager.settings.embeds.showBg = value;
-        await settingsManager.updateSettings(settingsManager.settings);
-    }, [settingsManager]);
+        await settingsManager.updateSettings({
+            ...settings,
+            embeds: {
+                ...settings.embeds,
+                showBg: value
+            }
+        });
+    }, [settings, settingsManager]);
 
     const onShowBgDotsChange = useCallback(async (value: boolean) => {
-        settingsManager.settings.embeds.showBgDots = value;
-        await settingsManager.updateSettings(settingsManager.settings);
-    }, [settingsManager]);
+        await settingsManager.updateSettings({
+            ...settings,
+            embeds: {
+                ...settings.embeds,
+                showBgDots: value
+            }
+        });
+    }, [settings, settingsManager]);
 
     return (
-        <>
+        <Setting.Container>
             <Setting
                 slots={{
-                    name: 'Padding',
-                    desc: 'The amount of padding to use by default for each embed image preview. This must be a non-negative number.',
-                    control: (
+                    name: "Padding",
+                    desc: (
                         <>
-                            <Setting.Text
-                                value={`${settings.embeds.padding}`}
-                                onChange={onPaddingChange}
-                            />
+                            Padding for the embed view in pixels.
+                            <code className="ptl-default-code">
+                                DEFAULT: {DEFAULT_SETTINGS.embeds.padding}
+                            </code>
                         </>
-                    )
+                    ),
+                    control: (
+                        <Setting.Text
+                            placeholder={DEFAULT_SETTINGS.embeds.padding.toString()}
+                            value={settings.embeds.padding.toString()}
+                            onChange={onPaddingChange}
+                        />
+                    ),
                 }}
             />
             <Setting
                 slots={{
-                    name: 'Show background',
-                    desc: 'Whether to show the background for a markdown embed by default',
-                    control: (
+                    name: "Show Background",
+                    desc: (
                         <>
-                            <Setting.Toggle
-                                value={settings.embeds.showBg}
-                                onChange={onShowBgChange}
-                            />
+                            Show the background for markdown embeds.
+                            <code className="ptl-default-code">
+                                DEFAULT: {DEFAULT_SETTINGS.embeds.showBg ? "On" : "Off"}
+                            </code>
                         </>
-                    )
+                    ),
+                    control: (
+                        <Setting.Toggle
+                            value={settings.embeds.showBg}
+                            onChange={onShowBgChange}
+                        />
+                    ),
                 }}
             />
             <Setting
                 slots={{
-                    name: 'Show background dotted pattern',
-                    desc: 'Whether to show the background dotted pattern for a markdown embed by default',
-                    control: (
+                    name: "Show Background Dots",
+                    desc: (
                         <>
-                            <Setting.Toggle
-                                value={settings.embeds.showBgDots}
-                                onChange={onShowBgDotsChange}
-                            />
+                            Show the background dotted pattern for markdown embeds.
+                            <code className="ptl-default-code">
+                                DEFAULT: {DEFAULT_SETTINGS.embeds.showBgDots ? "On" : "Off"}
+                            </code>
                         </>
-                    )
+                    ),
+                    control: (
+                        <Setting.Toggle
+                            value={settings.embeds.showBgDots}
+                            onChange={onShowBgDotsChange}
+                        />
+                    ),
                 }}
             />
-        </>
-    );
-}
-
-export default function EmbedsSettings() {
-    return (
-        <>
-            <Setting.Container>
-                <EmbedsSettingsGroup />
-            </Setting.Container>
-        </>
+        </Setting.Container>
     );
 }

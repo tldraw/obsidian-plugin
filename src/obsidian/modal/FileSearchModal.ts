@@ -350,7 +350,7 @@ function filterSearchPath(tFolder: TFolder, searchPath: string, extensions?: str
 }
 
 function debounce<T extends [unknown, ...unknown[]]>(/** callback to debounce */ cb: (...args: T) => void, /** milliseconds */ wait: number) {
-    let timeout: undefined | NodeJS.Timeout;
+    let timeout: undefined | number;
     return function (...args: T) {
         clearTimeout(timeout);
         timeout = setTimeout(() => cb(...args), wait);
