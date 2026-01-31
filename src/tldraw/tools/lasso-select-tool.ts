@@ -6,6 +6,14 @@ export class LassoSelectTool extends StateNode {
     return [IdleState, LassoingState]
   }
   static override initial = 'idle'
+
+  override onEnter() {
+    this.editor.setCursor({ type: 'cross', rotation: 0 })
+  }
+
+  override onExit() {
+    this.editor.setCursor({ type: 'default', rotation: 0 })
+  }
 }
 
 export class IdleState extends StateNode {
