@@ -274,6 +274,64 @@ const TldrawApp = ({ plugin, store,
 		(window as any).tldrawStrokeOptions = plugin.settings.tldrawOptions?.strokeParameters;
 	}, [plugin.settings.tldrawOptions?.strokeParameters]);
 
+	// Fix for tools not working properly when zoomed
+	// This effect monitors zoom level changes and refreshes the viewport bounds
+	React.useEffect(() => {
+		if (!editor) return;
+
+		let lastZoomLevel = editor.getZoomLevel();
+		let debounceTimer: ReturnType<typeof setTimeout>;
+
+		const removeHandler = editor.sideEffects.registerAfterChangeHandler('camera', (_prev, next) => {
+			const currentZoomLevel = next.z;
+
+			// Only act when zoom level actually changes
+			if (currentZoomLevel !== lastZoomLevel) {
+				lastZoomLevel = currentZoomLevel;
+
+				// Debounce the fix to avoid interrupting the zoom gesture
+				// and to ensure we only reset after the zoom has settled.
+				clearTimeout(debounceTimer);
+				debounceTimer = setTimeout(() => {
+					const currentToolId = editor.getCurrentToolId();
+					console.log(`[tldraw-plugin] Zoom change detected. Resetting tool state from ${currentToolId}...`);
+
+					// Attempt to cancel any current interaction state
+					if ('cancel' in editor && typeof (editor as any).cancel === 'function') {
+						(editor as any).cancel();
+					}
+
+					editor.selectNone();
+
+					// Dispatch global input release events to clear stuck pointers
+					window.dispatchEvent(new PointerEvent('pointerup'));
+					window.dispatchEvent(new MouseEvent('mouseup'));
+
+					// Force a tool switch to reset the state
+					if (currentToolId !== 'select') {
+						editor.setCurrentTool('select');
+						setTimeout(() => {
+							editor.setCurrentTool(currentToolId);
+							console.log(`[tldraw-plugin] Reset back to ${currentToolId}`);
+						}, 50); // Increased delay to ensure state transition completes
+					} else {
+						// If we were in select, switch to hand and back
+						editor.setCurrentTool('hand');
+						setTimeout(() => {
+							editor.setCurrentTool('select');
+							console.log(`[tldraw-plugin] Reset back to select`);
+						}, 50);
+					}
+				}, 200); // Increased debounce to 200ms
+			}
+		});
+
+		return () => {
+			removeHandler();
+			clearTimeout(debounceTimer);
+		};
+	}, [editor]);
+
 	const enabledTools = React.useMemo(() => {
 		const toolbarTools = plugin.settings.tldrawOptions?.toolbarTools;
 		const defaults = [...defaultTools, ...defaultShapeTools];
