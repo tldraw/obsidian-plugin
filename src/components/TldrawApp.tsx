@@ -274,63 +274,7 @@ const TldrawApp = ({ plugin, store,
 		(window as any).tldrawStrokeOptions = plugin.settings.tldrawOptions?.strokeParameters;
 	}, [plugin.settings.tldrawOptions?.strokeParameters]);
 
-	// Fix for tools not working properly when zoomed
-	// This effect monitors zoom level changes and refreshes the viewport bounds
-	React.useEffect(() => {
-		if (!editor) return;
 
-		let lastZoomLevel = editor.getZoomLevel();
-		let debounceTimer: ReturnType<typeof setTimeout>;
-
-		const removeHandler = editor.sideEffects.registerAfterChangeHandler('camera', (_prev, next) => {
-			const currentZoomLevel = next.z;
-
-			// Only act when zoom level actually changes
-			if (currentZoomLevel !== lastZoomLevel) {
-				lastZoomLevel = currentZoomLevel;
-
-				// Debounce the fix to avoid interrupting the zoom gesture
-				// and to ensure we only reset after the zoom has settled.
-				clearTimeout(debounceTimer);
-				debounceTimer = setTimeout(() => {
-					const currentToolId = editor.getCurrentToolId();
-					console.log(`[tldraw-plugin] Zoom change detected. Resetting tool state from ${currentToolId}...`);
-
-					// Attempt to cancel any current interaction state
-					if ('cancel' in editor && typeof (editor as any).cancel === 'function') {
-						(editor as any).cancel();
-					}
-
-					editor.selectNone();
-
-					// Dispatch global input release events to clear stuck pointers
-					window.dispatchEvent(new PointerEvent('pointerup'));
-					window.dispatchEvent(new MouseEvent('mouseup'));
-
-					// Force a tool switch to reset the state
-					if (currentToolId !== 'select') {
-						editor.setCurrentTool('select');
-						setTimeout(() => {
-							editor.setCurrentTool(currentToolId);
-							console.log(`[tldraw-plugin] Reset back to ${currentToolId}`);
-						}, 50); // Increased delay to ensure state transition completes
-					} else {
-						// If we were in select, switch to hand and back
-						editor.setCurrentTool('hand');
-						setTimeout(() => {
-							editor.setCurrentTool('select');
-							console.log(`[tldraw-plugin] Reset back to select`);
-						}, 50);
-					}
-				}, 200); // Increased debounce to 200ms
-			}
-		});
-
-		return () => {
-			removeHandler();
-			clearTimeout(debounceTimer);
-		};
-	}, [editor]);
 
 	const enabledTools = React.useMemo(() => {
 		const toolbarTools = plugin.settings.tldrawOptions?.toolbarTools;
@@ -384,6 +328,54 @@ const TldrawApp = ({ plugin, store,
 			}
 		}
 	});
+
+	// Prevent gesture events from bubbling to Obsidian (Fixes Mac trackpad zoom interference)
+	React.useEffect(() => {
+		const el = editorContainerRef.current;
+		if (!el) return;
+
+		// We must stop propagation of the wheel event to prevent Obsidian from scrolling/zooming the parent.
+		// We also prevent default to ensure the browser doesn't perform a native page zoom.
+		const handleWheel = (e: WheelEvent) => {
+			e.stopPropagation();
+			if (e.cancelable) e.preventDefault();
+		};
+
+		// For gestures (pinch-zoom on trackpad), we must NOT stop propagation, 
+		// because Tldraw likely relies on global window listeners to track the gesture state.
+		// However, we prevent default to stop the browser's native response.
+		// AND we explicitly interrupt the editor on 'gestureend' to prevent it from getting stuck in a zoom state.
+		const handleGesture = (e: Event) => {
+			if (e.cancelable) e.preventDefault();
+			if (e.type === 'gestureend') {
+				editor?.interrupt();
+			}
+		};
+
+		// "Clean Slate" Protocol:
+		// If the user presses the pointer down (to draw, select, etc.), we forcefully interrupt
+		// any lingering states (like a stuck zoom or pan). This runs in the CAPTURE phase,
+		// triggering BEFORE Tldraw receives the event. This ensures Tldraw is in an 'idle' state
+		// and ready to accept the new input.
+		const handlePointerDownCapture = (e: PointerEvent) => {
+			// We do NOT stop propagation here, because Tldraw needs this event to start drawing.
+			editor?.interrupt();
+		};
+
+		el.addEventListener('wheel', handleWheel, { passive: false });
+		el.addEventListener('gesturestart', handleGesture, { passive: false });
+		el.addEventListener('gesturechange', handleGesture, { passive: false });
+		el.addEventListener('gestureend', handleGesture, { passive: false });
+		el.addEventListener('pointerdown', handlePointerDownCapture, { capture: true });
+
+		return () => {
+			el.removeEventListener('wheel', handleWheel);
+			el.removeEventListener('gesturestart', handleGesture);
+			el.removeEventListener('gesturechange', handleGesture);
+			el.removeEventListener('gestureend', handleGesture);
+			el.removeEventListener('pointerdown', handlePointerDownCapture, { capture: true });
+		};
+	}, [editorContainerRef, editor]);
 
 	/**
 	 * "Flashbang" workaround

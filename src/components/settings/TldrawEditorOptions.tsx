@@ -5,6 +5,9 @@ import CameraOptionsSettings from "./CameraOptionsSettings";
 import useSettingsManager from "src/hooks/useSettingsManager";
 import useUserPluginSettings from "src/hooks/useUserPluginSettings";
 import { defaultTldrawOptions } from "tldraw";
+import { DEFAULT_SETTINGS } from "src/obsidian/TldrawSettingsTab";
+import { DEFAULT_SAVE_DELAY, MIN_SAVE_DELAY, MAX_SAVE_DELAY } from "src/utils/constants";
+import { clamp, msToSeconds } from "src/utils/utils";
 
 function StrokeParametersGroup() {
     const settingsManager = useSettingsManager();
@@ -277,6 +280,21 @@ function TldrawEditorOptionsGroup() {
         });
     }, [settingsManager, settings]);
 
+    const defaultDelay = msToSeconds(DEFAULT_SAVE_DELAY);
+    const minDelay = msToSeconds(MIN_SAVE_DELAY);
+    const maxDelay = msToSeconds(MAX_SAVE_DELAY);
+
+    const onSaveFileDelayChanged = useCallback(async (value: string) => {
+        const parsedValue = parseFloat(value);
+        if (isNaN(parsedValue) && value) return;
+        settingsManager.settings.saveFileDelay = clamp(
+            parsedValue || defaultDelay,
+            minDelay,
+            maxDelay
+        );
+        await settingsManager.updateSettings(settingsManager.settings);
+    }, [settingsManager]);
+
     return (
         <>
             <Setting
@@ -343,6 +361,28 @@ function TldrawEditorOptionsGroup() {
                             <option value="horizontal">Horizontal</option>
                             <option value="vertical">Vertical</option>
                         </select>
+                    )
+                }}
+            />
+            <Setting
+                slots={{
+                    name: 'Save delay',
+                    desc: (
+                        <>
+                            {`The delay in seconds to automatically save after a change has been made to a tlraw drawing. Must be a value between ${minDelay} and ${maxDelay} (1 hour). Requires reloading any tldraw files you may have open in a tab.`}
+                            <code className="ptl-default-code">
+                                {`DEFAULT: [${DEFAULT_SETTINGS.saveFileDelay}]`}
+                            </code>
+                        </>
+                    ),
+                    control: (
+                        <>
+                            <Setting.Text
+                                placeholder={`${defaultDelay}`}
+                                value={`${settings.saveFileDelay}`}
+                                onChange={onSaveFileDelayChanged}
+                            />
+                        </>
                     )
                 }}
             />
