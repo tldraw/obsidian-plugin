@@ -1,48 +1,247 @@
-# This is a basic workflow that is manually triggered
+name: Manual Release
 
-name: Manual workflow
+# NOTE: This workflow creates a release from the current repository state.
+# Make sure you're on the commit you want to release before running this workflow.
+# The commit should have the version you want to release in the manifest.json and versions.json files.
 
-# Controls when the action will run. Workflow runs when manually triggered using the UI
-# or API.
 on:
   workflow_dispatch:
-    # Inputs the workflow accepts.
     inputs:
       tag:
-        # Friendly description to be shown in the UI instead of 'name'
-        description: 'Existing tag to create release from.'
-        # Default value if no value is explicitly provided
-        default: '0.0.0'
-        # Input has to be provided for the workflow to run
+        description: 'Version tag to create release from (e.g., 1.26.3)'
+        default: ''
         required: true
-        # The data type of the input
         type: string
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+env:
+  CI: 1
+  PRINT_GITHUB_ANNOTATIONS: 1
+
+defaults:
+  run:
+    shell: bash
+
 jobs:
-  build:
+  release:
+    name: Create Release
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
     steps:
-      - uses: actions/checkout@v3
-
-      - name: Use Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: "24.x"
-
-      - name: Build plugin
+      - name: Validate tag format
+        id: validate_tag
         run: |
-          npm install
-          npm run dist
+          tag="${{ github.event.inputs.tag }}"
+          # Allow x.y.z or x.y.z-prerelease.label format
+          if ! echo "$tag" | grep -qE '^[0-9]+\.[0-9]+\.[0-9]+(-[a-zA-Z0-9.-]+)?$'; then
+            echo "❌ Invalid tag format. Must be in x.y.z format (e.g., 1.26.3) or x.y.z-prerelease format (e.g., 1.26.3-alpha.1)"
+            exit 1
+          fi
+          
+          # Check if it's a prerelease
+          if echo "$tag" | grep -qE '^[0-9]+\.[0-9]+\.[0-9]+-'; then
+            echo "is_prerelease=true" >> $GITHUB_OUTPUT
+            echo "✅ Tag format validated (prerelease): $tag"
+          else
+            echo "is_prerelease=false" >> $GITHUB_OUTPUT
+            echo "✅ Tag format validated (release): $tag"
+          fi
+          echo "tag=$tag" >> $GITHUB_OUTPUT
 
-      - name: Create release
+      - name: Check out plugin repository
+        uses: actions/checkout@v6
+
+      # We create a draft early on to ensure we are able to before actually spending time building the release files
+      - name: Create empty draft release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          tag="${{inputs.tag}}"
+          tag="${{ steps.validate_tag.outputs.tag }}"
+          is_prerelease="${{ steps.validate_tag.outputs.is_prerelease }}"
+          
+          prerelease_args=""
+          if [ "$is_prerelease" = "true" ]; then
+            prerelease_args="--prerelease"
+          fi
 
+          # Ensure the specific tag exists locally; fetch only that tag if needed
+          if ! git rev-parse -q --verify "refs/tags/$tag" >/dev/null; then
+            echo "Tag $tag not found locally; attempting to fetch from origin..."
+            if git ls-remote --exit-code --tags origin "refs/tags/$tag" >/dev/null 2>&1; then
+              git fetch origin "refs/tags/$tag:refs/tags/$tag"
+              echo "Fetched tag $tag from origin"
+            else
+              echo "Tag $tag does not exist on origin"
+              exit 1
+            fi
+          else
+            echo "Tag $tag already present locally"
+          fi
+          
+          # Create empty draft release
           gh release create "$tag" \
-            --title="$tag" \
+            --title "$tag" \
+            --notes-from-tag \
             --draft \
-            main.js manifest.json styles.css
+            --verify-tag \
+            $prerelease_args
+          
+          if [ $? -ne 0 ]; then
+            echo "❌ Failed to create empty draft release"
+            exit 1
+          fi
+          
+          echo "✅ Empty draft release created: $tag"
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'npm'
+          cache-dependency-path: 'package-lock.json'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Make release files
+        id: make_release_files
+        run: |
+          set -e
+          package_out_dir="$(mktemp -d)"
+          npm run make-release-files -- --package-out-dir="$package_out_dir"
+
+          # Provide the package out directory to the next step
+          echo "package_out_dir=$package_out_dir" >> "$GITHUB_OUTPUT"
+
+      - name: Verify release files outputs
+        working-directory: ${{ steps.make_release_files.outputs.package_out_dir }}
+        run: |
+          if [ ! -f "manifest.json" ] || [ ! -f "main.js" ] || [ ! -f "styles.css" ]; then
+            echo "❌ Required release files not found"
+            exit 1
+          fi
+
+          # Check if the release files contain the correct version given the input tag
+          tag="${{ steps.validate_tag.outputs.tag }}"
+          is_prerelease="${{ steps.validate_tag.outputs.is_prerelease }}"
+
+          # manifest.json should have the version field matching the tag
+          if [[ "$(cat manifest.json | jq -r '.version')" != "$tag" ]]; then
+            echo "❌ manifest.json does not contain the version field matching the tag"
+            exit 1
+          fi
+
+          # We only update versions.json for release versions (not prereleases)
+          if [ "$is_prerelease" = "true" ]; then
+            echo "ℹ️  Prerelease version - skipping versions.json verification"
+          else
+            if [ ! -f "versions.json" ]; then
+              echo "❌ versions.json not found (required for release versions)"
+              exit 1
+            fi
+
+            # versions.json should have the key for the tag
+            if ! jq -e "has(\"$tag\")" versions.json > /dev/null; then
+              echo "❌ versions.json does not contain the key for the tag"
+              exit 1
+            fi
+          fi
+
+          echo "✅ Release files verified"
+      
+      - name: Copy versions.json and manifest.json to plugin repository
+        #  We only overwrite the manifest.json and versions.json for release versions (not prereleases)
+        #  - Obsidian only looks at x.y.z in the version field for plugin updates
+        #  - Prerelease labels are ignored by Obsidian
+        if: steps.validate_tag.outputs.is_prerelease != 'true'
+        run: |
+          set -e
+          package_out_dir="${{ steps.make_release_files.outputs.package_out_dir }}"
+          cp "$package_out_dir/versions.json" versions.json
+          cp "$package_out_dir/manifest.json" manifest.json
+          echo "✅ Copied versions.json and manifest.json to plugin repository"
+
+          # Configure git user
+          git config user.name 'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
+
+          # Create a commit with the modified files for the Publish step
+          git add versions.json manifest.json
+          
+          # Check if there are changes to commit
+          if git diff --staged --quiet; then
+            echo "❌ No changes to commit. Expected versions.json or manifest.json to be updated."
+            exit 1
+          else
+            git commit -m "Update versions.json and manifest.json for release ${{ steps.validate_tag.outputs.tag }}"
+            echo "✅ Changes committed"
+          fi
+
+      - name: Skip copying files for prerelease
+        if: steps.validate_tag.outputs.is_prerelease == 'true'
+        run: |
+          echo "ℹ️  Prerelease detected - skipping manifest.json and versions.json copy to plugin repository"
+
+      - name: Update release draft
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          tag="${{ steps.validate_tag.outputs.tag }}"
+          package_out_dir="${{ steps.make_release_files.outputs.package_out_dir }}"
+
+          release_files=(
+            "$package_out_dir/main.js"
+            "$package_out_dir/styles.css"
+            "$package_out_dir/manifest.json"
+          )
+
+          for file in "${release_files[@]}"; do
+            if [ ! -f "$file" ]; then
+              echo "❌ Release file $file not found"
+              exit 1
+            fi
+          done
+
+          echo "✅ Release files found"
+
+          # Upload files to the existing draft release
+          gh release upload "$tag" \
+            ${release_files[@]} \
+            --clobber
+
+          if [ $? -ne 0 ]; then
+            echo "❌ Failed to update draft release with files"
+            exit 1
+          fi
+          
+          echo "✅ Draft release updated with files: $tag"
+
+      - name: Publish release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          tag="${{ steps.validate_tag.outputs.tag }}"
+          is_prerelease="${{ steps.validate_tag.outputs.is_prerelease }}"
+
+          # Only push changes for non-prerelease versions
+          if [ "$is_prerelease" = "true" ]; then
+            # We are not adding any new files
+            echo "ℹ️  Prerelease version - skipping git push"
+          else
+            git push
+
+            if [ $? -ne 0 ]; then
+              echo "❌ Failed to push changes"
+              exit 1
+            fi
+          fi
+
+          gh release edit "$tag" --draft=false
+
+          if [ $? -ne 0 ]; then
+            echo "❌ Failed to publish release"
+            exit 1
+          fi
+
+          echo "✅ Release published: $tag"

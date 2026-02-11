@@ -1,24 +1,23 @@
-import { normalizePath } from "obsidian";
+import { normalizePath } from 'obsidian'
 
 export function getDir(path: string): string {
-    const normalized = normalizePath(path);
-    const lastIndex = normalized.lastIndexOf('/');
-    if(lastIndex === -1) return '/';
-    const dir = normalized.slice(0, lastIndex);
-    return dir.length === 0
-            ? '/' : dir;
+	const normalized = normalizePath(path)
+	const lastIndex = normalized.lastIndexOf('/')
+	if (lastIndex === -1) return '/'
+	const dir = normalized.slice(0, lastIndex)
+	return dir.length === 0 ? '/' : dir
 }
 
 export function pathBasename(path: string) {
-	const normalized = normalizePath(path);
-    const lastIndex = normalized.lastIndexOf('/');
-    if(lastIndex === -1) return path;
-	return path.slice(lastIndex + 1);
+	const normalized = normalizePath(path)
+	const lastIndex = normalized.lastIndexOf('/')
+	if (lastIndex === -1) return path
+	return path.slice(lastIndex + 1)
 }
 
 export function pathBasenameNoExt(path: string) {
-    const basename = pathBasename(path);
-    const lastDotIndex = basename.lastIndexOf('.');
-    if(lastDotIndex === -1) return basename;
-    return basename.slice(0, lastDotIndex);
+	const basename = pathBasename(path)
+	const lastDotIndex = basename.lastIndexOf('.')
+	if (lastDotIndex === -1) return basename
+	return basename.slice(0, lastDotIndex)
 }

@@ -1,14 +1,33 @@
-import { Editor, TLExportType, TLImageExportOptions, TLUiActionItem, TLUiActionsContextType, TLUiEventContextType, TLUiEventSource, TLUiOverrideHelpers, TLUiOverrides, useUiEvents } from "tldraw";
-import { Platform } from "obsidian";
-import TldrawPlugin from "src/main";
-import { downloadBlob, getSaveFileCopyAction, getSaveFileCopyInVaultAction, importFileAction, OPEN_FILE_ACTION, SAVE_FILE_COPY_ACTION, SAVE_FILE_COPY_IN_VAULT_ACTION } from "src/utils/file";
+import { Platform } from 'obsidian'
+import TldrawPlugin from 'src/main'
+import {
+	downloadBlob,
+	getSaveFileCopyAction,
+	getSaveFileCopyInVaultAction,
+	importFileAction,
+	OPEN_FILE_ACTION,
+	SAVE_FILE_COPY_ACTION,
+	SAVE_FILE_COPY_IN_VAULT_ACTION,
+} from 'src/utils/file'
+import {
+	Editor,
+	TLExportType,
+	TLImageExportOptions,
+	TLUiActionItem,
+	TLUiActionsContextType,
+	TLUiEventContextType,
+	TLUiEventSource,
+	TLUiOverrideHelpers,
+	TLUiOverrides,
+	useUiEvents,
+} from 'tldraw'
 
-const DEFAULT_CAMERA_STEPS = [0.1, 0.25, 0.5, 1, 2, 4, 8];
+const DEFAULT_CAMERA_STEPS = [0.1, 0.25, 0.5, 1, 2, 4, 8]
 
-export const PLUGIN_ACTION_TOGGLE_ZOOM_LOCK = 'toggle-zoom-lock';
+export const PLUGIN_ACTION_TOGGLE_ZOOM_LOCK = 'toggle-zoom-lock'
 
 export function uiOverrides(plugin: TldrawPlugin): TLUiOverrides {
-	const trackEvent = useUiEvents();
+	const trackEvent = useUiEvents()
 	return {
 		tools(editor, tools, helpers) {
 			// console.log(tools);
@@ -17,34 +36,33 @@ export function uiOverrides(plugin: TldrawPlugin): TLUiOverrides {
 			// 	...tools.draw,
 			// 	kbd: "!q",
 			// };
-			return tools;
+			return tools
 		},
 		actions: (editor, actions, { msg, addDialog, addToast, paste }) => {
-			const defaultDocumentName = msg("document.default-name");
+			const defaultDocumentName = msg('document.default-name')
 			if (!Platform.isMobile) {
-				actions[SAVE_FILE_COPY_ACTION] = getSaveFileCopyAction(
-					editor,
-					defaultDocumentName
-				);
+				actions[SAVE_FILE_COPY_ACTION] = getSaveFileCopyAction(editor, defaultDocumentName)
 			}
 
 			actions[SAVE_FILE_COPY_IN_VAULT_ACTION] = getSaveFileCopyInVaultAction(
 				editor,
 				defaultDocumentName,
 				plugin
-			);
+			)
 
-			actions[OPEN_FILE_ACTION] = importFileAction(plugin, addDialog);
+			actions[OPEN_FILE_ACTION] = importFileAction(plugin, addDialog)
 
-			(['jpeg', 'png', 'svg', 'webp'] satisfies TLExportType[]).map((e) => exportAllAsOverride(editor, actions, plugin, {
-				exportOptions: {
-					format: e,
-				},
-				defaultDocumentName,
-				trackEvent
-			}));
+			;(['jpeg', 'png', 'svg', 'webp'] satisfies TLExportType[]).map((e) =>
+				exportAllAsOverride(editor, actions, plugin, {
+					exportOptions: {
+						format: e,
+					},
+					defaultDocumentName,
+					trackEvent,
+				})
+			)
 
-			actions['paste'] = pasteFromClipboardOverride(editor, { msg, paste, addToast });
+			actions['paste'] = pasteFromClipboardOverride(editor, { msg, paste, addToast })
 
 			/**
 			 * https://tldraw.dev/examples/editor-api/lock-camera-zoom
@@ -52,7 +70,7 @@ export function uiOverrides(plugin: TldrawPlugin): TLUiOverrides {
 			actions[PLUGIN_ACTION_TOGGLE_ZOOM_LOCK] = {
 				id: PLUGIN_ACTION_TOGGLE_ZOOM_LOCK,
 				label: {
-					default: 'Toggle zoom lock'
+					default: 'Toggle zoom lock',
 				},
 				icon: PLUGIN_ACTION_TOGGLE_ZOOM_LOCK,
 				kbd: '!k',
@@ -65,7 +83,7 @@ export function uiOverrides(plugin: TldrawPlugin): TLUiOverrides {
 				},
 			}
 
-			return actions;
+			return actions
 		},
 		// toolbar(editor, toolbar, { tools }) {
 		// 	// console.log(toolbar);
@@ -88,13 +106,18 @@ export function uiOverrides(plugin: TldrawPlugin): TLUiOverrides {
 	}
 }
 
-function exportAllAsOverride(editor: Editor, actions: TLUiActionsContextType, plugin: TldrawPlugin, options: {
-	exportOptions?: TLImageExportOptions,
-	trackEvent: TLUiEventContextType,
-	defaultDocumentName: string
-}) {
-	const format = options.exportOptions?.format ?? 'png';
-	const key = `export-all-as-${format}` as const;
+function exportAllAsOverride(
+	editor: Editor,
+	actions: TLUiActionsContextType,
+	plugin: TldrawPlugin,
+	options: {
+		exportOptions?: TLImageExportOptions
+		trackEvent: TLUiEventContextType
+		defaultDocumentName: string
+	}
+) {
+	const format = options.exportOptions?.format ?? 'png'
+	const key = `export-all-as-${format}` as const
 	actions[key] = {
 		...actions[key],
 		async onSelect(source) {
@@ -104,17 +127,17 @@ function exportAllAsOverride(editor: Editor, actions: TLUiActionsContextType, pl
 			options.trackEvent('export-all-as', {
 				// @ts-ignore
 				format,
-				source
+				source,
 			})
 
-			const blob = (await editor.toImage(ids, options.exportOptions)).blob;
+			const blob = (await editor.toImage(ids, options.exportOptions)).blob
 
-			const res = await downloadBlob(blob, `${options.defaultDocumentName}.${format}`, plugin);
+			const res = await downloadBlob(blob, `${options.defaultDocumentName}.${format}`, plugin)
 
 			if (typeof res === 'object') {
 				res.showResultModal()
 			}
-		}
+		},
 	}
 }
 
@@ -124,17 +147,10 @@ function exportAllAsOverride(editor: Editor, actions: TLUiActionsContextType, pl
  */
 function pasteFromClipboardOverride(
 	editor: Editor,
-	{
-		addToast,
-		msg,
-		paste,
-	}: Pick<TLUiOverrideHelpers, 'addToast' | 'msg' | 'paste'>
+	{ addToast, msg, paste }: Pick<TLUiOverrideHelpers, 'addToast' | 'msg' | 'paste'>
 ): TLUiActionItem {
-	const pasteClipboard = (source: TLUiEventSource, items: ClipboardItem[]) => paste(
-		items,
-		source,
-		source === 'context-menu' ? editor.inputs.currentPagePoint : undefined
-	)
+	const pasteClipboard = (source: TLUiEventSource, items: ClipboardItem[]) =>
+		paste(items, source, source === 'context-menu' ? editor.inputs.currentPagePoint : undefined)
 	return {
 		id: 'paste',
 		label: 'action.paste',
@@ -144,7 +160,7 @@ function pasteFromClipboardOverride(
 			navigator.clipboard
 				?.read()
 				.then((clipboardItems) => {
-					pasteClipboard(source, clipboardItems);
+					pasteClipboard(source, clipboardItems)
 				})
 				.catch((e) => {
 					// Fallback to reading the clipboard as plain text.
@@ -152,14 +168,13 @@ function pasteFromClipboardOverride(
 						?.readText()
 						.then((val) => {
 							pasteClipboard(source, [
-								new ClipboardItem(
-									{
-										'text/plain': new Blob([val], { type: 'text/plain' }),
-									}
-								)
-							]);
-						}).catch((ee) => {
-							console.error({ e, ee });
+								new ClipboardItem({
+									'text/plain': new Blob([val], { type: 'text/plain' }),
+								}),
+							])
+						})
+						.catch((ee) => {
+							console.error({ e, ee })
 							addToast({
 								title: msg('action.paste-error-title'),
 								description: msg('action.paste-error-description'),
@@ -168,5 +183,5 @@ function pasteFromClipboardOverride(
 						})
 				})
 		},
-	};
+	}
 }

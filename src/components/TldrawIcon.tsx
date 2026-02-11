@@ -1,4 +1,4 @@
-import * as React from "react";
+import * as React from 'react'
 
 const TldrawIcon = () => {
 	return (
@@ -10,7 +10,7 @@ const TldrawIcon = () => {
 				fill="currentColor"
 			/>
 		</svg>
-	);
-};
+	)
+}
 
-export default TldrawIcon;
+export default TldrawIcon

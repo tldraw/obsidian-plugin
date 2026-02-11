@@ -1,4 +1,4 @@
-import { createContext } from "react";
-import UserSettingsManager from "src/obsidian/settings/UserSettingsManager";
+import { createContext } from 'react'
+import UserSettingsManager from 'src/obsidian/settings/UserSettingsManager'
 
-export const SettingsManagerContext = createContext<UserSettingsManager | undefined>(undefined);
+export const SettingsManagerContext = createContext<UserSettingsManager | undefined>(undefined)

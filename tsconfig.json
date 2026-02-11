@@ -11,9 +11,16 @@
 		"moduleResolution": "bundler",
 		"importHelpers": true,
 		"isolatedModules": true,
+		"strict": true,
 		"strictNullChecks": true,
+		// Set types to empty array to avoid referencing node types within the plugin source code
+		"types": [],
 		"lib": ["DOM", "ESNext"],
-		"jsx": "react"
+		"jsx": "react",
+		"composite": true,
+		"skipLibCheck": true,
+		"skipDefaultLibCheck": true,
+		"noEmit": true
 	},
-	"include": ["**/*.ts", "**/*.tsx", "**/*.css"]
+	"include": ["src", "scripts", "eslint.config.mjs"]
 }

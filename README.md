@@ -6,6 +6,11 @@ This Obsidian plugin allows users to use [Tldraw](https://tldraw.com), which is 
 
 TIP: You can toggle between the view modes, using the command palette, keyboard shortcuts, status bar toggle at the bottom right, file menu, and context menu. See the plugin settings tab for customization options as well.
 
+## Plugin Usage Guides
+
+- [Custom icons and fonts](https://github.com/tldraw/obsidian-plugin/issues/58#issue-2571070259)
+- [Customizing embeds](https://github.com/tldraw/obsidian-plugin/issues/59)
+
 ## Development Goals
 
 The main goals of this plugin and repo is to keep up to date with the Tldraw's latest version and to add these features:
@@ -13,6 +18,18 @@ The main goals of this plugin and repo is to keep up to date with the Tldraw's l
 -   Preview the drawing when a tldraw file is referenced in markdown.
 -   Add markdown notes into tldraw.
 -   Export and import tools.
+
+## Structure
+
+- `src/` - Source code for the Obsidian plugin
+- `dist/` - Compiled output (generated during build)
+  - `development/` - Development build
+  - `production/` - Production build
+- `release/` - Files that are needed for the plugin release
+  - `manifest.json` 
+  - `versions.json`
+
+`manifest.json` and `versions.json` are updated by `npm run make-release-files` and should be committed if there are any changes.
 
 ## Installation
 
@@ -39,20 +56,27 @@ Tldraw in Obsidian is now available on the official community plugins list!
 -   Copy and paste over `main.js`, `styles.css`, `manifest.json` into the newly created `/tldraw-in-obsidian` folder.
 -   Make sure you enable the plugin by going into Settings > Community plugins > Installed plugins > toggle 'Tldraw'.
 
-## Guides
-
-- [Custom icons and fonts](https://github.com/tldraw/obsidian-plugin/issues/58#issue-2571070259)
-- [Customizing embeds](https://github.com/tldraw/obsidian-plugin/issues/59)
-
 ## Development
 
 -   Clone this repo or a fork to a local development folder.
 -   Place this folder in your `.obsidian/plugins` folder.
 -   Install NodeJS, then run `npm i` in the command line under your repo folder.
--   Run `npm run dev` to compile your plugin from `main.ts` to `main.js`.
+-   Run `npm run dev` to compile your plugin. Changes to `src/` will be automatically compiled to `dist/development/`.
 -   Make changes to the files in `/src`. Those changes should be automatically compiled into `main.js` and `styles.css`.
 -   To refresh your changes, go to Settings > Community Plugins > disable and enable the plugin. You can also close your vault and then reopen it but that's more bothersome.
 -   Do not edit the `styles.css` file at the root of the repo. Edit the one in `/src/styles.css` and the changes will be reflected automatically.
+
+## Building
+
+To build the plugin for production:
+
+```bash
+npm run build
+```
+
+## Releasing
+
+See [Creating a Release](./release/README.md)
 
 ## Contributions
 

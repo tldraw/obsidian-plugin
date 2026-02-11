@@ -15,20 +15,13 @@ export const defaultFonts = {
 	tldraw_draw_italic: 'Shantell_Sans-Informal_Regular_Italic.woff2',
 	tldraw_draw_bold: 'Shantell_Sans-Informal_Bold.woff2',
 	tldraw_draw_italic_bold: 'Shantell_Sans-Informal_Bold_Italic.woff2',
-} as const;
+} as const
 
 export type FontGroupMatcher = '_draw' | '_mono' | '_sans' | '_serif'
 
-export const fontExtensions = [
-	'otf',
-	'ttf',
-	'woff',
-	'woff2'
-] as const;
+export const fontExtensions = ['otf', 'ttf', 'woff', 'woff2'] as const
 
-export const iconExtensions = [
-	'svg'
-] as const;
+export const iconExtensions = ['svg'] as const
 
 // https://github.com/tldraw/tldraw/blob/eacdc6b6eada7a710586a2c6978b1ac75ca9b7d3/packages/tldraw/src/lib/ui/icon-types.ts#L149C1-L291C11
 export const iconTypes = [
@@ -173,7 +166,7 @@ export const iconTypes = [
 	'warning-triangle',
 	'zoom-in',
 	'zoom-out',
-] as const;
+] as const
 
 export const themePreferenceRecord = {
 	light: 'Light theme',
@@ -181,10 +174,10 @@ export const themePreferenceRecord = {
 	'match-theme': 'Match theme',
 }
 
-export const destinationMethods = ['attachments-folder', 'colocate', 'default-folder'] as const;
+export const destinationMethods = ['attachments-folder', 'colocate', 'default-folder'] as const
 
 export const destinationMethodsRecord = {
-	'colocate': 'Colocate file',
+	colocate: 'Colocate file',
 	'default-folder': 'Use default folder',
 	'attachments-folder': 'Use attachments folder',
-} satisfies Record<typeof destinationMethods[number], string>;
+} satisfies Record<(typeof destinationMethods)[number], string>

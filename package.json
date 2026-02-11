@@ -1,15 +1,19 @@
 {
 	"name": "tldraw-in-obsidian",
-	"version": "1.26.3",
+	"version": "1.27.0",
+	"description": "Integrates Tldraw into Obsidian, allowing users to draw and edit content on a virtual whiteboard.",
+	"main": "dist/production/main.js",
 	"private": true,
-	"description": "Create whiteboards, diagrams, and drawings with the official tldraw plugin.",
-	"main": "main.js",
 	"scripts": {
-		"dev": "node esbuild.config.mjs",
-		"build": "tsc -noEmit -skipLibCheck && node esbuild.config.mjs production",
-		"dist": "node esbuild.config.mjs production",
-		"version": "node version-bump.mjs && git add manifest.json versions.json",
-		"postinstall": "patch-package"
+		"clean": "rm -rf dist && rm -rf node_modules && npm install",
+		"dev": "NODE_ENV=development tsx ./scripts/build.mts",
+		"build": "NODE_ENV=production tsx ./scripts/build.mts",
+		"version": "tsx ./scripts/version-bump.mts",
+		"postinstall": "patch-package",
+		"package": "tsx ./scripts/package.mts",
+		"make-release-files": "tsx ./scripts/make-release-files.ts",
+		"lint": "eslint src scripts",
+		"format-current": "prettier --write --cache $(git diff --name-only --diff-filter d | xargs)"
 	},
 	"keywords": [
 		"obsidian",
@@ -25,15 +29,26 @@
 		"Sam Alhaqab"
 	],
 	"devDependencies": {
+		"@eslint/eslintrc": "^3.3.3",
+		"@eslint/js": "^9.39.2",
+		"@obsidian-plugin-toolkit/esbuild": "^0.2.0",
+		"@obsidian-plugin-toolkit/react": "^0.2.0",
+		"@types/node": "^24.10.9",
 		"@types/react": "^18.3.5",
 		"@types/react-dom": "^18.3.0",
-		"@typescript-eslint/eslint-plugin": "7.12.0",
-		"@typescript-eslint/parser": "7.12.0",
+		"@typescript-eslint/eslint-plugin": "^8.54.0",
+		"@typescript-eslint/parser": "^8.54.0",
 		"builtin-modules": "3.3.0",
-		"esbuild": "^0.23.1",
-		"obsidian": "^1.10.0",
+		"esbuild": "^0.27.2",
+		"eslint": "^8.57.1",
+		"eslint-config-prettier": "^10.1.8",
+		"eslint-plugin-react": "^7.37.5",
+		"obsidian": "^1.11.4",
 		"patch-package": "^8.0.0",
+		"prettier": "^3.8.1",
+		"prettier-plugin-organize-imports": "^4.3.0",
 		"tslib": "2.6.3",
+		"tsx": "^4.21.0",
 		"typescript": "^5.5.4"
 	},
 	"dependencies": {
