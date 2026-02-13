@@ -44,6 +44,7 @@ import { TldrawInObsidianPluginProvider } from "src/contexts/plugin";
 import { PTLEditorBlockBlur } from "src/utils/dom-attributes";
 import { LassoSelectTool } from "src/tldraw/tools/lasso-select-tool";
 import LassoOverlays from "./LassoOverlays";
+import { usePenModeUnstick } from "src/hooks/usePenModeUnstick";
 
 type TldrawAppOptions = {
 	iconAssetUrls?: TLUiAssetUrlOverrides['icons'],
@@ -194,6 +195,7 @@ const TldrawApp = ({ plugin, store,
 	}, [_onUiEvent, editor]);
 
 	const [isFocused, setIsFocused] = React.useState(false);
+	usePenModeUnstick(editor ?? null);
 
 	const setFocusedEditor = (isMounting: boolean, editor?: Editor) => {
 		const { currTldrawEditor } = plugin;
@@ -313,54 +315,6 @@ const TldrawApp = ({ plugin, store,
 			}
 		}
 	});
-
-	// Prevent gesture events from bubbling to Obsidian (Fixes Mac trackpad zoom interference)
-	React.useEffect(() => {
-		const el = editorContainerRef.current;
-		if (!el) return;
-
-		// We must stop propagation of the wheel event to prevent Obsidian from scrolling/zooming the parent.
-		// We also prevent default to ensure the browser doesn't perform a native page zoom.
-		const handleWheel = (e: WheelEvent) => {
-			e.stopPropagation();
-			if (e.cancelable) e.preventDefault();
-		};
-
-		// For gestures (pinch-zoom on trackpad), we must NOT stop propagation, 
-		// because Tldraw likely relies on global window listeners to track the gesture state.
-		// However, we prevent default to stop the browser's native response.
-		// AND we explicitly interrupt the editor on 'gestureend' to prevent it from getting stuck in a zoom state.
-		const handleGesture = (e: Event) => {
-			if (e.cancelable) e.preventDefault();
-			if (e.type === 'gestureend') {
-				editor?.interrupt();
-			}
-		};
-
-		// "Clean Slate" Protocol:
-		// If the user presses the pointer down (to draw, select, etc.), we forcefully interrupt
-		// any lingering states (like a stuck zoom or pan). This runs in the CAPTURE phase,
-		// triggering BEFORE Tldraw receives the event. This ensures Tldraw is in an 'idle' state
-		// and ready to accept the new input.
-		const handlePointerDownCapture = (e: PointerEvent) => {
-			// We do NOT stop propagation here, because Tldraw needs this event to start drawing.
-			editor?.interrupt();
-		};
-
-		el.addEventListener('wheel', handleWheel, { passive: false });
-		el.addEventListener('gesturestart', handleGesture, { passive: false });
-		el.addEventListener('gesturechange', handleGesture, { passive: false });
-		el.addEventListener('gestureend', handleGesture, { passive: false });
-		el.addEventListener('pointerdown', handlePointerDownCapture, { capture: true });
-
-		return () => {
-			el.removeEventListener('wheel', handleWheel);
-			el.removeEventListener('gesturestart', handleGesture);
-			el.removeEventListener('gesturechange', handleGesture);
-			el.removeEventListener('gestureend', handleGesture);
-			el.removeEventListener('pointerdown', handlePointerDownCapture, { capture: true });
-		};
-	}, [editorContainerRef, editor]);
 
 	/**
 	 * "Flashbang" workaround

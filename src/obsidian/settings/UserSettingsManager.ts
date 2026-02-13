@@ -180,6 +180,45 @@ export default class UserSettingsManager {
         this.updateSettings(this.#plugin.settings);
     }
 
+    async updateEditorPanSpeed(panSpeed: UserTLCameraOptions['panSpeed']) {
+        let options = this.#plugin.settings.cameraOptions;
+        if (panSpeed === options?.panSpeed) return;
+        if (panSpeed === undefined) {
+            delete options?.panSpeed;
+        } else {
+            if (!options) options = {};
+            options.panSpeed = panSpeed;
+        }
+        this.#plugin.settings.cameraOptions = Object.assign({}, options);
+        this.updateSettings(this.#plugin.settings);
+    }
+
+    async updateEditorZoomSpeed(zoomSpeed: UserTLCameraOptions['zoomSpeed']) {
+        let options = this.#plugin.settings.cameraOptions;
+        if (zoomSpeed === options?.zoomSpeed) return;
+        if (zoomSpeed === undefined) {
+            delete options?.zoomSpeed;
+        } else {
+            if (!options) options = {};
+            options.zoomSpeed = zoomSpeed;
+        }
+        this.#plugin.settings.cameraOptions = Object.assign({}, options);
+        this.updateSettings(this.#plugin.settings);
+    }
+
+    async updateEditorZoomSteps(zoomSteps: UserTLCameraOptions['zoomSteps']) {
+        let options = this.#plugin.settings.cameraOptions;
+        if (zoomSteps === options?.zoomSteps) return;
+        if (zoomSteps === undefined) {
+            delete options?.zoomSteps;
+        } else {
+            if (!options) options = {};
+            options.zoomSteps = zoomSteps;
+        }
+        this.#plugin.settings.cameraOptions = Object.assign({}, options);
+        this.updateSettings(this.#plugin.settings);
+    }
+
     async updatePasteAtCursor(pasteAtCursor: NonNullable<TldrawPluginSettings['clipboard']>['pasteAtCursor']) {
         let options = this.#plugin.settings.clipboard;
         if (pasteAtCursor === options?.pasteAtCursor) return;
