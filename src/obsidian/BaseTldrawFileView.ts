@@ -9,7 +9,8 @@ import {
 import TldrawPlugin from 'src/main'
 import { MARKDOWN_ICON_NAME, VIEW_TYPE_MARKDOWN } from 'src/utils/constants'
 import { TLDataDocumentStore } from 'src/utils/document'
-import { parseDeepLinkString, TLDeepLink } from 'tldraw'
+import { createDeepLinkString, parseDeepLinkString, TLDeepLink } from 'tldraw'
+import { getViewport } from 'src/utils/viewport-storage'
 import { intercept, Interceptor, MethodKeys } from '../utils/decorators/methods'
 import TldrawAssetsModal from './modal/TldrawAssetsModal'
 
@@ -211,20 +212,25 @@ export abstract class BaseTldrawFileView<View extends FileView = FileView> {
 	}
 
 	protected getTldrawOptions(): TldrawAppProps['options'] {
+		const initialDeepLink = this.#deepLink
+			? createDeepLinkString(this.#deepLink)
+			: undefined
+
+		const filePath = this.fileView.file?.path
+		const vaultName = this.plugin.app.vault.getName()
+		const hasSavedViewport = filePath
+			? getViewport(vaultName, filePath) !== null
+			: false
+
 		return {
 			components: {
 				InFrontOfTheCanvas,
 			},
+			initialDeepLink,
 			onEditorMount: (editor) => {
-				const viewState = this.fileView.getEphemeralState()
-				console.log(this.#deepLink)
-				console.log({ viewState })
-				if (this.#deepLink) {
-					console.log(this.#deepLink)
-					editor.navigateToDeepLink(this.#deepLink)
-					return
+				if (!initialDeepLink && !hasSavedViewport) {
+					editor.zoomToFit()
 				}
-				return editor.zoomToFit()
 			},
 		}
 	}
@@ -233,6 +239,7 @@ export abstract class BaseTldrawFileView<View extends FileView = FileView> {
 		return createRootAndRenderTldrawApp(entryPoint, this.plugin, {
 			app: this.getTldrawOptions(),
 			store,
+			filePath: this.fileView.file?.path,
 		})
 	}
 
