@@ -11,6 +11,7 @@ import {
 } from 'src/utils/file'
 import {
 	Editor,
+	PageRecordType,
 	TLExportType,
 	TLImageExportOptions,
 	TLUiActionItem,
@@ -52,7 +53,6 @@ export function uiOverrides(plugin: TldrawPlugin): TLUiOverrides {
 			)
 
 			actions[OPEN_FILE_ACTION] = importFileAction(plugin, addDialog)
-
 			;(['jpeg', 'png', 'svg', 'webp'] satisfies TLExportType[]).map((e) =>
 				exportAllAsOverride(editor, actions, plugin, {
 					exportOptions: {
@@ -80,8 +80,10 @@ export function uiOverrides(plugin: TldrawPlugin): TLUiOverrides {
 					while (existingNames.includes(name)) {
 						name = `Page ${i++}`
 					}
+					const id = PageRecordType.createId()
 					editor.markHistoryStoppingPoint('create-page')
-					editor.createPage({ name })
+					editor.createPage({ name, id })
+					editor.setCurrentPage(id)
 				},
 			}
 
