@@ -17,6 +17,7 @@ import {
 } from 'src/utils/file'
 import { getIsDarkMode, isObsidianThemeDark } from 'src/utils/utils'
 import {
+	DefaultColorThemePalette,
 	DefaultMainMenu,
 	DefaultMainMenuContent,
 	Editor,
@@ -34,6 +35,7 @@ import {
 	useActions,
 	useAtom,
 	useComputed,
+	useReactor,
 	useValue,
 } from 'tldraw'
 import PluginKeyboardShortcutsDialog from './PluginKeyboardShortcutsDialog'
@@ -263,10 +265,31 @@ const TldrawApp = ({
 	useEffect(() => {
 		const updateTheme = () => {
 			isDarkMode.set(getIsDarkMode(plugin.settings.themeMode))
+			if (isDarkMode.get()) {
+				DefaultColorThemePalette.darkMode.background = getComputedStyle(document.body)
+					.getPropertyValue('--background-primary')
+					.trim()
+			} else {
+				DefaultColorThemePalette.lightMode.background = getComputedStyle(document.body)
+					.getPropertyValue('--background-primary')
+					.trim()
+			}
 		}
 		const eventRef = plugin.app.workspace.on('css-change', updateTheme)
 		return () => plugin.app.workspace.offref(eventRef)
 	}, [plugin, isDarkMode])
+
+	useReactor('set bg color', () => {
+		if (isDarkMode.get()) {
+			DefaultColorThemePalette.darkMode.background = getComputedStyle(document.body)
+				.getPropertyValue('--background-primary')
+				.trim()
+		} else {
+			DefaultColorThemePalette.lightMode.background = getComputedStyle(document.body)
+				.getPropertyValue('--background-primary')
+				.trim()
+		}
+	})
 
 	const obsidianThemeOverride = useValue(
 		'obsidianThemeOverride',

@@ -63,9 +63,9 @@ import { checkAndCreateFolder, getNewUniqueFilepath, isValidViewType } from './u
 export default class TldrawPlugin extends Plugin {
 	#instance?: TldrawInObsidianPluginInstance
 	// status bar stuff:
-	statusBarRoot: HTMLElement
-	statusBarViewModeReactRoot: Root
-	unsubscribeToViewModeState: () => void
+	statusBarRoot?: HTMLElement
+	statusBarViewModeReactRoot?: Root
+	unsubscribeToViewModeState?: () => void
 	transientUpdate: boolean = false
 
 	// keeps track of what view mode each tab-file combo should be in:
@@ -173,8 +173,8 @@ export default class TldrawPlugin extends Plugin {
 
 	onunload() {
 		this.tlDataDocumentStoreManager.dispose()
-		this.unsubscribeToViewModeState()
-		this.statusBarViewModeReactRoot.unmount()
+		this.unsubscribeToViewModeState?.()
+		this.statusBarViewModeReactRoot?.unmount()
 		URL.revokeObjectURL(this.embedBoundsSelectorIcon)
 		this.#instance = undefined
 		super.onunload()
@@ -346,8 +346,8 @@ export default class TldrawPlugin extends Plugin {
 	private registerCommands = () => registerCommands(this)
 
 	public setStatusBarViewModeVisibility(visible: boolean) {
-		if (visible) this.statusBarRoot.removeClass('ptl-hide-statusbar-viewmode')
-		else this.statusBarRoot.addClass('ptl-hide-statusbar-viewmode')
+		if (visible) this.statusBarRoot?.removeClass('ptl-hide-statusbar-viewmode')
+		else this.statusBarRoot?.addClass('ptl-hide-statusbar-viewmode')
 	}
 
 	public updateStatusBarViewMode(view: ViewType) {
