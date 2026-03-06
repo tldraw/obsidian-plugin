@@ -7,7 +7,7 @@ import { TldrawInObsidianPluginProvider } from 'src/contexts/plugin'
 import { useClickAwayListener } from 'src/hooks/useClickAwayListener'
 import { useTldrawAppEffects } from 'src/hooks/useTldrawAppHook'
 import TldrawPlugin from 'src/main'
-import { PLUGIN_ACTION_TOGGLE_ZOOM_LOCK, uiOverrides } from 'src/tldraw/ui-overrides'
+import { CREATE_PAGE_ACTION, PLUGIN_ACTION_TOGGLE_ZOOM_LOCK, uiOverrides } from 'src/tldraw/ui-overrides'
 import { TLDataDocumentStore } from 'src/utils/document'
 import { PTLEditorBlockBlur } from 'src/utils/dom-attributes'
 import {
@@ -26,6 +26,7 @@ import {
 	TldrawEditorStoreProps,
 	TldrawUiMenuItem,
 	TldrawUiMenuSubmenu,
+	TldrawUiRow,
 	TLStateNodeConstructor,
 	TLStoreSnapshot,
 	TLUiAssetUrlOverrides,
@@ -35,7 +36,10 @@ import {
 	useActions,
 	useAtom,
 	useComputed,
+	useEditor,
+	usePassThroughWheelEvents,
 	useReactor,
+	useTldrawUiComponents,
 	useValue,
 } from 'tldraw'
 import PluginKeyboardShortcutsDialog from './PluginKeyboardShortcutsDialog'
@@ -113,6 +117,28 @@ const components = (plugin: TldrawPlugin): TLComponents => ({
 	),
 	KeyboardShortcutsDialog: PluginKeyboardShortcutsDialog,
 	QuickActions: PluginQuickActions,
+	MenuPanel: () => {
+		const ref = React.useRef<HTMLDivElement>(null)
+		usePassThroughWheelEvents(ref)
+
+		const { MainMenu, PageMenu } = useTldrawUiComponents()
+
+		const editor = useEditor()
+		const hasMultiplePages = useValue('hasMultiplePages', () => editor.getPages().length > 1, [
+			editor,
+		])
+
+		if (!MainMenu && !PageMenu) return null
+
+		return (
+			<nav ref={ref} className="tlui-menu-zone">
+				<TldrawUiRow>
+					{MainMenu && <MainMenu />}
+					{PageMenu && hasMultiplePages && <PageMenu />}
+				</TldrawUiRow>
+			</nav>
+		)
+	},
 })
 
 function LocalFileMenu(props: { plugin: TldrawPlugin }) {
@@ -123,6 +149,7 @@ function LocalFileMenu(props: { plugin: TldrawPlugin }) {
 			{Platform.isMobile ? <></> : <TldrawUiMenuItem {...actions[SAVE_FILE_COPY_ACTION]} />}
 			<TldrawUiMenuItem {...actions[SAVE_FILE_COPY_IN_VAULT_ACTION]} />
 			<TldrawUiMenuItem {...actions[OPEN_FILE_ACTION]} />
+			<TldrawUiMenuItem {...actions[CREATE_PAGE_ACTION]} />
 		</TldrawUiMenuSubmenu>
 	)
 }

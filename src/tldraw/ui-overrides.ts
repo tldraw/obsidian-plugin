@@ -25,6 +25,7 @@ import {
 const DEFAULT_CAMERA_STEPS = [0.1, 0.25, 0.5, 1, 2, 4, 8]
 
 export const PLUGIN_ACTION_TOGGLE_ZOOM_LOCK = 'toggle-zoom-lock'
+export const CREATE_PAGE_ACTION = 'create-page'
 
 export function uiOverrides(plugin: TldrawPlugin): TLUiOverrides {
 	const trackEvent = useUiEvents()
@@ -67,6 +68,23 @@ export function uiOverrides(plugin: TldrawPlugin): TLUiOverrides {
 			/**
 			 * https://tldraw.dev/examples/editor-api/lock-camera-zoom
 			 */
+			actions[CREATE_PAGE_ACTION] = {
+				id: CREATE_PAGE_ACTION,
+				label: {
+					default: 'New page',
+				},
+				onSelect() {
+					const existingNames = editor.getPages().map((p) => p.name)
+					let name = 'Page 1'
+					let i = 2
+					while (existingNames.includes(name)) {
+						name = `Page ${i++}`
+					}
+					editor.markHistoryStoppingPoint('create-page')
+					editor.createPage({ name })
+				},
+			}
+
 			actions[PLUGIN_ACTION_TOGGLE_ZOOM_LOCK] = {
 				id: PLUGIN_ACTION_TOGGLE_ZOOM_LOCK,
 				label: {
