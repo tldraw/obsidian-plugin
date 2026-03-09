@@ -25,6 +25,7 @@ import {
 	DefaultColorThemePalette,
 	DefaultMainMenu,
 	DefaultMainMenuContent,
+	DefaultPageMenu,
 	Editor,
 	TLComponents,
 	Tldraw,
@@ -32,7 +33,6 @@ import {
 	TldrawOptions,
 	TldrawUiMenuItem,
 	TldrawUiMenuSubmenu,
-	TldrawUiRow,
 	TLStateNodeConstructor,
 	TLStoreSnapshot,
 	TLUiAssetUrlOverrides,
@@ -43,9 +43,7 @@ import {
 	useAtom,
 	useComputed,
 	useEditor,
-	usePassThroughWheelEvents,
 	useReactor,
-	useTldrawUiComponents,
 	useValue,
 } from 'tldraw'
 import PluginKeyboardShortcutsDialog from './PluginKeyboardShortcutsDialog'
@@ -131,27 +129,13 @@ const components = (plugin: TldrawPlugin): TLComponents => ({
 	),
 	KeyboardShortcutsDialog: PluginKeyboardShortcutsDialog,
 	QuickActions: PluginQuickActions,
-	MenuPanel: () => {
-		const ref = React.useRef<HTMLDivElement>(null)
-		usePassThroughWheelEvents(ref)
-
-		const { MainMenu, PageMenu } = useTldrawUiComponents()
-
+	PageMenu: () => {
 		const editor = useEditor()
 		const hasMultiplePages = useValue('hasMultiplePages', () => editor.getPages().length > 1, [
 			editor,
 		])
-
-		if (!MainMenu && !PageMenu) return null
-
-		return (
-			<nav ref={ref} className="tlui-menu-zone">
-				<TldrawUiRow>
-					{MainMenu && <MainMenu />}
-					{PageMenu && hasMultiplePages && <PageMenu />}
-				</TldrawUiRow>
-			</nav>
-		)
+		if (!hasMultiplePages) return null
+		return <DefaultPageMenu />
 	},
 })
 
