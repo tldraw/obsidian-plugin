@@ -283,39 +283,20 @@ const TldrawApp = ({
 	useEffect(() => {
 		const updateTheme = () => {
 			isDarkMode.set(getIsDarkMode(plugin.settings.themeMode))
-			if (isDarkMode.get()) {
-				DefaultColorThemePalette.darkMode.background = getComputedStyle(document.body)
-					.getPropertyValue('--background-primary')
-					.trim()
-			} else {
-				DefaultColorThemePalette.lightMode.background = getComputedStyle(document.body)
-					.getPropertyValue('--background-primary')
-					.trim()
-			}
 		}
 		const eventRef = plugin.app.workspace.on('css-change', updateTheme)
 		return () => plugin.app.workspace.offref(eventRef)
 	}, [plugin, isDarkMode])
 
-	useReactor('set bg color', () => {
-		if (isDarkMode.get()) {
-			DefaultColorThemePalette.darkMode.background = getComputedStyle(document.body)
-				.getPropertyValue('--background-primary')
-				.trim()
-		} else {
-			DefaultColorThemePalette.lightMode.background = getComputedStyle(document.body)
-				.getPropertyValue('--background-primary')
-				.trim()
-		}
+	useReactor('sync bg color with obsidian theme', () => {
+		const palette = isDarkMode.get()
+			? DefaultColorThemePalette.darkMode
+			: DefaultColorThemePalette.lightMode
+		palette.background = getComputedStyle(document.body)
+			.getPropertyValue('--background-primary')
+			.trim()
 	})
 
-	const obsidianThemeOverride = useValue(
-		'obsidianThemeOverride',
-		() => {
-			return isDarkMode.get() ? 'theme-dark' : 'theme-light'
-		},
-		[]
-	)
 	const userPreferences = useComputed(
 		'userPreferences',
 		() => {
@@ -338,7 +319,7 @@ const TldrawApp = ({
 	const tldrawOptions = useMemo<Partial<TldrawOptions>>(() => {
 		const deepLinksConfig = filePath
 			? {
-					debounceMs: 1000,
+					debounceMs: 100,
 					getUrl() {
 						const url = new URL('https://obsidian.local')
 						const deepLink = initialDeepLink ?? getViewport(vaultName, filePath)
@@ -360,7 +341,7 @@ const TldrawApp = ({
 
 	return (
 		<div
-			className={`tldraw-view-root ${obsidianThemeOverride}`}
+			className={`tldraw-view-root ${plugin.settings.themeMode === 'match-theme' ? 'tl-obsidian-theme' : ''}`}
 			// e.stopPropagation(); this line should solve the mobile swipe menus bug
 			// The bug only happens on the mobile version of Obsidian.
 			// When a user tries to interact with the tldraw canvas,

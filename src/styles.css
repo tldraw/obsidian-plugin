@@ -1,6 +1,7 @@
 @import url('tldraw/tldraw.css');
 @import url('styles/workaround-obsidian-mobile-navbar.css');
 @import url('styles/audit.css');
+@import url('styles/tldraw-theme-overrides.css');
 
 /* 
 	!!! Please prefix all custom classes with 'ptl' !!!
@@ -21,6 +22,10 @@
 
 .tl-watermark_SEE-LICENSE {
 	visibility: hidden;
+}
+
+button:not(.clickable-icon) {
+	color: currentColor;
 }
 
 .tldraw-view-root {
@@ -55,21 +60,8 @@
 	padding-left: 6px;
 }
 
-/**
- * In dark mode use the secondary background color for style/tool panels, and
- * the primary background color for the extra controls
- */
-.theme-dark .tlui-main-toolbar__extras__controls {
-	background-color: var(--background-primary);
-}
-
-.theme-light .tlui-main-toolbar__extras__controls {
-	background-color: var(--background-primary-alt);
-}
-
 .tlui-menu-zone {
 	border: none;
-	background-color: var(--background-primary);
 	padding-left: 6px;
 }
 
@@ -87,23 +79,6 @@
 	border-radius: var(--radius-m);
 }
 
-* * * {
-	--tl-shadow-2:
-		0px 0px 2px hsl(0, 0%, 0%, 18%), 0px 2px 3px hsl(0, 0%, 0%, 19%),
-		0px 2px 6px hsl(0, 0%, 0%, 0.03), inset 0px 0px 0px 1px var(--tl-color-panel-contrast) !important;
-	--tl-color-panel: var(--background-primary);
-	--tl-color-low: var(--background-secondary);
-	--tl-color-background: var(--background-primary);
-}
-
-/**
- * In dark mode use the secondary background color for style/tool panels, and
- * the primary background color for the extra controls
- */
-.theme-dark * * * {
-	--tl-color-panel: var(--background-secondary);
-}
-
 /* OVERRIDING button:not(.clickable-icon) back to tldraw's original styles: */
 .tldraw-view-root .tlui-button {
 	background-color: transparent;
@@ -112,31 +87,11 @@
 	box-shadow: none;
 }
 
-/* Overriding back to original style */
-.tldraw-view-root .tlui-button:disabled {
-	/* color: var(--color-text-3); */
-}
-
-/* Overriding back to original style */
-.tldraw-view-root .tlui-button__tool[aria-checked='true'] {
-	/* color: var(--color-selected-contrast); */
-}
-
-.tldraw-view-root .ptl-quick-action-button-wrapper[data-selected='true'] .tlui-button__icon {
-	/* color: var(--color-selected-contrast); */
-}
-
 .tldraw-view-root .ptl-quick-action-button-wrapper[data-selected='true'] .tlui-button::before {
 	content: '';
 	position: absolute;
 	inset: 4px;
 	border-radius: var(--radius-2);
-	/* background-color: var(--color-selected); */
-}
-
-/* OVERRIDING button:not(.clickable-icon) */
-.tldraw-view-root .tlui-button.tlui-help-menu__button {
-	/* background-color: var(--color-low); */
 }
 
 .tldraw-view-root kbd {

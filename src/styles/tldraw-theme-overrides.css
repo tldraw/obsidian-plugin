@@ -1,0 +1,35 @@
+/*
+	Maps tldraw's internal CSS variables and component backgrounds
+	to Obsidian's theme variables so the editor blends with whatever
+	theme (including community themes) the user has active.
+*/
+
+/* Base variable mappings for both themes */
+.tl-obsidian-theme .tl-theme__light,
+.tl-obsidian-theme .tl-theme__dark {
+	--tl-shadow-2:
+		0px 0px 2px hsl(0, 0%, 0%, 18%), 0px 2px 3px hsl(0, 0%, 0%, 19%),
+		0px 2px 6px hsl(0, 0%, 0%, 0.03), inset 0px 0px 0px 1px var(--tl-color-panel-contrast) !important;
+	--tl-color-panel: var(--background-primary);
+	--tl-color-low: var(--background-secondary);
+	--tl-color-background: var(--background-primary);
+}
+
+/* In dark mode, panels use the secondary background */
+.tl-obsidian-theme .tl-theme__dark {
+	--tl-color-panel: var(--background-secondary);
+}
+
+/* Menu zone always matches primary bg */
+.tlui-menu-zone {
+	background-color: var(--tl-color-background);
+}
+
+/* Extra controls background per theme */
+.tl-obsidian-theme .tl-theme__dark .tlui-main-toolbar__extras__controls {
+	background-color: var(--background-primary);
+}
+
+.tl-obsidian-theme .tl-theme__light .tlui-main-toolbar__extras__controls {
+	background-color: var(--background-primary-alt);
+}

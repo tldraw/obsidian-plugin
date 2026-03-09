@@ -274,7 +274,6 @@ export abstract class BaseTldrawFileView<View extends FileView = FileView> {
 		}
 		this.registerOnUnloadFile(removeCb)
 		this.#unregisterViewAssetsActionCallback = () => {
-			console.log('unregisterViewAssetsActionCallback')
 			this.#onUnloadCallbacks.remove(removeCb)
 			removeCb()
 		}
