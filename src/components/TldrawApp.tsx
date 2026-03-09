@@ -19,7 +19,7 @@ import {
 	SAVE_FILE_COPY_ACTION,
 	SAVE_FILE_COPY_IN_VAULT_ACTION,
 } from 'src/utils/file'
-import { getIsDarkMode, isObsidianThemeDark } from 'src/utils/utils'
+import { getIsDarkMode } from 'src/utils/utils'
 import { getViewport, saveViewport } from 'src/utils/viewport-storage'
 import {
 	TldrawUiMenuSubmenu as _TldrawUiMenuSubmenu,
@@ -278,19 +278,6 @@ const TldrawApp = ({
 		},
 	})
 
-	/**
-	 * "Flashbang" workaround
-	 *
-	 * The editor shows a loading screen which doesn't reflect the user's preference until the editor is loaded.
-	 * This works around it by checking the user's preference ahead of time and passing the dark theme className.
-	 */
-	const fbWorkAroundClassname = React.useMemo(() => {
-		const themeMode = plugin.settings.themeMode
-		if (themeMode === 'dark') return 'tl-theme__dark'
-		else if (themeMode === 'light') return
-		else return !isObsidianThemeDark() ? undefined : 'tl-theme__dark'
-	}, [plugin])
-
 	const isDarkMode = useAtom('isDarkMode', getIsDarkMode(plugin.settings.themeMode))
 
 	useEffect(() => {
@@ -325,7 +312,7 @@ const TldrawApp = ({
 	const obsidianThemeOverride = useValue(
 		'obsidianThemeOverride',
 		() => {
-			return isObsidianThemeDark() ? 'theme-dark' : 'theme-light'
+			return isDarkMode.get() ? 'theme-dark' : 'theme-light'
 		},
 		[]
 	)
@@ -398,7 +385,6 @@ const TldrawApp = ({
 				autoFocus={false}
 				onMount={setAppState}
 				tools={tools}
-				className={fbWorkAroundClassname}
 				licenseKey="tldraw-tldraw-2026-07-10/WyIyU3h6ZzhTZyIsWyIqLnRsZHJhdy5jb20iLCIqLnRsZHJhdy5kZXYiLCIqLnRsZHJhdy5jbHViIiwiKi50bGRyYXcud29ya2Vycy5kZXYiXSw5LCIyMDI2LTA3LTEwIl0.+21jrvz5ZFmIvvA/DusCcnFV6Ab1iQQYR+INTqw/i/MmZe/5I/lhdLtqm9nprkQ1MfWL2PeyBmQui1+rjoQS1w"
 			/>
 		</div>

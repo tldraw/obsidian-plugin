@@ -1,8 +1,6 @@
 import * as React from 'react'
 import TldrawPlugin from 'src/main'
-import monkeyPatchEditorInstance from 'src/tldraw/monkey-patch/editor'
 import { TldrawPluginMetaData } from 'src/utils/document'
-import { isObsidianThemeDark } from 'src/utils/utils'
 import { Editor, TldrawFile } from 'tldraw'
 import useUserPluginSettings from './useUserPluginSettings'
 
@@ -42,18 +40,11 @@ export function useTldrawAppEffects({
 			editor.selectNone()
 		}
 
-		const { themeMode, gridMode, debugMode, snapMode, focusMode, toolSelected } =
-			settingsManager.settings
+		const { gridMode, debugMode, snapMode, focusMode, toolSelected } = settingsManager.settings
 
 		editor.setCurrentTool(initialTool ?? toolSelected)
 
-		let darkMode = true
-		if (themeMode === 'dark') darkMode = true
-		else if (themeMode === 'light') darkMode = false
-		else darkMode = isObsidianThemeDark()
-
 		editor.user.updateUserPreferences({
-			colorScheme: darkMode ? 'dark' : 'light',
 			isSnapMode: snapMode,
 		})
 

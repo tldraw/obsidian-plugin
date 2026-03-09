@@ -63,6 +63,10 @@
 	background-color: var(--background-primary);
 }
 
+.theme-light .tlui-main-toolbar__extras__controls {
+	background-color: var(--background-primary-alt);
+}
+
 .tlui-menu-zone {
 	border: none;
 	background-color: var(--background-primary);
