@@ -22,6 +22,7 @@ import {
 import { getIsDarkMode, isObsidianThemeDark } from 'src/utils/utils'
 import { getViewport, saveViewport } from 'src/utils/viewport-storage'
 import {
+	TldrawUiMenuSubmenu as _TldrawUiMenuSubmenu,
 	DefaultColorThemePalette,
 	DefaultMainMenu,
 	DefaultMainMenuContent,
@@ -32,7 +33,6 @@ import {
 	TldrawEditorStoreProps,
 	TldrawOptions,
 	TldrawUiMenuItem,
-	TldrawUiMenuSubmenu,
 	TLStateNodeConstructor,
 	TLStoreSnapshot,
 	TLUiAssetUrlOverrides,
@@ -48,6 +48,10 @@ import {
 } from 'tldraw'
 import PluginKeyboardShortcutsDialog from './PluginKeyboardShortcutsDialog'
 import PluginQuickActions from './PluginQuickActions'
+
+// React 18/19 type compat: tldraw is typed against React 19's broader ReactNode
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const TldrawUiMenuSubmenu: React.FC<any> = _TldrawUiMenuSubmenu as any
 
 type TldrawAppOptions = {
 	iconAssetUrls?: TLUiAssetUrlOverrides['icons']
@@ -120,10 +124,10 @@ export type TldrawAppProps = {
 }
 
 // https://github.com/tldraw/tldraw/blob/58890dcfce698802f745253ca42584731d126cc3/apps/examples/src/examples/custom-main-menu/CustomMainMenuExample.tsx
-const components = (plugin: TldrawPlugin): TLComponents => ({
+const components: TLComponents = {
 	MainMenu: () => (
 		<DefaultMainMenu>
-			<LocalFileMenu plugin={plugin} />
+			<LocalFileMenu />
 			<DefaultMainMenuContent />
 		</DefaultMainMenu>
 	),
@@ -137,9 +141,9 @@ const components = (plugin: TldrawPlugin): TLComponents => ({
 		if (!hasMultiplePages) return null
 		return <DefaultPageMenu />
 	},
-})
+}
 
-function LocalFileMenu(props: { plugin: TldrawPlugin }) {
+function LocalFileMenu() {
 	const actions = useActions()
 
 	return (
@@ -179,7 +183,7 @@ const TldrawApp = ({
 		tools,
 		uiOverrides: otherUiOverrides,
 	},
-	targetDocument: ownerDocument,
+	targetDocument: _ownerDocument,
 	filePath,
 }: TldrawAppProps) => {
 	const assetUrls = React.useRef({
@@ -195,7 +199,7 @@ const TldrawApp = ({
 		...otherUiOverrides,
 	})
 	const overridesUiComponents = React.useRef({
-		...components(plugin),
+		...components,
 		...otherComponents,
 	})
 
@@ -377,7 +381,7 @@ const TldrawApp = ({
 			// By preventing the event from propagating, we can prevent those actions menus from opening.
 			onTouchStart={(e) => e.stopPropagation()}
 			ref={editorContainerRef}
-			onFocus={(e) => {
+			onFocus={(_e) => {
 				setFocusedEditor(false, editor)
 			}}
 		>
