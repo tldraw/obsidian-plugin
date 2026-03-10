@@ -385,9 +385,13 @@ const TldrawApp = ({
 						if (deepLink) url.searchParams.set('d', deepLink)
 						return url
 					},
-					onChange(url: URL) {
+					onChange(url: URL, editor: Editor) {
 						const deepLink = url.searchParams.get('d')
-						if (deepLink) saveViewport(vaultName, filePath, deepLink)
+						if (!deepLink) return
+						// Only save when this editor has focus, so we don't persist viewport on tab blur
+						const container = editor.getContainer()
+						if (!container.contains(container.ownerDocument.activeElement)) return
+						saveViewport(vaultName, filePath, deepLink)
 					},
 				}
 			: undefined
