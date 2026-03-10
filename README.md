@@ -61,17 +61,23 @@ Tldraw in Obsidian is now available on the official community plugins list!
 -   Clone this repo or a fork to a local development folder.
 -   Place this folder in your `.obsidian/plugins` folder.
 -   Install NodeJS, then run `npm i` in the command line under your repo folder.
--   Run `npm run dev` to compile your plugin. Changes to `src/` will be automatically compiled to `dist/development/`.
+-   Run `npm run vite:dev` (recommended) to compile your plugin using Vite with fast HMR, or `npm run dev` to use the legacy build script. Changes to `src/` will be automatically compiled to `dist/development/`.
 -   Make changes to the files in `/src`. Those changes should be automatically compiled into `main.js` and `styles.css`.
 -   To refresh your changes, go to Settings > Community Plugins > disable and enable the plugin. You can also close your vault and then reopen it but that's more bothersome.
 -   Do not edit the `styles.css` file at the root of the repo. Edit the one in `/src/styles.css` and the changes will be reflected automatically.
 
 ## Building
 
-To build the plugin for production:
+To build the plugin for production using the existing build pipeline:
 
 ```bash
 npm run build
+```
+
+To build the plugin for production using the Vite pipeline:
+
+```bash
+npm run vite:build
 ```
 
 ## Releasing
