@@ -8,6 +8,8 @@
 		"clean": "rm -rf dist && rm -rf node_modules && npm install",
 		"dev": "NODE_ENV=development tsx ./scripts/build.mts",
 		"build": "NODE_ENV=production tsx ./scripts/build.mts",
+		"vite:dev": "vite dev",
+		"vite:build": "vite build",
 		"version": "tsx ./scripts/version-bump.mts",
 		"postinstall": "patch-package",
 		"package": "tsx ./scripts/package.mts",
@@ -33,11 +35,13 @@
 		"@eslint/js": "^9.39.2",
 		"@obsidian-plugin-toolkit/esbuild": "^0.2.0",
 		"@obsidian-plugin-toolkit/react": "^0.2.0",
+		"@obsidian-plugin-toolkit/vite": "^0.1.0",
 		"@types/node": "^24.10.9",
 		"@types/react": "^19.2.14",
 		"@types/react-dom": "^19.2.3",
 		"@typescript-eslint/eslint-plugin": "^8.54.0",
 		"@typescript-eslint/parser": "^8.54.0",
+		"@vitejs/plugin-react": "^5.1.4",
 		"builtin-modules": "3.3.0",
 		"esbuild": "^0.27.2",
 		"eslint": "^8.57.1",
@@ -49,7 +53,8 @@
 		"prettier-plugin-organize-imports": "^4.3.0",
 		"tslib": "2.6.3",
 		"tsx": "^4.21.0",
-		"typescript": "^5.5.4"
+		"typescript": "^5.5.4",
+		"vite": "^7.3.1"
 	},
 	"dependencies": {
 		"monkey-around": "^2.3.0",

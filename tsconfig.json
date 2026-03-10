@@ -22,5 +22,5 @@
 		"skipDefaultLibCheck": true,
 		"noEmit": true
 	},
-	"include": ["src", "scripts", "eslint.config.mjs"]
+	"include": ["src", "scripts", "eslint.config.mjs", "vite.config.ts"]
 }

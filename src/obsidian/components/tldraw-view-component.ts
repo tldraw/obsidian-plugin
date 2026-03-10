@@ -60,9 +60,8 @@ export default class TldrawViewComponent extends Component {
 	renderInteractive(options: ComponentProps<typeof TldrawApp>) {
 		this.#renderRoot(() =>
 			createElement(TldrawInObsidianPluginProvider, {
-				children: createElement(TldrawApp, options),
 				plugin: options.plugin,
-			})
+			}, createElement(TldrawApp, options))
 		)
 		this.#setReadyAttribute()
 	}
