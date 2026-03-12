@@ -60,7 +60,7 @@
 		"monkey-around": "^2.3.0",
 		"react": "^18.3.1",
 		"react-dom": "^18.3.1",
-		"tldraw": "^4.4.1",
+		"tldraw": "4.5.0-internal.66c28d065c67",
 		"zustand": "^4.3.9"
 	}
 }
