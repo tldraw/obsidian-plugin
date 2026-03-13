@@ -1,7 +1,7 @@
 {
 	"id": "tldraw",
 	"name": "tldraw",
-	"version": "1.27.0",
+	"version": "1.28.0",
 	"minAppVersion": "1.7.7",
 	"description": "Create whiteboards, diagrams, and drawings with the official tldraw plugin.",
 	"author": "tldraw, Jonathan Mendez, Sam Alhaqab",
