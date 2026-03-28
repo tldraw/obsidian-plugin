@@ -1,0 +1,6 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "types": ["@wdio/globals", "@wdio/mocha-framework", "expect-webdriverio", "wdio-obsidian-service"]
+  }
+}

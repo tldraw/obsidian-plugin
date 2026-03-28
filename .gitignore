@@ -37,5 +37,8 @@ dist/
 # obsidian
 data.json
 
+# testing
+/.wdio/
+
 # Exclude macOS Finder (System Explorer) View States
 .DS_Store

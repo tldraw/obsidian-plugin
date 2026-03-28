@@ -28,6 +28,7 @@ The main goals of this plugin and repo is to keep up to date with the Tldraw's l
 - `release/` - Files that are needed for the plugin release
   - `manifest.json` 
   - `versions.json`
+- `test/` - End-to-end tests (WebdriverIO) and fixture vaults
 
 `manifest.json` and `versions.json` are updated by `npm run make-release-files` and should be committed if there are any changes.
 
@@ -79,6 +80,24 @@ To build the plugin for production using the Vite pipeline:
 ```bash
 npm run vite:build
 ```
+
+## End-to-end testing
+
+E2E tests run [WebdriverIO](https://webdriver.io/) against a real Obsidian instance using [`wdio-obsidian-service`](https://github.com/jesse-r-s-hines/wdio-obsidian-service). Specs live under `test/specs/` (files matching `*.e2e.ts`). The default vault is `test/vaults/default`.
+
+**Prerequisites:** The runner needs a plugin to load. By default it expects a production build at `dist/production/`. Build first, or point to another build with environment variables.
+
+```bash
+npm run build
+npm run e2e
+```
+
+**Plugin location (optional):**
+
+- `TLDRAW_PLUGIN_DIR` — Path to a plugin folder (the directory that contains `manifest.json`, `main.js`, etc.).
+- `TLDRAW_PLUGIN_VERSION` — If set, the test run installs the published plugin with id `tldraw` at this version from the community registry instead of using a local folder.
+
+Configuration is in `wdio.conf.mts` (timeouts, Obsidian installer version, parallel runs, and more are documented in the [sample plugin config](https://github.com/jesse-r-s-hines/wdio-obsidian-service-sample-plugin/blob/main/wdio.conf.mts)).
 
 ## Releasing
 
