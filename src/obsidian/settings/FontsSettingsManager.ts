@@ -4,9 +4,10 @@ import { FontTypes } from 'src/types/tldraw'
 import { DownloadInfo } from 'src/utils/fetch/download'
 import { updateFontOverrides } from '../plugin/settings'
 import { defaultFonts } from './constants'
+import { TLDRAW_NPM_ASSETS_BASE_URL } from './tldrawNpmAssets'
 
 export default class FontsSettingsManager {
-	static readonly FONT_DOWNLOAD_BASE_URL = `https://raw.githubusercontent.com/tldraw/tldraw/refs/tags/v${TLDRAW_VERSION}/assets/fonts`
+	static readonly FONT_DOWNLOAD_BASE_URL = `${TLDRAW_NPM_ASSETS_BASE_URL}/fonts`
 	private onChangedCallbacks = new Map<FontTypes, () => void>()
 
 	constructor(public readonly plugin: TldrawPlugin) {}
