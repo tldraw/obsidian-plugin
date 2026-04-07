@@ -23,6 +23,7 @@ import {
 } from 'src/obsidian/settings/constants'
 import FontsSettingsManager from 'src/obsidian/settings/FontsSettingsManager'
 import IconsSettingsManager from 'src/obsidian/settings/IconsSettingsManager'
+import { tldrawNpmAssetsBrowseUrl } from 'src/obsidian/settings/tldrawNpmAssets'
 import { FontTypes, IconNames } from 'src/types/tldraw'
 import { DownloadInfo } from 'src/utils/fetch/download'
 
@@ -165,7 +166,7 @@ function FontOverrideSetting({
 		[font, fontConfig, downloadFont]
 	)
 
-	const href = `https://github.com/tldraw/tldraw/blob/v${TLDRAW_VERSION}/assets/fonts/${defaultFonts[font]}`
+	const href = tldrawNpmAssetsBrowseUrl(`fonts/${defaultFonts[font]}`)
 	return (
 		<>
 			<Setting
@@ -384,7 +385,7 @@ function IconOverrideSetting({
 		[icon, iconConfig, downloadIcon]
 	)
 
-	const href = `https://github.com/tldraw/tldraw/blob/v${TLDRAW_VERSION}/assets/icons/icon/${icon}.svg`
+	const href = tldrawNpmAssetsBrowseUrl(`icons/icon/${icon}.svg`)
 
 	return (
 		<>
@@ -439,7 +440,7 @@ const MemoIconAssetsSettingsGroup = memo(function MemoIconAssetsSettingsGroup({
 							Click an icon name to view the default in your web browser. All of the default icons
 							are available to browse on{' '}
 							<a
-								href={`https://github.com/tldraw/tldraw/tree/v${TLDRAW_VERSION}/assets/icons/icon`}
+								href={tldrawNpmAssetsBrowseUrl('icons/icon')}
 							>
 								{"tldraw's GitHub repository"}
 							</a>

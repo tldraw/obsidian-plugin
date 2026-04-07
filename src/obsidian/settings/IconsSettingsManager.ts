@@ -4,9 +4,10 @@ import { IconNames } from 'src/types/tldraw'
 import { DownloadInfo } from 'src/utils/fetch/download'
 import { updateIconOverrides } from '../plugin/settings'
 import { iconTypes } from './constants'
+import { TLDRAW_NPM_ASSETS_BASE_URL } from './tldrawNpmAssets'
 
 export default class IconsSettingsManager {
-	static readonly ICON_DOWNLOAD_BASE_URL = `https://raw.githubusercontent.com/tldraw/tldraw/refs/tags/v${TLDRAW_VERSION}/assets/icons/icon`
+	static readonly ICON_DOWNLOAD_BASE_URL = `${TLDRAW_NPM_ASSETS_BASE_URL}/icons/icon`
 	private onChangedCallbacks = new Map<IconNames, () => void>()
 
 	constructor(public readonly plugin: TldrawPlugin) {}
