@@ -38,10 +38,9 @@ export async function getTldrawFileDestination(
 	} = plugin.settings
 
 	const defaultRes = (() => {
-		if (attachTo || destinationMethod === 'attachments-folder') {
-			return getAttachmentsFolder(plugin.app, attachTo)
-		}
 		switch (destinationMethod) {
+			case 'attachments-folder':
+				return getAttachmentsFolder(plugin.app, attachTo)
 			case 'colocate':
 				return getColocationDestination(plugin)
 			case 'default-folder':
