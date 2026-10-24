@@ -90,7 +90,7 @@ class SaveFileModal extends Modal {
 				.setCta()
 				.onClick(() => {
 					this.saveFile(filePath).catch((e) => {
-						console.log(e)
+						console.error(e)
 						const notice = new Notice(`There was an error saving the file to "${filePath}".`)
 						notice.noticeEl.createDiv({
 							text: `${e}`,

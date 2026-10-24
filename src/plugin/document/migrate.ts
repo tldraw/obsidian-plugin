@@ -27,7 +27,7 @@ export function migrateIfNecessary(
 			store: tLDataToTLStore(tldata),
 		}
 	} else {
-		console.log(
+		console.debug(
 			`Tldraw migration:\n\tCurrent file version: ${currFileVersion}\n\tCurrent app version: ${currAppVersion}`
 		)
 		tldataRes = {

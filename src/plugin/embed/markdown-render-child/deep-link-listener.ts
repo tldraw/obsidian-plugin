@@ -4,6 +4,7 @@ import { InternalEmbedWidget } from 'src/obsidian/helpers/cm-view'
 import { updateEmbedLinkText } from 'src/plugin/embed/embeds'
 import { MarkdownEmbed } from 'src/plugin/embed/markdown-embed'
 import { TLDeepLinkOptions } from 'tldraw'
+import { LOGGING_ENABLED, logFn } from 'src/utils/logging'
 
 export default function deepLinkListener(
 	plugin: TldrawPlugin,
@@ -39,11 +40,13 @@ export default function deepLinkListener(
 					},
 				}
 			)
-			console.log(`Deep link listener:`, {
-				url,
-				editor,
-				markdownLink: `![[${markdownLinkText}]]`,
-			})
+			if (LOGGING_ENABLED) {
+				logFn(deepLinkListener, 'Deep link listener:', {
+					url,
+					editor,
+					markdownLink: `![[${markdownLinkText}]]`,
+				})
+			}
 		},
 	}
 }

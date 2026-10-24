@@ -164,7 +164,6 @@ export function registerCommands(plugin: TldrawPlugin) {
 		editorCallback: async (editor, ctx) => {
 			const { file } = ctx
 			if (file === null) {
-				console.log(ctx)
 				throw new Error('ctx.file was null')
 			}
 			const from = editor.getCursor('from')
