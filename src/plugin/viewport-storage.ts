@@ -1,28 +1,33 @@
+import type { App } from 'obsidian'
+
 const PREFIX = 'tldraw-viewport'
 
-function storageKey(vaultName: string, filePath: string): string {
-	return `${PREFIX}:${vaultName}:${filePath}`
+/**
+ * `App#saveLocalStorage` keeps entries per vault, so the key only needs the file path.
+ */
+function storageKey(filePath: string): string {
+	return `${PREFIX}:${filePath}`
 }
 
-export function saveViewport(vaultName: string, filePath: string, deepLinkString: string): void {
+export function saveViewport(app: App, filePath: string, deepLinkString: string): void {
 	try {
-		localStorage.setItem(storageKey(vaultName, filePath), deepLinkString)
+		app.saveLocalStorage(storageKey(filePath), deepLinkString)
 	} catch {
-		// localStorage may be full or unavailable
+		// Local storage may be full or unavailable
 	}
 }
 
-export function getViewport(vaultName: string, filePath: string): string | null {
+export function getViewport(app: App, filePath: string): string | null {
 	try {
-		return localStorage.getItem(storageKey(vaultName, filePath))
+		return app.loadLocalStorage(storageKey(filePath))
 	} catch {
 		return null
 	}
 }
 
-export function removeViewport(vaultName: string, filePath: string): void {
+export function removeViewport(app: App, filePath: string): void {
 	try {
-		localStorage.removeItem(storageKey(vaultName, filePath))
+		app.saveLocalStorage(storageKey(filePath), null)
 	} catch {
 		// ignore
 	}

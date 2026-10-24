@@ -22,7 +22,7 @@ import {
 	SAVE_FILE_COPY_IN_VAULT_ACTION,
 } from 'src/plugin/actions/file'
 import { getIsDarkMode } from 'src/plugin/theme'
-import { getViewport, saveViewport } from 'src/utils/viewport-storage'
+import { getViewport, saveViewport } from 'src/plugin/viewport-storage'
 import {
 	DefaultMainMenu,
 	DefaultPageMenu,
@@ -392,7 +392,7 @@ const TldrawApp = ({
 		}
 	}, [userPreferences])
 
-	const vaultName = plugin.app.vault.getName()
+	const { app } = plugin
 
 	const tldrawOptions = useMemo<Partial<TldrawOptions>>(() => {
 		const deepLinksConfig = filePath
@@ -400,7 +400,7 @@ const TldrawApp = ({
 					debounceMs: 100,
 					getUrl() {
 						const url = new URL('https://obsidian.local')
-						const deepLink = initialDeepLink ?? getViewport(vaultName, filePath)
+						const deepLink = initialDeepLink ?? getViewport(app, filePath)
 						if (deepLink) url.searchParams.set('d', deepLink)
 						return url
 					},
@@ -410,7 +410,7 @@ const TldrawApp = ({
 						// Only save when this editor has focus, so we don't persist viewport on tab blur
 						const container = editor.getContainer()
 						if (!container.contains(container.ownerDocument.activeElement)) return
-						saveViewport(vaultName, filePath, deepLink)
+						saveViewport(app, filePath, deepLink)
 					},
 				}
 			: undefined
@@ -419,7 +419,7 @@ const TldrawApp = ({
 			actionShortcutsLocation: 'toolbar',
 			deepLinks: deepLinksConfig,
 		}
-	}, [filePath, vaultName, initialDeepLink])
+	}, [filePath, app, initialDeepLink])
 
 	return (
 		<div
