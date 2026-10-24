@@ -18,7 +18,7 @@ export const OPEN_FILE_ACTION = 'open-file'
 
 // https://github.com/tldraw/tldraw/blob/58890dcfce698802f745253ca42584731d126cc3/packages/tldraw/src/lib/utils/export/exportAs.ts#L57
 const downloadFile = (file: File) => {
-	const link = document.createElement('a')
+	const link = createEl('a')
 	const url = URL.createObjectURL(file)
 	link.href = url
 	link.download = file.name
@@ -132,7 +132,7 @@ export async function importTldrawFile(
 		// `.TLDRAW` file is selectable and would otherwise fall through to the JSON parser.
 		if (file.name.toLowerCase().endsWith(TLDRAW_OFFLINE_FILE_EXTENSION)) {
 			// A fragment rather than a string, so the notice can carry the links.
-			const notice = document.createDocumentFragment()
+			const notice = createFragment()
 			notice.createEl('strong', { text: TLDRAW_OFFLINE_UNSUPPORTED_TITLE })
 			appendTldrawOfflineMessage(notice)
 			new Notice(notice)

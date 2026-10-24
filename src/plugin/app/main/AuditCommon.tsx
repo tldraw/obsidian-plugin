@@ -231,7 +231,7 @@ export function TldrawDocumentView({ document }: { document: TldrawDocument }) {
 			if (!node) {
 				// Unmounting
 				if (componentRef.current) {
-					setTimeout(() => {
+					window.setTimeout(() => {
 						componentRef.current?.unload()
 						componentRef.current = null
 					})
@@ -245,7 +245,7 @@ export function TldrawDocumentView({ document }: { document: TldrawDocument }) {
 				componentRef.current = comp
 				comp.load()
 
-				setTimeout(async () => {
+				window.setTimeout(async () => {
 					const instance = await document.getInstance()
 					if (componentRef.current) {
 						componentRef.current.renderInteractive({

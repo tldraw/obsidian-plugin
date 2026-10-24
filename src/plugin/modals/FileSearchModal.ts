@@ -371,7 +371,7 @@ function debounce<T extends [unknown, ...unknown[]]>(
 ) {
 	let timeout: undefined | Timer
 	return function (...args: T) {
-		clearTimeout(timeout)
-		timeout = setTimeout(() => cb(...args), wait)
+		window.clearTimeout(timeout)
+		timeout = window.setTimeout(() => cb(...args), wait)
 	}
 }

@@ -403,7 +403,7 @@ export class TldrawMarkdownRenderChild extends MarkdownRenderChild {
 	#awaitInitialLoadViaTimeout(ms: number) {
 		return new Promise<void>((res, rej) => {
 			if (this.isContentLoaded()) return res()
-			setTimeout(() => {
+			window.setTimeout(() => {
 				if (this.isContentLoaded()) {
 					return res()
 				} else {
@@ -459,7 +459,7 @@ export class TldrawMarkdownRenderChild extends MarkdownRenderChild {
 		})())
 
 		// Wait for the component to be ready before rendering
-		setTimeout(() => {
+		window.setTimeout(() => {
 			if (TLDRAW_COMPONENT_LOGGING)
 				logClass(TldrawMarkdownRenderChild, this.renderRoot, 'timeout', {
 					containerEl: this.containerEl,
@@ -676,8 +676,8 @@ function createTldrawEmbedView(
 		tldrawEmbedViewContent.addEventListener(
 			'touchstart',
 			(ev) => {
-				clearTimeout(longPressTimer)
-				longPressTimer = setTimeout(() => showMenu(ev, tldrawEmbedView), 500)
+				window.clearTimeout(longPressTimer)
+				longPressTimer = window.setTimeout(() => showMenu(ev, tldrawEmbedView), 500)
 			},
 			{ passive: true }
 		)
@@ -685,7 +685,7 @@ function createTldrawEmbedView(
 		tldrawEmbedViewContent.addEventListener(
 			'touchmove',
 			() => {
-				clearTimeout(longPressTimer)
+				window.clearTimeout(longPressTimer)
 			},
 			{ passive: true }
 		)
@@ -693,7 +693,7 @@ function createTldrawEmbedView(
 		tldrawEmbedViewContent.addEventListener(
 			'touchend',
 			() => {
-				clearTimeout(longPressTimer)
+				window.clearTimeout(longPressTimer)
 			},
 			{ passive: true }
 		)

@@ -162,7 +162,7 @@ export default class PreviewImageImpl implements PreviewImage {
 	}
 
 	clearRefreshTimeout() {
-		clearTimeout(this.#refreshTimeout)
+		window.clearTimeout(this.#refreshTimeout)
 		this.#refreshTimeout = undefined
 	}
 
@@ -180,8 +180,8 @@ export default class PreviewImageImpl implements PreviewImage {
 	 * If `options` is provided, it will update the {@linkcode options} property.
 	 */
 	refreshPreview(options?: ImageViewModeOptions) {
-		clearTimeout(this.#refreshTimeout)
-		this.#refreshTimeout = setTimeout(() => {
+		window.clearTimeout(this.#refreshTimeout)
+		this.#refreshTimeout = window.setTimeout(() => {
 			if (options) {
 				this.#options = options
 			}
@@ -230,8 +230,8 @@ export default class PreviewImageImpl implements PreviewImage {
 
 		// TODO: Replace this with something that does not poll the bounding rect
 		// https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver/ResizeObserver
-		clearInterval(this.#placeHolderSizeInterval)
-		this.#placeHolderSizeInterval = setInterval(() => {
+		window.clearInterval(this.#placeHolderSizeInterval)
+		this.#placeHolderSizeInterval = window.setInterval(() => {
 			onSize(containerEl.getBoundingClientRect())
 		}, 100)
 	}
@@ -239,7 +239,7 @@ export default class PreviewImageImpl implements PreviewImage {
 	observePreviewImageDisconnect() {
 		this.#observer?.disconnect()
 		this.#observer = undefined
-		clearInterval(this.#placeHolderSizeInterval)
+		window.clearInterval(this.#placeHolderSizeInterval)
 		this.#placeHolderSizeInterval = undefined
 	}
 

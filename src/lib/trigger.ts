@@ -19,8 +19,8 @@ export function createTrigger<Params extends unknown[], Return>(
 	return {
 		trigger: (...args: Parameters<typeof fn>) => {
 			// We only want to call the function once per event loop so we utilize a timeout
-			clearTimeout(timeout)
-			timeout = setTimeout(() => {
+			window.clearTimeout(timeout)
+			timeout = window.setTimeout(() => {
 				const res = fn(...args)
 				notifier.notifyListeners(res)
 			})
