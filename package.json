@@ -18,6 +18,7 @@
 		"package": "tsx ./scripts/package.mts",
 		"make-release-files": "tsx ./scripts/make-release-files.ts",
 		"lint": "eslint src scripts",
+		"lint:obsidian": "eslint -c eslint.obsidianmd.config.mjs src",
 		"typecheck": "tsc --noEmit -p tsconfig.json && tsc --noEmit -p tsconfig.node.json && tsc --noEmit -p test/tsconfig.json",
 		"format-current": "prettier --write --cache $(git diff --name-only --diff-filter d | xargs)",
 		"e2e": "wdio run ./wdio.conf.mts",
@@ -45,6 +46,7 @@
 		"@eslint-react/eslint-plugin": "^5.17.3",
 		"@eslint/eslintrc": "^3.3.3",
 		"@eslint/js": "^10.0.1",
+		"@eslint/json": "^0.14.0",
 		"@obsidian-plugin-toolkit/esbuild": "^0.2.1",
 		"@obsidian-plugin-toolkit/react": "^0.2.2",
 		"@obsidian-plugin-toolkit/vite": "^0.3.0",
@@ -64,6 +66,7 @@
 		"eslint": "^10.7.0",
 		"eslint-config-prettier": "^10.1.8",
 		"eslint-plugin-boundaries": "^7.0.2",
+		"eslint-plugin-obsidianmd": "^0.4.2",
 		"expect-webdriverio": "^6.0.9",
 		"jsdom": "^29.1.1",
 		"mocha": "^11.7.5",
@@ -74,6 +77,7 @@
 		"tslib": "2.6.3",
 		"tsx": "^4.21.0",
 		"typescript": "6.0.3",
+		"typescript-eslint": "^8.72.0",
 		"vite": "^8",
 		"vitest": "^4.1.10",
 		"wdio-obsidian-reporter": "^3.1.1",
@@ -87,5 +91,11 @@
 		"react-dom": "^19.2.7",
 		"tldraw": "^5.5.2",
 		"zustand": "^5.0.14"
+	},
+	"overrides": {
+		"eslint-plugin-obsidianmd": {
+			"@eslint/js": "$@eslint/js",
+			"obsidian": "$obsidian"
+		}
 	}
 }
