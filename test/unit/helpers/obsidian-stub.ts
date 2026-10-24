@@ -6,6 +6,11 @@
  * here; type-only imports are erased by the TS transform.
  */
 
+import { vi } from 'vitest'
+
+/** Replace the implementation per test with `requestUrl.mockResolvedValue(...)`. */
+export const requestUrl = vi.fn()
+
 export function normalizePath(path: string): string {
 	// Approximates Obsidian's normalizePath: forward slashes, collapse
 	// duplicate separators, strip leading/trailing slashes.

@@ -6,6 +6,7 @@ import TldrawViewComponent from 'src/plugin/views/tldraw-view-component'
 import { navigateToBlockCache } from 'src/plugin/file/navigate'
 import { TldrawDocument } from 'src/plugin/audit/document'
 import { AssetEntry } from 'src/plugin/instance'
+import { mimeTypeFromExtension } from 'src/utils/mime-type'
 
 export function AuditLayout({
 	slots,
@@ -118,12 +119,7 @@ export function AssetListItem({
 			if (!assetFile) throw new Error(`Asset file not found for link: ${ref.link}`)
 
 			const url = app.vault.adapter.getResourcePath(assetFile.path)
-
-			// Fetch it to get mime type
-			const response = await fetch(url)
-			if (!response.ok) throw new Error(`Failed to fetch asset: ${response.statusText}`)
-
-			const mimeType = response.headers.get('content-type') || undefined
+			const mimeType = mimeTypeFromExtension(assetFile.extension)
 			setAssetData({ url, mimeType, isLoading: false })
 		} catch (e) {
 			console.error(e)

@@ -1,4 +1,4 @@
-import { normalizePath, TAbstractFile, TFolder, Vault } from 'obsidian'
+import { normalizePath, requestUrl, TAbstractFile, TFolder, Vault } from 'obsidian'
 import { getDir, pathBasename } from '../helpers/path'
 
 export class DownloadError extends Error {}
@@ -45,10 +45,11 @@ export async function fetchAndSaveDownload(
 		throw new DownloadErrorTAbstractFileExists(existing)
 	}
 
-	const res = await fetch(url)
-	if (!res.ok) {
+	// `throw: false` so that an unsuccessful status is reported as a DownloadError below.
+	const res = await requestUrl({ url: url.toString(), throw: false })
+	if (res.status < 200 || res.status >= 300) {
 		throw new DownloadError(`Fetch unsuccessful: ${url}`)
 	}
 
-	return vault.createBinary(normalizePath(downloadTo), await res.arrayBuffer())
+	return vault.createBinary(normalizePath(downloadTo), res.arrayBuffer)
 }
