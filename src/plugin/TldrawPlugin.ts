@@ -177,7 +177,7 @@ export default class TldrawPlugin extends Plugin {
 	}
 
 	private registerEvents() {
-		// eslint-disable-next-line @typescript-eslint/no-this-alias
+		// eslint-disable-next-line @typescript-eslint/no-this-alias -- `this` is shadowed inside the patched methods below
 		const plugin = this
 		// Monkey patch WorkspaceLeaf to open Tldraw drawings with TldrawView by default
 		// inspired from https://github.com/zsviczian/obsidian-excalidraw-plugin/blob/f79181c76a9d6ef9f17ecdfd054aa0e6d7564d1f/src/main.ts#L1649C9-L1649C9

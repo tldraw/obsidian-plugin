@@ -85,7 +85,7 @@ declare module 'obsidian' {
 		basePath: string
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars -- the type parameter must match obsidian's declaration for the interfaces to merge
 	interface SuggestModal<T = unknown> {
 		/**
 		 * This function is present at runtime in the web developer console in Obsidian, but not in the type definition for some reason.
