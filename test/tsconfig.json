@@ -2,5 +2,8 @@
 	"extends": "../tsconfig.json",
 	"compilerOptions": {
 		"types": ["@wdio/globals", "@wdio/mocha-framework", "expect-webdriverio", "wdio-obsidian-service"]
-	}
+	},
+	// The specs drive Obsidian from outside, so this program has Node's types (via the wdio
+	// packages) and must not compile the plugin source, which is checked by ../tsconfig.json.
+	"include": ["specs", "lib"]
 }

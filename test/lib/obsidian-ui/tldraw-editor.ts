@@ -16,7 +16,7 @@ export async function ensureLinkableShapeSelected(): Promise<void> {
 		const latestGeoId = () =>
 			editor.getCurrentPageShapes().filter((s) => s.type === 'geo').at(-1)?.id
 
-		let id = editor.getSelectedShapeIds()[0] ?? latestGeoId()
+		let id: string | undefined = editor.getSelectedShapeIds()[0] ?? latestGeoId()
 		if (!id) {
 			editor.run(() => editor.createShapes([geoShape]))
 			id = latestGeoId()
