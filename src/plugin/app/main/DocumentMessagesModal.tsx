@@ -107,7 +107,7 @@ function BlockRefErrorMessageItem({
 			{errors.length === 0 ? (
 				<>Hmm... 🤔 we overlooked something.</>
 			) : (
-				errors.map((e, index) => {
+				errors.map((e) => {
 					const content = (() => {
 						switch (e.type) {
 							case 'asset':
@@ -124,7 +124,7 @@ function BlockRefErrorMessageItem({
 						}
 					})()
 					return (
-						<div className="ptl-document-message-item-error" data-error-type={e.type} key={index}>
+						<div className="ptl-document-message-item-error" data-error-type={e.type} key={e.type}>
 							{content}
 						</div>
 					)

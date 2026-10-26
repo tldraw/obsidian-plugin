@@ -49,13 +49,19 @@ const TABS = {
 	}
 >
 
+type TabKey = keyof typeof TABS
+
 export default function TldrawSettingsTabView({
 	settingsManager,
 }: {
 	settingsManager: UserSettingsManager
 }) {
-	const tabs = useMemo(() => Object.entries(TABS), [])
-	const [[activeTabKey, activeTab], setActiveTab] = useState(tabs[0])
+	const tabs = useMemo(
+		() => (Object.keys(TABS) as TabKey[]).map((key) => [key, TABS[key]] as const),
+		[]
+	)
+	const [activeTabKey, setActiveTabKey] = useState<TabKey>(tabs[0][0])
+	const activeTab = TABS[activeTabKey]
 	const [isOpen, setIsOpen] = useState(false)
 	return (
 		<>
@@ -66,7 +72,7 @@ export default function TldrawSettingsTabView({
 							key={key}
 							className="ptl-settings-tab-item"
 							data-is-active={key === activeTabKey}
-							onClick={() => setActiveTab([key, tab])}
+							onClick={() => setActiveTabKey(key)}
 						>
 							{tab.label}
 						</div>

@@ -9,21 +9,22 @@ export function ButtonComponentWrapper({ text, onClick }: { text: string; onClic
 	const buttonComponentRef = useRef<ButtonComponent | null>(null)
 
 	useEffect(() => {
-		if (!buttonRef.current) return
+		const container = buttonRef.current
+		if (!container) return
 
 		// Clean up previous button if it exists
 		if (buttonComponentRef.current) {
 			// ButtonComponent doesn't have a cleanup method, but we can remove the element
-			buttonRef.current.empty()
+			container.empty()
 		}
 
-		const button = new ButtonComponent(buttonRef.current)
+		const button = new ButtonComponent(container)
 		button.setButtonText(text).onClick(onClick)
 		buttonComponentRef.current = button
 
 		return () => {
 			if (buttonComponentRef.current) {
-				buttonRef.current?.empty()
+				container.empty()
 				buttonComponentRef.current = null
 			}
 		}

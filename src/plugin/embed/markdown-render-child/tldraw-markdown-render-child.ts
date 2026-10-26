@@ -140,9 +140,7 @@ export class TldrawMarkdownRenderChild extends MarkdownRenderChild {
 				isReadonly: this.#storeInstance?.isSynchronizingToMain() !== true,
 				components: {
 					InFrontOfTheCanvas: () =>
-						createElement(InFrontOfTheCanvas, {
-							children: createElement(BoundsTool),
-						}),
+						createElement(InFrontOfTheCanvas, null, createElement(BoundsTool)),
 					Toolbar: EmbedTldrawToolBar,
 				},
 				overlayUtils: [BoundsSelectorIndicatorOverlayUtil],
