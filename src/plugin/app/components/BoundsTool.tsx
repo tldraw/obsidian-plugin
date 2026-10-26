@@ -38,7 +38,7 @@ export default function BoundsTool() {
 		if (!toolInitialized) {
 			editor.getStateDescendant<BoundsSelectorTool>(BoundsSelectorTool.id)?.init()
 		}
-	}, [toolInitialized])
+	}, [editor, toolInitialized])
 
 	const currentBounds = useValue(BOUNDS_CURRENT_PAGE_BOUNDS, () => {
 		const selectorTool = editor.getStateDescendant<BoundsSelectorTool>(BoundsSelectorTool.id)

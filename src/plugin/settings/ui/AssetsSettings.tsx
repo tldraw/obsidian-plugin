@@ -155,7 +155,7 @@ function FontOverrideSetting({
 				manager.setFontPath(font, file.path)
 			},
 		}).open()
-	}, [manager, store])
+	}, [manager, store, font])
 
 	const resetFont = useCallback(() => manager.setFontPath(font, null), [font, manager])
 
@@ -373,7 +373,7 @@ function IconOverrideSetting({
 				manager.setIconPath(icon, file.path)
 			},
 		}).open()
-	}, [manager, store])
+	}, [manager, store, icon])
 
 	const resetIcon = useCallback(() => manager.setIconPath(icon, null), [icon, manager])
 
@@ -502,14 +502,14 @@ export default function AssetsSettings() {
 		for (const [font, downloadInfo] of configs) {
 			await downloadFont(font, downloadInfo)
 		}
-	}, [settingsManager, assetManagers, downloadFont])
+	}, [assetManagers, downloadFont])
 
 	const downloadAllIcons = useCallback(async () => {
 		const configs = assetManagers.icons.getAllDownloadConfigs()
 		for (const [icon, downloadInfo] of configs) {
 			await downloadIcon(icon, downloadInfo)
 		}
-	}, [settingsManager, downloadIcon])
+	}, [assetManagers, downloadIcon])
 
 	const downloadAll = useCallback(async () => {
 		await downloadAllFonts()

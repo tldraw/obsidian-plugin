@@ -430,7 +430,7 @@ function FrontmatterSettingsGroup() {
 				</div>
 			)
 		},
-		[defaultTagsRemove, settings]
+		[defaultTagsRemove, updateFrontmatterTags, settings]
 	)
 
 	return (
@@ -569,7 +569,7 @@ function SaveDelaySettings() {
 			)
 			await settingsManager.updateSettings(settingsManager.settings)
 		},
-		[settingsManager]
+		[settingsManager, defaultDelay, minDelay, maxDelay]
 	)
 
 	return (

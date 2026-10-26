@@ -153,7 +153,7 @@ const TextSuggestions = track(() => {
 		return () => {
 			removeSideEffectCb()
 		}
-	}, [editor, editingShapeId])
+	}, [editor, editingShapeId, app])
 
 	const bounds = editor.getViewportPageBounds()
 
