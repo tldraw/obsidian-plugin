@@ -1,4 +1,4 @@
-export class Notifier<Listener extends (...args: any[]) => unknown = () => void> {
+export class Notifier<Listener extends (...args: never[]) => unknown = () => void> {
 	readonly #listeners = new Set<Listener>()
 
 	#timeout?: Timer

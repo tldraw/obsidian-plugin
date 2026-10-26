@@ -74,7 +74,7 @@ export default class DownloadManagerModal extends Modal {
 
 		if (error instanceof DownloadErrorTAbstractFileExists) {
 			new ButtonComponent(container).setButtonText('Replace file').onClick(async () => {
-				await this.app.vault.delete(error.tAbstractFile)
+				await this.app.fileManager.trashFile(error.tAbstractFile)
 				await this.startDownload(info, onRetrySuccess, container)
 			})
 		}

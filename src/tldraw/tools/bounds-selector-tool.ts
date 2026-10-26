@@ -78,7 +78,7 @@ export class BoundsDraggingState extends StateNode {
 	}
 
 	override onKeyDown() {
-		if (this.editor.inputs.altKey) {
+		if (this.editor.inputs.getAltKey()) {
 			this._parent.cycleAspectRatio()
 		}
 		this.update()
@@ -93,7 +93,7 @@ export class BoundsDraggingState extends StateNode {
 		const box = this.boundsBox.get()
 		const shapesBox = this.shapesBox.get()
 
-		if (editor.inputs.ctrlKey && shapesBox) {
+		if (editor.inputs.getCtrlKey() && shapesBox) {
 			this._parent.onBounds(this.editor.getCurrentPageId(), shapesBox)
 		} else {
 			this._parent.onBounds(this.editor.getCurrentPageId(), box)
@@ -107,9 +107,11 @@ export class BoundsDraggingState extends StateNode {
 	}
 
 	private update() {
-		const {
-			inputs: { ctrlKey, shiftKey, originPagePoint, currentPagePoint },
-		} = this.editor
+		const { inputs } = this.editor
+		const ctrlKey = inputs.getCtrlKey()
+		const shiftKey = inputs.getShiftKey()
+		const originPagePoint = inputs.getOriginPagePoint()
+		const currentPagePoint = inputs.getCurrentPagePoint()
 
 		const box = Box.FromPoints([originPagePoint, currentPagePoint])
 

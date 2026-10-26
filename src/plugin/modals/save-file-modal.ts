@@ -92,7 +92,7 @@ class SaveFileModal extends Modal {
 					this.saveFile(filePath).catch((e) => {
 						console.error(e)
 						const notice = new Notice(`There was an error saving the file to "${filePath}".`)
-						notice.noticeEl.createDiv({
+						notice.messageEl.createDiv({
 							text: `${e}`,
 						})
 					})

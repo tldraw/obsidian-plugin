@@ -142,7 +142,7 @@ function pasteFromClipboardOverride(
 	{ addToast, msg, paste }: Pick<TLUiOverrideHelpers, 'addToast' | 'msg' | 'paste'>
 ): TLUiActionItem {
 	const pasteClipboard = (source: TLUiEventSource, items: ClipboardItem[]) =>
-		paste(items, source, source === 'context-menu' ? editor.inputs.currentPagePoint : undefined)
+		paste(items, source, source === 'context-menu' ? editor.inputs.getCurrentPagePoint() : undefined)
 	return {
 		id: 'paste',
 		label: 'action.paste',
