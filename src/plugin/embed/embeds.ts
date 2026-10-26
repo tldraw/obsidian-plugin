@@ -5,7 +5,7 @@ import { InternalEmbedWidget } from 'src/obsidian/helpers/cm-view'
 function parseAltText(altText: string): Partial<Record<string, string>> {
 	const altSplit = altText.split(';').map((e) => e.trim())
 	const altEntries = altSplit.map((e) => e.split('='))
-	return Object.fromEntries(altEntries)
+	return Object.fromEntries(altEntries) as Partial<Record<string, string>>
 }
 
 export function parseEmbedValues(

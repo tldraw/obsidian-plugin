@@ -78,7 +78,7 @@ function DocumentMessageItem({
 		default:
 			return (
 				<div className="ptl-document-message-item">
-					<p className="ptl-document-message-text">{`Unknown message type: ${message.type}`}</p>
+					<p className="ptl-document-message-text">{`Unknown message type: ${String((message as { type: unknown }).type)}`}</p>
 					<ButtonComponent text="Dismiss" onClick={() => message.dismiss()} />
 				</div>
 			)

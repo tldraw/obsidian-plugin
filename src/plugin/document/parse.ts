@@ -56,5 +56,5 @@ export function parseTLDataDocument(
 
 	return !extracted
 		? { meta: getTLMetaTemplate(pluginVersion) }
-		: migrateIfNecessary(pluginVersion, parseTLJsonData(JSON.parse(extracted)))
+		: migrateIfNecessary(pluginVersion, parseTLJsonData(JSON.parse(extracted) as JsonValue))
 }

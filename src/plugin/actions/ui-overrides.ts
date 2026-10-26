@@ -153,7 +153,7 @@ function pasteFromClipboardOverride(
 				.then((clipboardItems) => {
 					pasteClipboard(source, clipboardItems)
 				})
-				.catch((e) => {
+				.catch((e: unknown) => {
 					// Fallback to reading the clipboard as plain text.
 					navigator.clipboard
 						?.readText()
@@ -164,7 +164,7 @@ function pasteFromClipboardOverride(
 								}),
 							])
 						})
-						.catch((ee) => {
+						.catch((ee: unknown) => {
 							console.error({ e, ee })
 							addToast({
 								title: msg('action.paste-error-title'),

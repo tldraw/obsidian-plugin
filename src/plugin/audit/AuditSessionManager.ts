@@ -60,7 +60,7 @@ export class AuditSessionManager<T extends BaseEntry> {
 	public readonly store: Store<AuditSessionState<T>>
 	private history: AuditResult<T>[] = []
 	private index = -1
-	private iterator: AsyncGenerator<AuditResult<T>> | null = null
+	private iterator: AsyncGenerator<AuditResult<T>, void, void> | null = null
 	private documents: TldrawDocument[] = []
 	private parser: AuditCallbacks<T>['parse'] | null = null
 	private refFinder: AuditCallbacks<T>['findReferences'] | null = null

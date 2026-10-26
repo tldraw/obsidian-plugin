@@ -93,7 +93,7 @@ export class ReadonlyTldrawView extends FileView {
 		})
 	}
 
-	override onPaneMenu(menu: Menu, source: 'more-options' | 'tab-header' | string): void {
+	override onPaneMenu(menu: Menu, source: string): void {
 		super.onPaneMenu(menu, source)
 		const { file } = this
 		if (!file) return

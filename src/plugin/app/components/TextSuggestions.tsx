@@ -1,3 +1,4 @@
+import { errorMessage } from 'src/utils/error'
 import { AbstractInputSuggest, App, Notice, TFile } from 'obsidian'
 import React, { ReactPortal, useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
@@ -74,7 +75,7 @@ const TextSuggestions = track(() => {
 					inputSuggestRef.current = undefined
 				}
 
-				if (!shouldShowSuggestions(next as TLTextShape)) return
+				if (!shouldShowSuggestions(next)) return
 
 				const inputSuggest =
 					!tipTap ||
@@ -145,7 +146,7 @@ const TextSuggestions = track(() => {
 						})
 					} catch (e) {
 						console.error(e)
-						new Notice(`Unable to replace text with asset: ${e}`)
+						new Notice(`Unable to replace text with asset: ${errorMessage(e)}`)
 					}
 				})
 			}

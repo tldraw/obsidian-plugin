@@ -93,7 +93,7 @@ export default class TldrawStoreExistsIndexedDBModal extends Modal {
 						)
 						toggle.setValue(ignoreIndexedDbStore)
 						toggle.onChange((ignoreIndexedDbStore) => {
-							this.app.fileManager.processFrontMatter(tFile, (frontMatter) => {
+							this.app.fileManager.processFrontMatter(tFile, (frontMatter: Record<string, unknown>) => {
 								const tlDataDocumentFlags = frontMatter[dataDocumentFlagsKey]
 								if (Array.isArray(tlDataDocumentFlags)) {
 									if (!ignoreIndexedDbStore) {

@@ -28,7 +28,6 @@ export async function markdownPostProcessor(
 		return
 	}
 
-	//@ts-ignore
 	const containerEl: HTMLElement = context.containerEl
 
 	const internalEmbedDiv: HTMLElement | undefined = (() => {

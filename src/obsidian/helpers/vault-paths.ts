@@ -7,7 +7,6 @@ import { pathBasename } from './path'
  */
 export async function checkAndCreateFolder(folderpath: string, vault: Vault) {
 	folderpath = normalizePath(folderpath)
-	//@ts-ignore
 	const folder = vault.getAbstractFileByPathInsensitive(folderpath)
 	if (folder && folder instanceof TFolder) {
 		return
@@ -52,10 +51,10 @@ export async function createAttachmentFilepath(
 	attachmentFilename: string,
 	attachTo?: TFile
 ) {
-	const attachmentPath = await (fileManager.getAvailablePathForAttachment(
+	const attachmentPath = await fileManager.getAvailablePathForAttachment(
 		attachmentFilename,
 		attachTo?.path
-	) as Promise<string>)
+	)
 	const filename = pathBasename(attachmentPath)
 	const folder = attachmentPath.slice(0, -(filename.length + 1))
 	return {

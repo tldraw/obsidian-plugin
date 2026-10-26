@@ -62,7 +62,7 @@ export class TldrawStoreIndexedDB {
 			const getRes = transaction.objectStore(ASSETS_STORE_NAME).get(assetSrc)
 
 			getRes.onsuccess = () => {
-				fileBlob = getRes.result
+				fileBlob = getRes.result as File | undefined
 			}
 		})
 	}

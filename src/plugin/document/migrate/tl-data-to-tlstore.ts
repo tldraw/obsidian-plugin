@@ -58,7 +58,7 @@ export function tLDataToTLStore(tldata: TLData): TLStore {
 		.filter((e): e is JsonObject => !Array.isArray(e))
 		.map((e) => {
 			if (!isJsonUnknownRecord(e)) {
-				throw new Error(`Invalid json object found while parsing: ${e}`)
+				throw new Error(`Invalid json object found while parsing: ${JSON.stringify(e)}`)
 			}
 			return e
 		})

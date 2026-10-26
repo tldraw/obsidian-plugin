@@ -499,7 +499,7 @@ export function listenAssetChanges(store: TLStore) {
 				.then(() => {
 					deleteStore.remove(id)
 				})
-				.catch((error) => {
+				.catch((error: unknown) => {
 					console.error('Unable to remove block ref', { error })
 				})
 		}

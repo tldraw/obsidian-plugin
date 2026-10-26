@@ -19,7 +19,8 @@ export function saveViewport(app: App, filePath: string, deepLinkString: string)
 
 export function getViewport(app: App, filePath: string): string | null {
 	try {
-		return app.loadLocalStorage(storageKey(filePath))
+		const value: unknown = app.loadLocalStorage(storageKey(filePath))
+		return typeof value === 'string' ? value : null
 	} catch {
 		return null
 	}

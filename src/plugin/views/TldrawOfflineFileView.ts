@@ -41,7 +41,7 @@ export class TldrawOfflineFileView extends FileView {
 		this.addAction('external-link', OPEN_IN_DEFAULT_APP, () => this.openInDefaultApp())
 	}
 
-	override onPaneMenu(menu: Menu, source: 'more-options' | 'tab-header' | string): void {
+	override onPaneMenu(menu: Menu, source: string): void {
 		super.onPaneMenu(menu, source)
 		if (!this.file) return
 

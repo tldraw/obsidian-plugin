@@ -108,7 +108,7 @@ export default function TldrawSettingsTabView({
 									key={key}
 									slots={{
 										name: key,
-										control: <Text readonly value={value} />,
+										control: <Text readonly value={String(value)} />,
 									}}
 								/>
 							))}

@@ -35,7 +35,7 @@ declare module 'obsidian' {
 		 * @param path A vault file path
 		 * @returns
 		 */
-		openWithDefaultApp(path: string): void
+		openWithDefaultApp(path: string): void | Promise<void>
 		embedRegistry: App.EmbedRegistry
 		dom: {
 			statusBarEl: HTMLElement
@@ -72,9 +72,20 @@ declare module 'obsidian' {
 	}
 
 	interface Vault {
+		/**
+		 * Not defined by Obsidian APIs, but exists regardless.
+		 */
+		getAbstractFileByPathInsensitive(path: string): TAbstractFile | null
 		config: {
 			attachmentFolderPath?: '/' | `./${string}` | (string & NonNullable<unknown>)
 		}
+	}
+
+	interface MarkdownPostProcessorContext {
+		/**
+		 * Not defined by Obsidian APIs, but exists regardless.
+		 */
+		containerEl: HTMLElement
 	}
 
 	interface DataAdapter {

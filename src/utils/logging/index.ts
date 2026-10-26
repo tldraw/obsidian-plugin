@@ -1,4 +1,4 @@
-export type ConsoleLogParams = Parameters<typeof console.log>
+export type ConsoleLogParams = unknown[]
 
 export function logClass<
 	T extends new (...args: any[]) => unknown,
