@@ -75,3 +75,23 @@ export function debounce<TArgs extends unknown[]>(
 	}
 	return debounced
 }
+
+export class Modal {
+	modalEl = document.createElement('div')
+	contentEl = document.createElement('div')
+	isOpen = false
+	private closeCallback?: () => void
+	constructor(public app?: unknown) {}
+	setCloseCallback(callback: () => void) {
+		this.closeCallback = callback
+		return this
+	}
+	open() {
+		this.isOpen = true
+	}
+	close() {
+		if (!this.isOpen) return
+		this.isOpen = false
+		this.closeCallback?.()
+	}
+}
