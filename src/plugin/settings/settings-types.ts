@@ -47,20 +47,20 @@ export type FileDestinationsSettings = {
 }
 
 /**
- * These are old settings, the properties have been marked as deprecated to assist the programmer migrate these settings.
+ * These are old settings that are only read to migrate them to {@linkcode TldrawPluginSettings.fileDestinations}.
  */
-type DeprecatedFileDestinationSettings = {
+type LegacyFileDestinationSettings = {
 	/**
-	 * @deprecated Migrate to {@linkcode TldrawPluginSettings.fileDestinations}
+	 * Legacy: migrated to {@linkcode TldrawPluginSettings.fileDestinations}.
 	 * The location where tldraw assets will be downloaded in
 	 */
 	assetsFolder?: string
 	/**
-	 * @deprecated Migrate to {@linkcode TldrawPluginSettings.fileDestinations}
+	 * Legacy: migrated to {@linkcode TldrawPluginSettings.fileDestinations}.
 	 */
 	folder?: string
 	/**
-	 * @deprecated Migrate to {@linkcode TldrawPluginSettings.fileDestinations}
+	 * Legacy: migrated to {@linkcode TldrawPluginSettings.fileDestinations}.
 	 * Use the attachments folder defined in the Obsidian "Files and links" settings.
 	 */
 	useAttachmentsFolder?: boolean
@@ -81,7 +81,7 @@ export type UserTLCameraOptions = Pick<
  */
 type MarkdownViewType = ViewType
 
-export interface TldrawPluginSettings extends DeprecatedFileDestinationSettings {
+export interface TldrawPluginSettings extends LegacyFileDestinationSettings {
 	fileDestinations: FileDestinationsSettings
 	saveFileDelay: number // in seconds
 	newFilePrefix: string
