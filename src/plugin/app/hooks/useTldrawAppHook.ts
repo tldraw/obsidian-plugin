@@ -29,12 +29,10 @@ export function useTldrawAppEffects({
 	const settings = useUserPluginSettings(settingsManager)
 
 	/**
-	 * Effect for editor mounting
+	 * Applies the initial editor state. It is an effect event so that it reads the latest props
+	 * without re-running (and resetting the tool and instance state) when one of them changes.
 	 */
-	React.useEffect(() => {
-		if (!editor) return
-
-
+	const mountEditor = React.useEffectEvent((editor: Editor) => {
 		if (selectNone) {
 			editor.selectNone()
 		}
@@ -59,6 +57,14 @@ export function useTldrawAppEffects({
 		// NOTE: These could probably be utilized for storing assets as files in the vault instead of tldraw's default indexedDB.
 		// editor.registerExternalAssetHandler
 		// editor.registerExternalContentHandler
+	})
+
+	/**
+	 * Effect for editor mounting
+	 */
+	React.useEffect(() => {
+		if (!editor) return
+		mountEditor(editor)
 	}, [editor, settingsManager])
 
 	/**
