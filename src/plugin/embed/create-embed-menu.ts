@@ -21,13 +21,13 @@ function background(menuItem: MenuItem, controller: TldrAppControllerForMenu) {
 
 function interactiveMode(menuItem: MenuItem, controller: TldrAppControllerForMenu) {
 	return menuItem
-		.setTitle('Interactive Mode')
+		.setTitle('Interactive mode')
 		.setIcon('hand')
 		.setChecked(controller.getViewMode() === 'interactive')
 }
 
 function openMdNewTab(menuItem: MenuItem) {
-	return menuItem.setIcon(MARKDOWN_ICON_NAME).setTitle('Open as markdown (new tab)')
+	return menuItem.setIcon(MARKDOWN_ICON_NAME).setTitle('Open as Markdown (new tab)')
 }
 
 function editInteractive(menuItem: MenuItem) {

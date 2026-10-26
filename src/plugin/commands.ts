@@ -177,7 +177,7 @@ export function registerCommands(plugin: TldrawPlugin) {
 
 	plugin.addCommand({
 		id: 'open-vault-audit-modal',
-		name: '[Vault] Scan for loose assets',
+		name: 'Scan vault for loose assets',
 		checkCallback: (checking: boolean) => {
 			if (checking) {
 				return true

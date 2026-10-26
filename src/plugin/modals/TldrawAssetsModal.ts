@@ -90,13 +90,13 @@ export default class TldrawAssetsModal extends Modal {
 				this.contentEl.createDiv(undefined, (div) => {
 					if (assetSourcesMarkdown.length === 0) {
 						div.createEl('p', {
-							text: 'No assets references in the markdown file.',
+							text: 'No assets references in the Markdown file.',
 						})
 					} else {
 						div.createEl(
 							'ul',
 							{
-								text: `${assetSourcesMarkdown.length} asset reference(s) in the markdown file`,
+								text: `${assetSourcesMarkdown.length} asset reference(s) in the Markdown file`,
 							},
 							(ul) => {
 								for (const assetSource of assetSourcesMarkdown) {

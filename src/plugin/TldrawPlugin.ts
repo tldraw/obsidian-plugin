@@ -225,7 +225,7 @@ export default class TldrawPlugin extends Plugin {
 					item
 						.setIcon(TLDRAW_ICON_NAME)
 						.setSection('close')
-						.setTitle('View as Tldraw')
+						.setTitle('View as tldraw')
 						.onClick(async () => {
 							await this.updateViewMode(VIEW_TYPE_TLDRAW, leaf)
 						})
@@ -245,7 +245,7 @@ export default class TldrawPlugin extends Plugin {
 							item
 								.setIcon('edit')
 								.setSection('tldraw')
-								.setTitle('Edit as new Note')
+								.setTitle('Edit as new note')
 								.onClick(async () => {
 									const newFile = await this.createUntitledTldrFile({
 										tlStore: migrateTldrawFileDataIfNecessary(await this.app.vault.read(file)),
@@ -267,7 +267,7 @@ export default class TldrawPlugin extends Plugin {
 
 				const view = isMDMode ? VIEW_TYPE_TLDRAW : VIEW_TYPE_MARKDOWN // opposite view mode
 				const icon = isMDMode ? TLDRAW_ICON_NAME : MARKDOWN_ICON_NAME
-				const title = isMDMode ? 'View as Tldraw' : 'View as Markdown'
+				const title = isMDMode ? 'View as tldraw' : 'View as Markdown'
 
 				menu.addItem((item) => {
 					item
