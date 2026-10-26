@@ -74,9 +74,9 @@ export default function TldrawSettingsTabView({
 				</div>
 			</div>
 			<Container key={activeTabKey} className="ptl-setting-tab-content">
-				<SettingsManagerContext.Provider value={settingsManager}>
+				<SettingsManagerContext value={settingsManager}>
 					<activeTab.Component />
-				</SettingsManagerContext.Provider>
+				</SettingsManagerContext>
 			</Container>
 			<Container className="ptl-settings-footer" style={{ marginTop: '16px' }}>
 				<Group heading="Plugin information">

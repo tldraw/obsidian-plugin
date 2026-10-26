@@ -1,4 +1,4 @@
-import React, { createContext, ReactNode, useContext, useMemo } from 'react'
+import React, { createContext, ReactNode, use, useMemo } from 'react'
 import TldrawPlugin from 'src/plugin/TldrawPlugin'
 import TldrawInObsidianPluginInstance from 'src/plugin/instance'
 
@@ -11,7 +11,7 @@ export const PluginContext = createContext<PluginContextValue | undefined>(undef
 
 export function useTldrawInObsdianPlugin() {
 	return (
-		useContext(PluginContext)?.instance ??
+		use(PluginContext)?.instance ??
 		(() => {
 			throw new Error(`Must be called within the provider tree`)
 		})()
@@ -20,7 +20,7 @@ export function useTldrawInObsdianPlugin() {
 
 export function useTldrawPlugin() {
 	return (
-		useContext(PluginContext)?.plugin ??
+		use(PluginContext)?.plugin ??
 		(() => {
 			throw new Error(`Must be called within the provider tree`)
 		})()
@@ -44,5 +44,5 @@ export function TldrawInObsidianPluginProvider({
 			plugin,
 		}
 	}, [plugin])
-	return <PluginContext.Provider value={value}>{children}</PluginContext.Provider>
+	return <PluginContext value={value}>{children}</PluginContext>
 }

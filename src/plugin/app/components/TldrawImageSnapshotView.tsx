@@ -145,14 +145,14 @@ function TldrawImageContextProviders({
 	}, [previewOptions])
 
 	return (
-		<PluginTldrawImageContext.Provider value={ptlTldrawImageContextValue}>
-			<TldrawImageContext.Provider
+		<PluginTldrawImageContext value={ptlTldrawImageContextValue}>
+			<TldrawImageContext
 				key={tldrawImageContextValue?.props.pageId}
 				value={tldrawImageContextValue}
 			>
 				{children}
-			</TldrawImageContext.Provider>
-		</PluginTldrawImageContext.Provider>
+			</TldrawImageContext>
+		</PluginTldrawImageContext>
 	)
 }
 

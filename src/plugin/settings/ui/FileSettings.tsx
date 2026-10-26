@@ -190,7 +190,7 @@ function NewFilePrefix({ settingsManager }: { settingsManager: UserSettingsManag
 
 	const [previewWithExampleNote, setPreviewWithExampleNote] = useState(true)
 
-	const exampleNote = useRef(
+	const exampleNoteRef = useRef(
 		(() => {
 			const path = 'Path/To/ExampleNote.md'
 			return {
@@ -202,7 +202,7 @@ function NewFilePrefix({ settingsManager }: { settingsManager: UserSettingsManag
 
 	const previewCreateOptions = useMemo(() => {
 		return {
-			currentFile: previewWithExampleNote ? exampleNote.current : undefined,
+			currentFile: previewWithExampleNote ? exampleNoteRef.current : undefined,
 		}
 	}, [previewWithExampleNote])
 
@@ -244,7 +244,7 @@ function NewFilePrefix({ settingsManager }: { settingsManager: UserSettingsManag
 														checked={previewWithExampleNote}
 														onChange={(e) => setPreviewWithExampleNote(e.currentTarget.checked)}
 													/>
-													<span>Preview with example note ({exampleNote.current.path})</span>
+													<span>Preview with example note ({exampleNoteRef.current.path})</span>
 												</>
 											),
 										},

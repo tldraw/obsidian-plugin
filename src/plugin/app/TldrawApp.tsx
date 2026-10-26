@@ -249,7 +249,7 @@ const TldrawApp = ({
 	targetDocument: _ownerDocument,
 	filePath,
 }: TldrawAppProps) => {
-	const assetUrls = React.useRef({
+	const assetUrlsRef = React.useRef({
 		fonts: plugin.getFontOverrides(),
 		icons: {
 			...plugin.getIconOverrides(),
@@ -257,11 +257,11 @@ const TldrawApp = ({
 			[PLUGIN_ACTION_TOGGLE_ZOOM_LOCK]: lockZoomIcon,
 		},
 	})
-	const overridesUi = React.useRef({
+	const overridesUiRef = React.useRef({
 		...uiOverrides(plugin),
 		...otherUiOverrides,
 	})
-	const overridesUiComponents = React.useRef({
+	const overridesUiComponentsRef = React.useRef({
 		...components,
 		...otherComponents,
 	})
@@ -432,13 +432,13 @@ const TldrawApp = ({
 		>
 			<Tldraw
 				{...storeProps}
-				assetUrls={assetUrls.current}
+				assetUrls={assetUrlsRef.current}
 				hideUi={hideUi}
 				onUiEvent={onUiEvent}
-				overrides={overridesUi.current}
+				overrides={overridesUiRef.current}
 				options={tldrawOptions}
 				user={user}
-				components={overridesUiComponents.current}
+				components={overridesUiComponentsRef.current}
 				// Set this flag to false when a tldraw document is embed into markdown to prevent it from gaining focus when it is loaded.
 				autoFocus={false}
 				onMount={setAppState}
