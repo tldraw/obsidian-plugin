@@ -60,11 +60,11 @@ type MainData = {
 	 * Messages associated with the main document.
 	 */
 	messages: {
-		getAll(): DocumentMessage[]
-		addListener(listener: () => void): () => void
-		getCount(): number
-		dismissAll(): void
-		getFile(): TFile
+		getAll: () => DocumentMessage[]
+		addListener: (listener: () => void) => () => void
+		getCount: () => number
+		dismissAll: () => void
+		getFile: () => TFile
 	}
 }
 

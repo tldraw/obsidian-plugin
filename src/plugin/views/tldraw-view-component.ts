@@ -27,12 +27,12 @@ export default class TldrawViewComponent extends Component {
 	}
 
 	onload(): void {
-		if (TLDRAW_COMPONENT_LOGGING) logClass(TldrawViewComponent, this.onload, this)
+		if (TLDRAW_COMPONENT_LOGGING) logClass(TldrawViewComponent, 'onload', this)
 		this.#setRoot(createRoot(this.containerEl))
 	}
 
 	onunload(): void {
-		if (TLDRAW_COMPONENT_LOGGING) logClass(TldrawViewComponent, this.onunload, this)
+		if (TLDRAW_COMPONENT_LOGGING) logClass(TldrawViewComponent, 'onunload', this)
 		this.#setRoot(undefined)
 		this.containerEl.removeAttribute(TldrawViewComponent.readyAttribute)
 	}

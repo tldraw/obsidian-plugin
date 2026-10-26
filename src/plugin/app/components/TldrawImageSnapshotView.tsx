@@ -157,23 +157,23 @@ function TldrawImageContextProviders({
 }
 
 type SnapshotSyncStore = {
-	getSnapshot(): undefined | TldrawImageSnapshot
-	onSnapshot(cb: () => void): () => void
+	getSnapshot: () => undefined | TldrawImageSnapshot
+	onSnapshot: (cb: () => void) => () => void
 }
 
 type SnapshotImagePreviewOptionsSyncStore = {
-	getPreviewSize(): undefined | { width: number; height: number }
-	onPreviewSize(cb: () => void): () => void
+	getPreviewSize: () => undefined | { width: number; height: number }
+	onPreviewSize: (cb: () => void) => () => void
 }
 
 type SnapshotImagePreviewSizeSyncStore = {
-	getPreviewOptions(): ImageViewModeOptions
-	onPreviewOptions(cb: () => void): () => void
+	getPreviewOptions: () => ImageViewModeOptions
+	onPreviewOptions: (cb: () => void) => () => void
 }
 
 type SnapshotImagePlaceHolderSyncStore = {
-	getPlaceHolder(): HTMLElement | undefined
-	syncPlaceHolder(cb: () => void): () => void
+	getPlaceHolder: () => HTMLElement | undefined
+	syncPlaceHolder: (cb: () => void) => () => void
 }
 
 export interface SnapshotPreviewSyncStore

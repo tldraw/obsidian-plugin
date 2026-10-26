@@ -36,7 +36,7 @@ export class MarkdownEmbed {
 		}
 		return {
 			updateBounds: (page: string, bounds: BoxLike | undefined) => {
-				logClass(MarkdownEmbed, this.getUpdater, 'updateBounds', { page, bounds })
+				logClass(MarkdownEmbed, 'getUpdater', 'updateBounds', { page, bounds })
 				updateEmbedBounds(widget, { page, bounds }, widget.editor.editor)
 			},
 			updateSize: (size: { width: number; height: number }) =>

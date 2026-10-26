@@ -312,7 +312,7 @@ export class TldrawMarkdownRenderChild extends MarkdownRenderChild {
 		page?: string
 	}) {
 		if (TLDRAW_COMPONENT_LOGGING)
-			logClass(TldrawMarkdownRenderChild, this.updateEmbedValues, { bounds, imageSize })
+			logClass(TldrawMarkdownRenderChild, 'updateEmbedValues', { bounds, imageSize })
 		const { options: currOptions } = this.#previewImage
 		if (
 			imageSize.height !== this.#previewImage.size.height ||
@@ -359,7 +359,7 @@ export class TldrawMarkdownRenderChild extends MarkdownRenderChild {
 	}
 
 	updateBounds(bounds?: BoxLike) {
-		if (TLDRAW_COMPONENT_LOGGING) logClass(TldrawMarkdownRenderChild, this.updateBounds)
+		if (TLDRAW_COMPONENT_LOGGING) logClass(TldrawMarkdownRenderChild, 'updateBounds')
 		this.#previewImage.setOptions({
 			...this.#previewImage.options,
 			bounds,
@@ -437,7 +437,7 @@ export class TldrawMarkdownRenderChild extends MarkdownRenderChild {
 
 	renderRoot() {
 		if (TLDRAW_COMPONENT_LOGGING)
-			logClass(TldrawMarkdownRenderChild, this.renderRoot, {
+			logClass(TldrawMarkdownRenderChild, 'renderRoot', {
 				containerEl: this.containerEl,
 				parentEl: this.containerEl.parentElement,
 			})
@@ -448,7 +448,7 @@ export class TldrawMarkdownRenderChild extends MarkdownRenderChild {
 
 		const component = (this.#viewComponent ??= (() => {
 			if (TLDRAW_COMPONENT_LOGGING)
-				logClass(TldrawMarkdownRenderChild, this.renderRoot, 'component init', {
+				logClass(TldrawMarkdownRenderChild, 'renderRoot', 'component init', {
 					containerEl: this.containerEl,
 					parentEl: this.containerEl.parentElement,
 				})
@@ -461,7 +461,7 @@ export class TldrawMarkdownRenderChild extends MarkdownRenderChild {
 		// Wait for the component to be ready before rendering
 		window.setTimeout(() => {
 			if (TLDRAW_COMPONENT_LOGGING)
-				logClass(TldrawMarkdownRenderChild, this.renderRoot, 'timeout', {
+				logClass(TldrawMarkdownRenderChild, 'renderRoot', 'timeout', {
 					containerEl: this.containerEl,
 					parentEl: this.containerEl.parentElement,
 				})
@@ -498,7 +498,7 @@ export class TldrawMarkdownRenderChild extends MarkdownRenderChild {
 
 	async loadRoot() {
 		if (TLDRAW_COMPONENT_LOGGING)
-			logClass(TldrawMarkdownRenderChild, this.loadRoot, this, {
+			logClass(TldrawMarkdownRenderChild, 'loadRoot', this, {
 				containerEl: this.containerEl,
 				parentEl: this.containerEl.parentElement,
 			})
@@ -509,7 +509,7 @@ export class TldrawMarkdownRenderChild extends MarkdownRenderChild {
 	}
 
 	unloadRoot() {
-		if (TLDRAW_COMPONENT_LOGGING) logClass(TldrawMarkdownRenderChild, this.unloadRoot, this)
+		if (TLDRAW_COMPONENT_LOGGING) logClass(TldrawMarkdownRenderChild, 'unloadRoot', this)
 		this.#previewImage.clearRefreshTimeout()
 		this.#previewImage.observePreviewImageDisconnect()
 		this.#setPlaceHolderSize()
