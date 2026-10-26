@@ -94,7 +94,7 @@ class BlockRefErrors {
 		if (!this.#isSameAssetError(prev, next)) {
 			shouldNotify = true
 		} else {
-			LOGGING_ENABLED &&
+			if (LOGGING_ENABLED)
 				console.info('Same asset error; skipping notifying', {
 					a: prev,
 					b: next,

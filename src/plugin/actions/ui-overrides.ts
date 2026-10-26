@@ -31,7 +31,7 @@ export const CREATE_PAGE_ACTION = 'create-page'
 export function uiOverrides(plugin: TldrawPlugin): TLUiOverrides {
 	const trackEvent = useUiEvents()
 	return {
-		actions: (editor, actions, { msg, addDialog, addToast, paste }) => {
+		actions: (editor, actions, { msg, addToast, paste }) => {
 			const defaultDocumentName = msg('document.default-name')
 			if (!Platform.isMobile) {
 				actions[SAVE_FILE_COPY_ACTION] = getSaveFileCopyAction(editor, defaultDocumentName)
@@ -43,7 +43,7 @@ export function uiOverrides(plugin: TldrawPlugin): TLUiOverrides {
 				plugin
 			)
 
-			actions[OPEN_FILE_ACTION] = importFileAction(plugin, addDialog)
+			actions[OPEN_FILE_ACTION] = importFileAction(plugin)
 			;(['jpeg', 'png', 'svg', 'webp'] satisfies TLExportType[]).map((e) =>
 				exportAllAsOverride(editor, actions, plugin, {
 					exportOptions: {

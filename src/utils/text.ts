@@ -47,7 +47,7 @@ export function deleteRangesFromText<T extends Range>(text: string, ranges: T[])
 	const sortedRanges = [...mergedRanges].sort((a, b) => b.start - a.start)
 
 	let newText = text
-	let deleteds = []
+	const deleteds = []
 	for (const range of sortedRanges) {
 		deleteds.push({
 			range,

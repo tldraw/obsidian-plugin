@@ -142,7 +142,7 @@ export default class TldrawStoresManager<MainData, InstanceData> {
 			syncToMain: (sync) => {
 				if (sync) {
 					_unregisterSyncToMain ??= (function registerSyncToMain() {
-						TLDRAW_STORES_MANAGER_LOGGING &&
+						if (TLDRAW_STORES_MANAGER_LOGGING)
 							logFn(
 								registerSyncToMain,
 								'Registering store instance synchronization to the main store:',
@@ -159,7 +159,7 @@ export default class TldrawStoresManager<MainData, InstanceData> {
 							}
 						)
 						return function unregisterSyncToMain() {
-							TLDRAW_STORES_MANAGER_LOGGING &&
+							if (TLDRAW_STORES_MANAGER_LOGGING)
 								logFn(
 									unregisterSyncToMain,
 									'Unregistering store instance synchronization to the main store.',

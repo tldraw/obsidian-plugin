@@ -7,9 +7,7 @@ import {
 	BoxLike,
 	ShapeIndicatorOverlayUtil,
 	StateNode,
-	TLCancelEventInfo,
 	TLPageId,
-	TLPointerEventInfo,
 	TLShape,
 	TLShapeIndicatorOverlay,
 	TLStateNodeConstructor,
@@ -18,7 +16,7 @@ import {
 class IdleBoundsState extends StateNode {
 	static override id = 'bounds-idle'
 
-	override onPointerDown(info: TLPointerEventInfo): void {
+	override onPointerDown(): void {
 		this.parent.transition(PointingBoundsState.id)
 	}
 }
@@ -26,17 +24,17 @@ class IdleBoundsState extends StateNode {
 class PointingBoundsState extends StateNode {
 	static override id = 'bounds-pointing'
 
-	override onPointerMove(info: TLPointerEventInfo): void {
+	override onPointerMove(): void {
 		if (this.editor.inputs.isDragging) {
 			this.parent.transition(BoundsDraggingState.id)
 		}
 	}
 
-	override onPointerUp(info: TLPointerEventInfo): void {
+	override onPointerUp(): void {
 		this.complete()
 	}
 
-	override onCancel(info: TLCancelEventInfo): void {
+	override onCancel(): void {
 		this.complete()
 	}
 

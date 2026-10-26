@@ -76,12 +76,12 @@ export default class NewTldrawFileConfirmationModal extends SuggestModal<Suggest
 				cls: 'modal-close-button',
 				prepend: true,
 			})
-			.onClickEvent((ev) => {
+			.onClickEvent(() => {
 				this.close()
 			})
 	}
 
-	async getSuggestions(query: string): Promise<SuggestOption[]> {
+	async getSuggestions(): Promise<SuggestOption[]> {
 		const suggestions: SuggestOption[] = []
 		for (const choice of choices) {
 			switch (choice) {
@@ -221,7 +221,7 @@ export default class NewTldrawFileConfirmationModal extends SuggestModal<Suggest
 		}
 	}
 
-	onChooseSuggestion(item: SuggestOption, evt: MouseEvent | KeyboardEvent) {
+	onChooseSuggestion(item: SuggestOption, _evt: MouseEvent | KeyboardEvent) {
 		switch (item.choice) {
 			case 'confirm':
 			case 'attachments-folder':

@@ -16,7 +16,7 @@ export async function markdownPostProcessor(
 	context: MarkdownPostProcessorContext
 ) {
 	const log = (...args: ConsoleLogParams) => logFn(markdownPostProcessor, args[0], ...args.slice(1))
-	MARKDOWN_POST_PROCESSING_LOGGING && log()
+	if (MARKDOWN_POST_PROCESSING_LOGGING) log()
 
 	// Inspired by: https://github.com/zsviczian/obsidian-excalidraw-plugin/blob/94fbac38bfc5036187a81c7883c03830a622bc1d/src/MarkdownPostProcessor.ts#L575
 
@@ -80,10 +80,10 @@ export async function markdownPostProcessor(
 			return
 		}
 
-		MARKDOWN_POST_PROCESSING_LOGGING && log('tldraw json code block')
-		MARKDOWN_POST_PROCESSING_LOGGING && log('element', internalEmbedDiv)
-		MARKDOWN_POST_PROCESSING_LOGGING && log('element', element)
-		MARKDOWN_POST_PROCESSING_LOGGING && log('context', context)
+		if (MARKDOWN_POST_PROCESSING_LOGGING) log('tldraw json code block')
+		if (MARKDOWN_POST_PROCESSING_LOGGING) log('element', internalEmbedDiv)
+		if (MARKDOWN_POST_PROCESSING_LOGGING) log('element', element)
+		if (MARKDOWN_POST_PROCESSING_LOGGING) log('context', context)
 
 		internalEmbedDiv.empty()
 
@@ -106,7 +106,7 @@ export async function markdownPostProcessor(
 		context.addChild(component)
 
 		const awaitInitialLoad = () => component.awaitInitialLoad(2500).catch(errorLoading)
-		const errorLoading = (e: unknown) => {
+		const errorLoading = () => {
 			// const errorDiv = internalEmbedDiv.createDiv();
 			// errorDiv.createEl('p', {
 			//     text: e instanceof Error ? e.message : 'Error'

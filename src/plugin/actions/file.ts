@@ -6,7 +6,6 @@ import {
 	TLDRAW_FILE_EXTENSION,
 	TLUiActionItem,
 	serializeTldrawJsonBlob,
-	useDefaultHelpers,
 } from 'tldraw'
 import { TLDRAW_OFFLINE_FILE_EXTENSION, TLDRAW_OFFLINE_UNSUPPORTED_TITLE } from 'src/plugin/document/constants'
 import { migrateTldrawFileDataIfNecessary } from 'src/plugin/document/migrate/tl-data-to-tlstore'
@@ -62,7 +61,7 @@ export function getSaveFileCopyAction(editor: Editor, defaultDocumentName: strin
 					type: blobToSave.type,
 				})
 				downloadFile(file)
-			} catch (e) {
+			} catch {
 				// user cancelled
 				return
 			}
@@ -95,15 +94,12 @@ export function getSaveFileCopyInVaultAction(
 	}
 }
 
-export function importFileAction(
-	plugin: TldrawPlugin,
-	addDialog: ReturnType<typeof useDefaultHelpers>['addDialog']
-): TLUiActionItem {
+export function importFileAction(plugin: TldrawPlugin): TLUiActionItem {
 	return {
 		id: OPEN_FILE_ACTION,
 		label: 'action.open-file',
 		readonlyOk: true,
-		async onSelect(source) {
+		async onSelect() {
 			const tFile = await importTldrawFile(plugin)
 			if (!tFile) return
 			await plugin.openTldrFile(tFile, 'new-tab')

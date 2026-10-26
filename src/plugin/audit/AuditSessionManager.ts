@@ -2,7 +2,7 @@ import { App } from 'obsidian'
 import { createStore, Store } from 'src/lib/stores'
 import { TldrawDocument } from './document'
 
-export interface BaseEntry {}
+export type BaseEntry = object
 
 type Content = Awaited<ReturnType<TldrawDocument['getInstance']>>
 

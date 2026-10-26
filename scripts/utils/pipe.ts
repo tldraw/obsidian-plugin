@@ -10,8 +10,8 @@ export function createPrefixer(prefix: string): Transform {
   return new Transform({
     transform(chunk, encoding, callback) {
       // 1. Get current data + any leftovers from previous chunk
-      let data = (this._leftover || '') + chunk.toString();
-      let lines = data.split('\n');
+      const data = (this._leftover || '') + chunk.toString();
+      const lines = data.split('\n');
 
       // 2. The last element might be an incomplete line; save it
       this._leftover = lines.pop();

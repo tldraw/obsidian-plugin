@@ -28,8 +28,6 @@ type DocumentStoreInstance = ReturnType<TLDataDocumentStoreManager['register']>
 
 type EmbedPageOptions = Pick<ImageViewModeOptions, 'bounds'>
 
-type Timeout = number
-
 export class TldrawMarkdownRenderChild extends MarkdownRenderChild {
 	#workspaceLeafDeferrables = new Set<() => void>()
 	#workspaceLeafObserverDisconnect?: () => void
@@ -135,7 +133,7 @@ export class TldrawMarkdownRenderChild extends MarkdownRenderChild {
 			store: !this.#storeInstance ? undefined : { plugin: this.#storeInstance.documentStore },
 			options: {
 				// assetStore: documentStore.store.props.assets,
-				onClickAwayBlur: (ev) => {
+				onClickAwayBlur: () => {
 					Promise.resolve().then(() => this.setViewMode('image'))
 					return true
 				},
@@ -213,7 +211,7 @@ export class TldrawMarkdownRenderChild extends MarkdownRenderChild {
 					// Listen for changes to the deep link
 					this.#registerDeepLinkListener(editor)
 				},
-				onUiEvent: (editor, name, data) => {
+				onUiEvent: (editor, name) => {
 					if (!editor || name !== 'change-page') return
 					zoomToEmbedPageBounds(editor)
 				},
@@ -315,7 +313,7 @@ export class TldrawMarkdownRenderChild extends MarkdownRenderChild {
 		showBg: boolean
 		page?: string
 	}) {
-		TLDRAW_COMPONENT_LOGGING &&
+		if (TLDRAW_COMPONENT_LOGGING)
 			logClass(TldrawMarkdownRenderChild, this.updateEmbedValues, { bounds, imageSize })
 		const { options: currOptions } = this.#previewImage
 		if (
@@ -363,7 +361,7 @@ export class TldrawMarkdownRenderChild extends MarkdownRenderChild {
 	}
 
 	updateBounds(bounds?: BoxLike) {
-		TLDRAW_COMPONENT_LOGGING && logClass(TldrawMarkdownRenderChild, this.updateBounds)
+		if (TLDRAW_COMPONENT_LOGGING) logClass(TldrawMarkdownRenderChild, this.updateBounds)
 		this.#previewImage.setOptions({
 			...this.#previewImage.options,
 			bounds,
@@ -440,7 +438,7 @@ export class TldrawMarkdownRenderChild extends MarkdownRenderChild {
 	}
 
 	renderRoot() {
-		TLDRAW_COMPONENT_LOGGING &&
+		if (TLDRAW_COMPONENT_LOGGING)
 			logClass(TldrawMarkdownRenderChild, this.renderRoot, {
 				containerEl: this.containerEl,
 				parentEl: this.containerEl.parentElement,
@@ -451,7 +449,7 @@ export class TldrawMarkdownRenderChild extends MarkdownRenderChild {
 		})
 
 		const component = (this.#viewComponent ??= (() => {
-			TLDRAW_COMPONENT_LOGGING &&
+			if (TLDRAW_COMPONENT_LOGGING)
 				logClass(TldrawMarkdownRenderChild, this.renderRoot, 'component init', {
 					containerEl: this.containerEl,
 					parentEl: this.containerEl.parentElement,
@@ -464,7 +462,7 @@ export class TldrawMarkdownRenderChild extends MarkdownRenderChild {
 
 		// Wait for the component to be ready before rendering
 		setTimeout(() => {
-			TLDRAW_COMPONENT_LOGGING &&
+			if (TLDRAW_COMPONENT_LOGGING)
 				logClass(TldrawMarkdownRenderChild, this.renderRoot, 'timeout', {
 					containerEl: this.containerEl,
 					parentEl: this.containerEl.parentElement,
@@ -501,7 +499,7 @@ export class TldrawMarkdownRenderChild extends MarkdownRenderChild {
 	}
 
 	async loadRoot() {
-		TLDRAW_COMPONENT_LOGGING &&
+		if (TLDRAW_COMPONENT_LOGGING)
 			logClass(TldrawMarkdownRenderChild, this.loadRoot, this, {
 				containerEl: this.containerEl,
 				parentEl: this.containerEl.parentElement,
@@ -513,7 +511,7 @@ export class TldrawMarkdownRenderChild extends MarkdownRenderChild {
 	}
 
 	unloadRoot() {
-		TLDRAW_COMPONENT_LOGGING && logClass(TldrawMarkdownRenderChild, this.unloadRoot, this)
+		if (TLDRAW_COMPONENT_LOGGING) logClass(TldrawMarkdownRenderChild, this.unloadRoot, this)
 		this.#previewImage.clearRefreshTimeout()
 		this.#previewImage.observePreviewImageDisconnect()
 		this.#setPlaceHolderSize()
@@ -542,14 +540,14 @@ export class TldrawMarkdownRenderChild extends MarkdownRenderChild {
 	}
 
 	async #setUpObservers() {
-		TLDRAW_COMPONENT_LOGGING &&
+		if (TLDRAW_COMPONENT_LOGGING)
 			logClass(TldrawMarkdownRenderChild, this.#setUpObservers, this, 'before resolve', {
 				containerEl: this.containerEl,
 				parentEl: this.containerEl.parentElement,
 			})
 		// Quick hack to ensure the parent element is available.
 		await Promise.resolve()
-		TLDRAW_COMPONENT_LOGGING &&
+		if (TLDRAW_COMPONENT_LOGGING)
 			logClass(TldrawMarkdownRenderChild, this.#setUpObservers, this, 'after resolve', {
 				containerEl: this.containerEl,
 				parentEl: this.containerEl.parentElement,
@@ -558,7 +556,7 @@ export class TldrawMarkdownRenderChild extends MarkdownRenderChild {
 		this.#workspaceLeafObserverDisconnect?.()
 		const workspaceLeafObserverDisconnect = (this.#workspaceLeafObserverDisconnect =
 			this.embed.observeWorkspaceLeafIsShown((isShown) => {
-				TLDRAW_COMPONENT_LOGGING &&
+				if (TLDRAW_COMPONENT_LOGGING)
 					logClass(
 						TldrawMarkdownRenderChild,
 						this.#setUpObservers,
@@ -580,7 +578,7 @@ export class TldrawMarkdownRenderChild extends MarkdownRenderChild {
 		const embedValuesObserverDisconnect = (this.#embedValuesObserverDisconnect =
 			this.embed.observeEmbedValues(
 				(values) => {
-					TLDRAW_COMPONENT_LOGGING &&
+					if (TLDRAW_COMPONENT_LOGGING)
 						logClass(TldrawMarkdownRenderChild, this.#setUpObservers, 'embed values observer', {
 							values,
 						})
@@ -688,7 +686,7 @@ function createTldrawEmbedView(
 
 		tldrawEmbedViewContent.addEventListener(
 			'touchmove',
-			(ev) => {
+			() => {
 				clearTimeout(longPressTimer)
 			},
 			{ passive: true }
@@ -696,7 +694,7 @@ function createTldrawEmbedView(
 
 		tldrawEmbedViewContent.addEventListener(
 			'touchend',
-			(ev) => {
+			() => {
 				clearTimeout(longPressTimer)
 			},
 			{ passive: true }

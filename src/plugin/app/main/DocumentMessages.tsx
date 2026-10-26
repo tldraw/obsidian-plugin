@@ -15,7 +15,7 @@ export default function DocumentMessages() {
 
 	return (
 		<>
-			{dmbss.map((e, i) => (
+			{dmbss.map((e) => (
 				<DocumentMessagesButtonPortal key={e.key} button={e} />
 			))}
 		</>
@@ -26,7 +26,7 @@ function DocumentMessagesButtonPortal({ button }: { button: DocumentMessagesButt
 	const [count, setCount] = useState(() => button.messages.getCount())
 	const [isModalOpen, setIsModalOpen] = useState(false)
 
-	const cb = useCallback((evt: MouseEvent) => {
+	const cb = useCallback(() => {
 		setIsModalOpen(true)
 	}, [])
 

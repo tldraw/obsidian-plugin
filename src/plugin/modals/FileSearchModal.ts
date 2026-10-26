@@ -123,7 +123,6 @@ export class FileSearchModal extends SuggestModal<Suggestion> {
 
 	private getFirstFile(searchPath: string): TAbstractFile {
 		let _searchPath = normalizePath(searchPath)
-		// eslint-disable-next-line no-constant-condition
 		while (true) {
 			const folder = this.app.vault.getAbstractFileByPath(_searchPath)
 			if (folder) return folder

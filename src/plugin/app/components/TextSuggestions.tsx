@@ -105,7 +105,7 @@ const TextSuggestions = track(() => {
 					portals.push(portal)
 				})
 
-				inputSuggest.onSelect(async (value, evt) => {
+				inputSuggest.onSelect(async (value) => {
 					// We explicitly close since there seems to be some delay closing after this callback if we don't.
 					inputSuggest.close()
 					const assets = editor.store.props.assets
@@ -159,7 +159,7 @@ const TextSuggestions = track(() => {
 
 	useEffect(() => {
 		// Whenever the page bounds change, we always want to repostion the popover ref so that it moves with the user input.
-		bounds
+		void bounds
 		inputSuggestRef.current?.autoReposition()
 	}, [bounds])
 
@@ -172,7 +172,7 @@ interface InputSuggestionValueType<Type extends string, Value = unknown> {
 	getKey: () => string
 }
 
-interface EmbedInputSuggestion extends InputSuggestionValueType<'embed', TFile> {}
+type EmbedInputSuggestion = InputSuggestionValueType<'embed', TFile>
 
 type InputSuggestionValue = EmbedInputSuggestion
 
@@ -200,7 +200,7 @@ class TldrawTipTapInputSuggest extends AbstractInputSuggest<InputSuggestionValue
 		PTLEditorBlockBlur.blockBlurOnElement(this.suggestEl)
 	}
 
-	setValue(value: string): void {
+	setValue(): void {
 		// We don't ever need to set the value in our case, so disable it just in case.
 	}
 

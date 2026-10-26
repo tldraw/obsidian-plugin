@@ -99,7 +99,7 @@ export default class TldrawStoreExistsIndexedDBModal extends Modal {
 									if (!ignoreIndexedDbStore) {
 										tlDataDocumentFlags.remove(ignoreIndexedDbStoreFlag)
 									} else {
-										!tlDataDocumentFlags.includes(ignoreIndexedDbStoreFlag) &&
+										if (!tlDataDocumentFlags.includes(ignoreIndexedDbStoreFlag))
 											tlDataDocumentFlags.push(ignoreIndexedDbStoreFlag)
 									}
 									frontMatter[dataDocumentFlagsKey] = tlDataDocumentFlags

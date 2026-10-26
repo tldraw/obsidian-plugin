@@ -116,7 +116,6 @@ function BlockRefErrorMessageItem({
 										<BlockRefErrorTypeMessage
 											asset={e.asset}
 											tFile={tFile}
-											blockId={state.blockId}
 										/>
 									</div>
 								)
@@ -139,11 +138,9 @@ function BlockRefErrorMessageItem({
 function BlockRefErrorTypeMessage({
 	asset,
 	tFile,
-	blockId,
 }: {
 	asset: NonNullable<Extract<DocumentMessage, { type: 'blockRefError' }>['state']['asset']>
 	tFile: TFile
-	blockId: string
 }) {
 	const plugin = useTldrawPlugin()
 
