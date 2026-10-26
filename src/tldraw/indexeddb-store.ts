@@ -9,6 +9,13 @@ export function tldrawStoreIndexedDBName(persistenceKey: string) {
 
 class TldrawStoreIndexedDBNonexistent extends Error {}
 
+/**
+ * The failed request's error, which IndexedDB leaves `null` in some cases. A promise should reject with an `Error`.
+ */
+function requestError(error: DOMException | null, message: string): Error {
+	return error ?? new Error(message)
+}
+
 export class TldrawStoreIndexedDB {
 	db?: IDBDatabase
 	dbName: string
@@ -33,7 +40,7 @@ export class TldrawStoreIndexedDB {
 			}
 
 			dbReq.onerror = () => {
-				rej(dbReq.error)
+				rej(requestError(dbReq.error, 'IndexedDB request failed'))
 			}
 		})
 	}
@@ -56,7 +63,7 @@ export class TldrawStoreIndexedDB {
 			}
 
 			transaction.onerror = () => {
-				rej(transaction.error)
+				rej(requestError(transaction.error, 'IndexedDB transaction failed'))
 			}
 
 			const getRes = transaction.objectStore(ASSETS_STORE_NAME).get(assetSrc)
@@ -81,7 +88,7 @@ export class TldrawStoreIndexedDB {
 			}
 
 			transaction.onerror = () => {
-				rej(transaction.error)
+				rej(requestError(transaction.error, 'IndexedDB transaction failed'))
 			}
 
 			const getRes = transaction.objectStore(ASSETS_STORE_NAME).getAllKeys()
@@ -129,7 +136,7 @@ export class TldrawStoreIndexedDB {
 			}
 
 			dbReq.onerror = () => {
-				rej(dbReq.error)
+				rej(requestError(dbReq.error, 'IndexedDB request failed'))
 			}
 		})
 	}
@@ -148,7 +155,7 @@ export class TldrawStoreIndexedDB {
 			}
 
 			dbReq.onerror = () => {
-				rej(dbReq.error)
+				rej(requestError(dbReq.error, 'IndexedDB request failed'))
 			}
 		})
 	}
