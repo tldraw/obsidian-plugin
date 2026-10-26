@@ -257,8 +257,10 @@ const TldrawApp = ({
 			[PLUGIN_ACTION_TOGGLE_ZOOM_LOCK]: lockZoomIcon,
 		},
 	})
+	// The overrides are created once, so route UI events through a ref to reach the latest handler.
+	const onUiEventRef = React.useRef<TLUiEventHandler>(() => {})
 	const overridesUiRef = React.useRef({
-		...uiOverrides(plugin),
+		...uiOverrides(plugin, (...args) => onUiEventRef.current(...args)),
 		...otherUiOverrides,
 	})
 	const overridesUiComponentsRef = React.useRef({
@@ -291,6 +293,9 @@ const TldrawApp = ({
 		},
 		[_onUiEvent, editor]
 	)
+	React.useLayoutEffect(() => {
+		onUiEventRef.current = onUiEvent
+	}, [onUiEvent])
 
 	const [isFocused, setIsFocused] = React.useState(false)
 

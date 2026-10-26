@@ -20,7 +20,6 @@ import {
 	TLUiEventSource,
 	TLUiOverrideHelpers,
 	TLUiOverrides,
-	useUiEvents,
 } from 'tldraw'
 
 const DEFAULT_CAMERA_STEPS = [0.1, 0.25, 0.5, 1, 2, 4, 8]
@@ -28,8 +27,7 @@ const DEFAULT_CAMERA_STEPS = [0.1, 0.25, 0.5, 1, 2, 4, 8]
 export const PLUGIN_ACTION_TOGGLE_ZOOM_LOCK = 'toggle-zoom-lock'
 export const CREATE_PAGE_ACTION = 'create-page'
 
-export function uiOverrides(plugin: TldrawPlugin): TLUiOverrides {
-	const trackEvent = useUiEvents()
+export function uiOverrides(plugin: TldrawPlugin, trackEvent: TLUiEventContextType): TLUiOverrides {
 	return {
 		actions: (editor, actions, { msg, addToast, paste }) => {
 			const defaultDocumentName = msg('document.default-name')
