@@ -13,6 +13,7 @@ import { migrateTldrawFileDataIfNecessary } from 'src/plugin/document/migrate/tl
 import { TLDRAW_FILE_EXTENSION } from 'tldraw'
 import { BaseTldrawFileView } from './BaseTldrawFileView'
 import { pluginMenuLabel } from 'src/plugin/menu'
+import { ErrorHandler } from 'src/plugin/error-handler'
 
 export class TldrawReadonlyView extends BaseTldrawFileView {
 	plugin: TldrawPlugin
@@ -46,7 +47,7 @@ export class TldrawReadonlyView extends BaseTldrawFileView {
 	override viewAsMarkdownClicked(): void {
 		const { file } = this.fileView
 		if (file !== null && file.path.endsWith(TLDRAW_FILE_EXTENSION)) {
-			this.createAndOpen(file, 'new-tab', 'markdown')
+			this.createAndOpen(file, 'new-tab', 'markdown').catch(ErrorHandler.notice)
 			return
 		} else {
 			super.viewAsMarkdownClicked()

@@ -7,6 +7,7 @@ import { navigateToBlockCache } from 'src/plugin/file/navigate'
 import { TldrawDocument } from 'src/plugin/audit/document'
 import { AssetEntry } from 'src/plugin/instance'
 import { mimeTypeFromExtension } from 'src/utils/mime-type'
+import { ErrorHandler } from 'src/plugin/error-handler'
 
 export function AuditLayout({
 	slots,
@@ -136,7 +137,7 @@ export function AssetListItem({
 				const snippet = fullText.substring(pos.start.offset, pos.end.offset)
 				setContent(snippet)
 			}
-			loadAsset()
+			await loadAsset()
 		}
 		setShowContent(!showContent)
 	}
@@ -158,7 +159,7 @@ export function AssetListItem({
 	const handleOpenInFile = async () => {
 		const file = app.vault.getAbstractFileByPath(document.path)
 		if (file instanceof TFile) {
-			navigateToBlockCache(plugin, file, asset.blockCache)
+			await navigateToBlockCache(plugin, file, asset.blockCache)
 		}
 	}
 
@@ -172,11 +173,16 @@ export function AssetListItem({
 					</span>
 				</div>
 				<div className="ptl-audit-item-actions" style={{ display: 'flex', gap: '4px' }}>
-					<button onClick={toggleView} className="ptl-audit-item-view-btn">
+					<button
+						onClick={() => {
+							toggleView().catch(ErrorHandler.notice)
+						}}
+						className="ptl-audit-item-view-btn"
+					>
 						{showContent ? 'Hide Details' : 'View Details'}
 					</button>
 					<button
-						onClick={handlePrune}
+						onClick={() => void handlePrune()}
 						className="mod-warning"
 						title="Remove block reference from file and prune from store"
 					>
@@ -184,7 +190,9 @@ export function AssetListItem({
 					</button>
 					<button
 						className="mod-cta"
-						onClick={handleOpenInFile}
+						onClick={() => {
+							handleOpenInFile().catch(ErrorHandler.notice)
+						}}
 						title="Navigate to block in the markdown file"
 					>
 						Go to location

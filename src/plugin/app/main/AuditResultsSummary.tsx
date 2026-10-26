@@ -99,7 +99,7 @@ function SummaryReportItem({
 			<div className="ptl-audit-report-item-actions">
 				<button
 					className="mod-warning"
-					onClick={handlePruneAll}
+					onClick={(e) => void handlePruneAll(e)}
 					title="Prune all loose assets in this file"
 				>
 					Prune All

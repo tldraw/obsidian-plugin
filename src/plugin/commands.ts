@@ -10,6 +10,7 @@ import {
 } from 'src/plugin/constants'
 import { importTldrawFile } from 'src/plugin/actions/file'
 import { TLDRAW_FILE_EXTENSION } from 'tldraw'
+import { ErrorHandler } from 'src/plugin/error-handler'
 
 async function createTldrawFile(
 	plugin: TldrawPlugin,
@@ -128,7 +129,7 @@ export function registerCommands(plugin: TldrawPlugin) {
 			const currentViewMode = plugin.getLeafFileViewMode(leaf, file)
 			const oppositeViewMode =
 				currentViewMode === VIEW_TYPE_MARKDOWN ? VIEW_TYPE_TLDRAW : VIEW_TYPE_MARKDOWN
-			plugin.updateViewMode(oppositeViewMode, leaf)
+			plugin.updateViewMode(oppositeViewMode, leaf).catch(ErrorHandler.notice)
 		},
 	})
 

@@ -55,7 +55,7 @@ export default class NewTldrawFileConfirmationModal extends SuggestModal<Suggest
 	}
 
 	onOpen(): void {
-		super.onOpen()
+		void super.onOpen()
 		const promptInputContainer = this.inputEl.parentElement!
 		const promptInputContainerParent = promptInputContainer.parentElement!
 		promptInputContainer.remove()

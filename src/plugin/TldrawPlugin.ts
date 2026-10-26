@@ -45,6 +45,7 @@ import { installObsidianLinkHandler } from 'src/plugin/uri/open-obsidian-link'
 import { hasTldrawFrontMatterKey, isTldrawFile } from 'src/plugin/document/detect'
 import TldrawFileCreator from 'src/plugin/file/creator'
 import ViewModeManager from 'src/plugin/view-mode-manager'
+import { ErrorHandler } from 'src/plugin/error-handler'
 
 export default class TldrawPlugin extends Plugin {
 	#instance?: TldrawInObsidianPluginInstance
@@ -75,7 +76,7 @@ export default class TldrawPlugin extends Plugin {
 	}
 
 	async onload() {
-		super.onload()
+		await super.onload()
 		installObsidianLinkHandler(this.app)
 		const instance = (this.#instance = new TldrawInObsidianPluginInstance(this.app))
 
@@ -122,9 +123,9 @@ export default class TldrawPlugin extends Plugin {
 		// subscribe to status bar state within react via zustand:
 		this.unsubscribeToViewModeState = useStatusBarState.subscribe(
 			(state) => state,
-			async (state, prevState) => {
+			(state, prevState) => {
 				if (state.view.mode !== prevState.view.mode && state.view.source === 'react')
-					await this.updateViewMode(state.view.mode)
+					this.updateViewMode(state.view.mode).catch(ErrorHandler.notice)
 			}
 		)
 

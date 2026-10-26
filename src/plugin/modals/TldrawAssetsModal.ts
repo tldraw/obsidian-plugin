@@ -1,6 +1,7 @@
 import { App, ButtonComponent, Modal, TFile } from 'obsidian'
 import { TldrawAppStoreProps } from 'src/plugin/app/TldrawApp'
 import { ObsidianTLAssetStore } from 'src/plugin/assets/asset-store'
+import { ErrorHandler } from 'src/plugin/error-handler'
 import { Store } from 'tldraw'
 
 export default class TldrawAssetsModal extends Modal {
@@ -13,7 +14,7 @@ export default class TldrawAssetsModal extends Modal {
 	}
 
 	onOpen(): void {
-		super.onOpen()
+		void super.onOpen()
 		this.contentEl.empty()
 
 		const store = this.storeProps.plugin
@@ -41,76 +42,88 @@ export default class TldrawAssetsModal extends Modal {
 	}
 
 	private displayObsidianTLAssetStore(assetStore: ObsidianTLAssetStore) {
-		assetStore.getAllFromIndexedDB().then((assetSourcesIDB) => {
-			this.contentEl.createDiv(undefined, async (div) => {
-				if (assetSourcesIDB.length === 0) {
-					div.createEl('p', {
-						text: 'No assets in the IndexedDB.',
-					})
-				} else {
-					div.createEl(
-						'ul',
-						{
-							text: `${assetSourcesIDB.length} asset(s) in the IndexedDB`,
-						},
-						(ul) => {
-							for (const assetSource of assetSourcesIDB) {
-								const li = ul.createEl('li', {
-									text: assetSource,
-								})
-								new ButtonComponent(li).setButtonText('View').onClick(() => {
-									const previewImageModal = new Modal(this.app)
-									previewImageModal.titleEl.createEl('header', {
+		assetStore
+			.getAllFromIndexedDB()
+			.then((assetSourcesIDB) => {
+				this.contentEl.createDiv(undefined, (div) => {
+					if (assetSourcesIDB.length === 0) {
+						div.createEl('p', {
+							text: 'No assets in the IndexedDB.',
+						})
+					} else {
+						div.createEl(
+							'ul',
+							{
+								text: `${assetSourcesIDB.length} asset(s) in the IndexedDB`,
+							},
+							(ul) => {
+								for (const assetSource of assetSourcesIDB) {
+									const li = ul.createEl('li', {
 										text: assetSource,
 									})
-									previewImageModal.contentEl.createEl('img', undefined, async (img) => {
-										const asset = await assetStore.getFromIndexedDB(assetSource)
-										if (!asset) return
-										img.src = asset
+									new ButtonComponent(li).setButtonText('View').onClick(() => {
+										const previewImageModal = new Modal(this.app)
+										previewImageModal.titleEl.createEl('header', {
+											text: assetSource,
+										})
+										previewImageModal.contentEl.createEl('img', undefined, (img) => {
+											assetStore
+												.getFromIndexedDB(assetSource)
+												.then((asset) => {
+													if (asset) img.src = asset
+												})
+												.catch(ErrorHandler.notice)
+										})
+										previewImageModal.open()
 									})
-									previewImageModal.open()
-								})
+								}
 							}
-						}
-					)
-				}
+						)
+					}
+				})
 			})
-		})
+			.catch(ErrorHandler.notice)
 
-		assetStore.getAllFromMarkdownFile().then((assetSourcesMarkdown) => {
-			this.contentEl.createDiv(undefined, async (div) => {
-				if (assetSourcesMarkdown.length === 0) {
-					div.createEl('p', {
-						text: 'No assets references in the markdown file.',
-					})
-				} else {
-					div.createEl(
-						'ul',
-						{
-							text: `${assetSourcesMarkdown.length} asset reference(s) in the markdown file`,
-						},
-						(ul) => {
-							for (const assetSource of assetSourcesMarkdown) {
-								const li = ul.createEl('li', {
-									text: assetSource,
-								})
-								new ButtonComponent(li).setButtonText('View').onClick(() => {
-									const previewImageModal = new Modal(this.app)
-									previewImageModal.titleEl.createEl('header', {
+		assetStore
+			.getAllFromMarkdownFile()
+			.then((assetSourcesMarkdown) => {
+				this.contentEl.createDiv(undefined, (div) => {
+					if (assetSourcesMarkdown.length === 0) {
+						div.createEl('p', {
+							text: 'No assets references in the markdown file.',
+						})
+					} else {
+						div.createEl(
+							'ul',
+							{
+								text: `${assetSourcesMarkdown.length} asset reference(s) in the markdown file`,
+							},
+							(ul) => {
+								for (const assetSource of assetSourcesMarkdown) {
+									const li = ul.createEl('li', {
 										text: assetSource,
 									})
-									previewImageModal.contentEl.createEl('img', undefined, async (img) => {
-										const asset = await assetStore.getFromMarkdown(assetSource)
-										if (!asset) return
-										img.src = asset
+									new ButtonComponent(li).setButtonText('View').onClick(() => {
+										const previewImageModal = new Modal(this.app)
+										previewImageModal.titleEl.createEl('header', {
+											text: assetSource,
+										})
+										previewImageModal.contentEl.createEl('img', undefined, (img) => {
+											assetStore
+												.getFromMarkdown(assetSource)
+												.then((asset) => {
+													if (asset) img.src = asset
+												})
+												.catch(ErrorHandler.notice)
+										})
+										previewImageModal.open()
 									})
-									previewImageModal.open()
-								})
+								}
 							}
-						}
-					)
-				}
+						)
+					}
+				})
 			})
-		})
+			.catch(ErrorHandler.notice)
 	}
 }

@@ -26,6 +26,7 @@ import IconsSettingsManager from 'src/plugin/settings/IconsSettingsManager'
 import { tldrawNpmAssetsBrowseUrl } from 'src/plugin/settings/tldrawNpmAssets'
 import { FontTypes, IconNames } from 'src/plugin/settings/overrides-types'
 import { DownloadInfo } from 'src/obsidian/download/download'
+import { ErrorHandler } from 'src/plugin/error-handler'
 
 function AssetsSettingsGroup({ downloadAll }: { downloadAll: () => void }) {
 	const settingsManager = useSettingsManager()
@@ -152,7 +153,7 @@ function FontOverrideSetting({
 					new Notice(`"${path}" is not a valid file.`)
 					return
 				}
-				manager.setFontPath(font, file.path)
+				manager.setFontPath(font, file.path).catch(ErrorHandler.notice)
 			},
 		}).open()
 	}, [manager, store, font])
@@ -292,23 +293,25 @@ function FontOverrideSettingGroup({
 function IconSetSetting({ manager }: { manager: IconsSettingsManager }) {
 	const onFileSearchClick = useCallback(() => {
 		new FileSearchModal(manager.plugin, {
-			setSelection: async (file) => {
-				if (file instanceof TFolder) {
-					const updates: NonNullable<Parameters<typeof manager.saveIconSettings>[0]> = {}
-					for (const child of file.children) {
-						if (!(child instanceof TFile)) continue
+			setSelection: (file) => {
+				if (!(file instanceof TFolder)) return
+				const updates: NonNullable<Parameters<typeof manager.saveIconSettings>[0]> = {}
+				for (const child of file.children) {
+					if (!(child instanceof TFile)) continue
 
-						if (
-							(iconExtensions as readonly string[]).includes(child.extension) &&
-							(iconTypes as readonly string[]).includes(child.basename)
-						) {
-							updates[child.basename as IconNames] = child.path
-						}
+					if (
+						(iconExtensions as readonly string[]).includes(child.extension) &&
+						(iconTypes as readonly string[]).includes(child.basename)
+					) {
+						updates[child.basename as IconNames] = child.path
 					}
-					await manager.saveIconSettings(updates)
-
-					new Notice(`Updated icon overrides for ${Object.entries(updates).length}`)
 				}
+				manager
+					.saveIconSettings(updates)
+					.then(() => {
+						new Notice(`Updated icon overrides for ${Object.entries(updates).length}`)
+					})
+					.catch(ErrorHandler.notice)
 			},
 			selectDir: true,
 			extensions: [],
@@ -370,7 +373,7 @@ function IconOverrideSetting({
 					new Notice(`"${path}" is not a valid file.`)
 					return
 				}
-				manager.setIconPath(icon, file.path)
+				manager.setIconPath(icon, file.path).catch(ErrorHandler.notice)
 			},
 		}).open()
 	}, [manager, store, icon])
@@ -516,16 +519,39 @@ export default function AssetsSettings() {
 		await downloadAllIcons()
 	}, [downloadAllFonts, downloadAllIcons])
 
+	// The settings components take callbacks that return nothing, so downloads report their own errors.
+	const onDownloadAll = useCallback(() => {
+		downloadAll().catch(ErrorHandler.notice)
+	}, [downloadAll])
+	const onDownloadAllFonts = useCallback(() => {
+		downloadAllFonts().catch(ErrorHandler.notice)
+	}, [downloadAllFonts])
+	const onDownloadAllIcons = useCallback(() => {
+		downloadAllIcons().catch(ErrorHandler.notice)
+	}, [downloadAllIcons])
+	const onDownloadFont = useCallback(
+		(font: FontTypes, config: DownloadInfo) => {
+			downloadFont(font, config).catch(ErrorHandler.notice)
+		},
+		[downloadFont]
+	)
+	const onDownloadIcon = useCallback(
+		(icon: IconNames, config: DownloadInfo) => {
+			downloadIcon(icon, config).catch(ErrorHandler.notice)
+		},
+		[downloadIcon]
+	)
+
 	return (
 		<>
 			<Group heading="Download assets">
-				<MemoAssetsSettingsGroup downloadAll={downloadAll} />
-				<FontAssetsSettingsGroup downloadAll={downloadAllFonts} />
-				<IconAssetsSettingsGroup downloadAll={downloadAllIcons} manager={assetManagers.icons} />
+				<MemoAssetsSettingsGroup downloadAll={onDownloadAll} />
+				<FontAssetsSettingsGroup downloadAll={onDownloadAllFonts} />
+				<IconAssetsSettingsGroup downloadAll={onDownloadAllIcons} manager={assetManagers.icons} />
 			</Group>
-			<MemoFontAssetsSettingsGroup downloadFont={downloadFont} manager={assetManagers.fonts} />
+			<MemoFontAssetsSettingsGroup downloadFont={onDownloadFont} manager={assetManagers.fonts} />
 			<Group heading="Icons">
-				<MemoIconAssetsSettingsGroup downloadIcon={downloadIcon} manager={assetManagers.icons} />
+				<MemoIconAssetsSettingsGroup downloadIcon={onDownloadIcon} manager={assetManagers.icons} />
 			</Group>
 		</>
 	)

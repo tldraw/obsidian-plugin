@@ -21,6 +21,7 @@ import TldrawViewComponent from 'src/plugin/views/tldraw-view-component'
 import deepLinkListener from './deep-link-listener'
 import PreviewImageImpl from './preview-image'
 import SnapshotPreviewSyncStoreImpl from './snapshot-preview-store'
+import { ErrorHandler } from 'src/plugin/error-handler'
 
 const boundsSelectorToolIconName = `tool-${BoundsSelectorTool.id}`
 
@@ -134,7 +135,9 @@ export class TldrawMarkdownRenderChild extends MarkdownRenderChild {
 			options: {
 				// assetStore: documentStore.store.props.assets,
 				onClickAwayBlur: () => {
-					Promise.resolve().then(() => this.setViewMode('image'))
+					Promise.resolve()
+						.then(() => this.setViewMode('image'))
+						.catch(ErrorHandler.log)
 					return true
 				},
 				isReadonly: this.#storeInstance?.isSynchronizingToMain() !== true,
@@ -516,12 +519,10 @@ export class TldrawMarkdownRenderChild extends MarkdownRenderChild {
 	}
 
 	override onload(): void {
-		try {
-			this.loadRoot()
-		} catch (e) {
+		this.loadRoot().catch((e: unknown) => {
 			this.unload()
 			console.error('There was an error while mounting the tldraw app: ', e)
-		}
+		})
 	}
 
 	override onunload(): void {
@@ -534,7 +535,7 @@ export class TldrawMarkdownRenderChild extends MarkdownRenderChild {
 	 * Compatibility with `.tldr` embed factory
 	 */
 	loadFile() {
-		this.lazyLoadStoreInstance()
+		this.lazyLoadStoreInstance().catch(ErrorHandler.notice)
 	}
 
 	async #setUpObservers() {
@@ -631,18 +632,20 @@ function createTldrawEmbedView(
 		viewType
 	) => {
 		const initialTldrawDeepLink = getCurrentDeepLink()
-		plugin.openTldrFile(
-			file,
-			location,
-			viewType,
-			!initialTldrawDeepLink
-				? undefined
-				: {
-						eState: {
-							tldrawDeepLink: createDeepLinkString(initialTldrawDeepLink),
-						},
-					}
-		)
+		plugin
+			.openTldrFile(
+				file,
+				location,
+				viewType,
+				!initialTldrawDeepLink
+					? undefined
+					: {
+							eState: {
+								tldrawDeepLink: createDeepLinkString(initialTldrawDeepLink),
+							},
+						}
+			)
+			.catch(ErrorHandler.notice)
 	}
 
 	tldrawEmbedViewContent.addEventListener('dblclick', (ev) => {

@@ -9,6 +9,7 @@ import {
 	SAVE_FILE_COPY_ACTION,
 	SAVE_FILE_COPY_IN_VAULT_ACTION,
 } from 'src/plugin/actions/file'
+import { ErrorHandler } from 'src/plugin/error-handler'
 import {
 	Editor,
 	PageRecordType,
@@ -151,19 +152,19 @@ function pasteFromClipboardOverride(
 			navigator.clipboard
 				?.read()
 				.then((clipboardItems) => {
-					pasteClipboard(source, clipboardItems)
+					pasteClipboard(source, clipboardItems).catch(ErrorHandler.log)
 				})
 				.catch((e: unknown) => {
 					// Fallback to reading the clipboard as plain text.
 					navigator.clipboard
 						?.readText()
-						.then((val) => {
+						.then((val) =>
 							pasteClipboard(source, [
 								new ClipboardItem({
 									'text/plain': new Blob([val], { type: 'text/plain' }),
 								}),
 							])
-						})
+						)
 						.catch((ee: unknown) => {
 							console.error({ e, ee })
 							addToast({

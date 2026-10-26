@@ -4,6 +4,7 @@ import { PTLEditorBlockBlur } from 'src/utils/dom-attributes'
 import { BoxLike } from 'tldraw'
 import { pluginMenuLabel } from 'src/plugin/menu'
 import { TldrawAppViewModeController } from './TldrawAppEmbedViewController'
+import { ErrorHandler } from 'src/plugin/error-handler'
 
 export type TldrAppControllerForMenu = Pick<
 	TldrawAppViewModeController,
@@ -114,7 +115,7 @@ export function createEmbedMenu({
 				.setDisabled(bounds === undefined)
 				.onClick(() => {
 					if (bounds) {
-						window.navigator.clipboard.writeText(boundsText(bounds))
+						window.navigator.clipboard.writeText(boundsText(bounds)).catch(ErrorHandler.notice)
 					}
 				})
 		)

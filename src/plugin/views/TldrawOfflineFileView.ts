@@ -3,6 +3,7 @@ import { TLDRAW_ICON_NAME, VIEW_TYPE_TLDRAW_OFFLINE } from 'src/plugin/constants
 import { TLDRAW_OFFLINE_UNSUPPORTED_TITLE } from 'src/plugin/document/constants'
 import { appendTldrawOfflineMessage } from 'src/utils/tldraw-offline-message'
 import { pluginMenuLabel } from 'src/plugin/menu'
+import { ErrorHandler } from 'src/plugin/error-handler'
 
 const OPEN_IN_DEFAULT_APP = 'Open in default app'
 
@@ -65,6 +66,7 @@ export class TldrawOfflineFileView extends FileView {
 
 	private openInDefaultApp() {
 		if (!this.file) return
-		this.app.openWithDefaultApp(this.file.path)
+		// Obsidian does not document whether this returns a promise.
+		Promise.resolve(this.app.openWithDefaultApp(this.file.path)).catch(ErrorHandler.notice)
 	}
 }

@@ -7,6 +7,7 @@ import { ModalWrapper } from 'src/obsidian/react/modal'
 import { ObsidianMarkdownFileTLAssetStoreProxy } from 'src/plugin/assets/asset-store'
 import { TLAsset, TLImageAsset, TLImageShape, TLUnknownShape } from 'tldraw'
 import { AssetListItem, AuditLayout, ErrorMessage, TldrawDocumentView } from './AuditCommon'
+import { ErrorHandler } from 'src/plugin/error-handler'
 
 function isShapeOfType<T extends TLUnknownShape>(
 	shape: TLUnknownShape,
@@ -229,7 +230,7 @@ export function LooseAssetsScanner({
 											>
 												<button
 													className="mod-warning"
-													onClick={handlePruneAll}
+													onClick={() => void handlePruneAll()}
 													disabled={isAuditingAll}
 													title="Prune all loose assets in this file"
 												>
@@ -295,12 +296,19 @@ export function LooseAssetsScanner({
 									<button onClick={handleBack} disabled={!canGoBack || isAuditingAll}>
 										Back
 									</button>
-									<button onClick={handleNext} disabled={!canGoForward || isAuditingAll}>
+									<button
+										onClick={() => {
+											handleNext().catch(ErrorHandler.notice)
+										}}
+										disabled={!canGoForward || isAuditingAll}
+									>
 										Next File
 									</button>
 									{!isDone && (
 										<button
-											onClick={async () => handleAuditAll().then(onNavigateToResults)}
+											onClick={() => {
+												handleAuditAll().then(onNavigateToResults).catch(ErrorHandler.notice)
+											}}
 											disabled={isAuditingAll || !canGoForward}
 										>
 											Audit All
@@ -311,7 +319,9 @@ export function LooseAssetsScanner({
 									</button>
 								</div>
 								<button
-									onClick={handleRefresh}
+									onClick={() => {
+										handleRefresh().catch(ErrorHandler.notice)
+									}}
 									disabled={!current || isAuditingAll}
 									className="mod-cta"
 								>

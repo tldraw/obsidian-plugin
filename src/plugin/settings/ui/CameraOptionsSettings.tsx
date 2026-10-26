@@ -3,6 +3,7 @@ import useSettingsManager from 'src/plugin/app/hooks/useSettingsManager'
 import useUserPluginSettings from 'src/plugin/app/hooks/useUserPluginSettings'
 import { Setting } from '@obsidian-plugin-toolkit/react/components/setting/group'
 import { Dropdown } from '@obsidian-plugin-toolkit/react/components'
+import { ErrorHandler } from 'src/plugin/error-handler'
 
 export default function CameraOptionsSettings() {
 	const settingsManager = useSettingsManager()
@@ -23,7 +24,7 @@ export default function CameraOptionsSettings() {
 				console.error('Unable to updated wheelBehavior, invalid value:', { value })
 				return
 			}
-			settingsManager.updateEditorWheelBehavior(value)
+			settingsManager.updateEditorWheelBehavior(value).catch(ErrorHandler.notice)
 		},
 		[settingsManager]
 	)

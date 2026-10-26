@@ -6,6 +6,7 @@ import { TLDataDocumentStore } from 'src/plugin/document/document'
 import { StoreSnapshot, TLRecord } from 'tldraw'
 import { getFrontMatterList } from 'src/obsidian/helpers/front-matter'
 import { TldrawView } from 'src/plugin/views/TldrawView'
+import { ErrorHandler } from 'src/plugin/error-handler'
 
 export class TldrawStoreConflictResolveFileUnloaded extends Error {}
 export class TldrawStoreConflictResolveCanceled extends Error {
@@ -106,7 +107,7 @@ export default class TldrawStoreExistsIndexedDBModal extends Modal {
 								} else if (ignoreIndexedDbStore) {
 									frontMatter[dataDocumentFlagsKey] = [ignoreIndexedDbStoreFlag]
 								}
-							})
+							}).catch(ErrorHandler.notice)
 						})
 					})
 				new Setting(div)
@@ -175,7 +176,7 @@ export default class TldrawStoreExistsIndexedDBModal extends Modal {
 	}
 
 	onOpen(): void {
-		super.onOpen()
+		void super.onOpen()
 		this.reset()
 
 		const sharedAppProps = {

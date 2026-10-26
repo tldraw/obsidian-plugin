@@ -21,6 +21,7 @@ import { pathBasenameNoExt } from 'src/obsidian/helpers/path'
 import { clamp, msToSeconds } from 'src/utils/numbers'
 import { Dropdown, Text, Toggle, ExtraButton, MomentFormat } from '@obsidian-plugin-toolkit/react/components'
 import { Setting, Group } from '@obsidian-plugin-toolkit/react/components/setting/group'
+import { ErrorHandler } from 'src/plugin/error-handler'
 
 const DEFAULT_TAGS = ['tldraw']
 
@@ -398,7 +399,7 @@ function FrontmatterSettingsGroup() {
 		const tags = settings.file?.customTags ?? [...DEFAULT_TAGS]
 		if (!isValidFrontmatterTag(frontmatterTagValue)) return
 		tags.push(frontmatterTagValue)
-		updateFrontmatterTags(tags)
+		updateFrontmatterTags(tags).catch(ErrorHandler.notice)
 		setFrontmatterTagValue('')
 	}, [updateFrontmatterTags, settings, frontmatterTagValue])
 
@@ -421,11 +422,13 @@ function FrontmatterSettingsGroup() {
 					<IconButton
 						className="multi-select-pill-remove-button"
 						iconId={'x'}
-						onClick={
-							tags === undefined
-								? () => defaultTagsRemove(tag)
-								: () => updateFrontmatterTags(tags.filter((e) => e !== tag))
-						}
+						onClick={() => {
+							const removed =
+								tags === undefined
+									? defaultTagsRemove(tag)
+									: updateFrontmatterTags(tags.filter((e) => e !== tag))
+							removed.catch(ErrorHandler.notice)
+						}}
 					/>
 				</div>
 			)
@@ -502,7 +505,9 @@ function FrontmatterSettingsGroup() {
 								className="clickable-icon extra-setting-button"
 								iconId="rotate-ccw"
 								aria-label="Reset to default"
-								onClick={resetFrontmatterTags}
+								onClick={() => {
+									resetFrontmatterTags().catch(ErrorHandler.notice)
+								}}
 							/>
 						</>
 					),

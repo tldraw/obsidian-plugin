@@ -20,7 +20,7 @@ export function useDocumentAudit(pluginInstance: TldrawInObsdianPluginInstance) 
 			const instance = await doc.getInstance()
 			await instance.pruneStoreImages(...blocks)
 			await doc.onceMetadataChanged()
-			manager.refreshCurrent()
+			await manager.refreshCurrent()
 		},
 	}
 }

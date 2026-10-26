@@ -6,6 +6,7 @@ import {
 	VIEW_TYPE_TLDRAW_READ_ONLY,
 	ViewType,
 } from 'src/plugin/constants'
+import { ErrorHandler } from 'src/plugin/error-handler'
 import TldrawPlugin from 'src/plugin/TldrawPlugin'
 
 /**
@@ -115,7 +116,7 @@ export default class ViewModeManager {
 					leaf.view.file &&
 					this.plugin.isTldrawFile(leaf.view.file)
 				) {
-					this.updateViewMode(VIEW_TYPE_TLDRAW, leaf)
+					this.updateViewMode(VIEW_TYPE_TLDRAW, leaf).catch(ErrorHandler.notice)
 				}
 			}
 		})

@@ -1,5 +1,6 @@
 import { App } from 'obsidian'
 import { createStore, Store } from 'src/lib/stores'
+import { ErrorHandler } from 'src/plugin/error-handler'
 import { TldrawDocument } from './document'
 
 export type BaseEntry = object
@@ -99,7 +100,7 @@ export class AuditSessionManager<T extends BaseEntry> {
 		})
 
 		// Auto-load first item
-		this.stepForward()
+		this.stepForward().catch(ErrorHandler.log)
 	}
 
 	stop() {
