@@ -8,6 +8,7 @@ import { TldrawDocument } from 'src/plugin/audit/document'
 import { AssetEntry } from 'src/plugin/instance'
 import { mimeTypeFromExtension } from 'src/utils/mime-type'
 import { ErrorHandler } from 'src/plugin/error-handler'
+import { errorMessage } from 'src/utils/error'
 
 export function AuditLayout({
 	slots,
@@ -124,7 +125,7 @@ export function AssetListItem({
 			setAssetData({ url, mimeType, isLoading: false })
 		} catch (e) {
 			console.error(e)
-			setAssetData({ error: e instanceof Error ? e.message : 'Unknown error', isLoading: false })
+			setAssetData({ error: errorMessage(e), isLoading: false })
 		}
 	}
 
@@ -150,7 +151,7 @@ export function AssetListItem({
 		} catch (e) {
 			console.error(e)
 			setAssetData({
-				error: `Pruning failed: ${e instanceof Error ? e.message : 'Unknown error'}`,
+				error: `Pruning failed: ${errorMessage(e)}`,
 				isLoading: false,
 			})
 		}

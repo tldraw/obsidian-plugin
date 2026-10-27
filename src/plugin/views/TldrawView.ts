@@ -4,6 +4,7 @@ import { TLDataDocumentStore } from 'src/plugin/document/document'
 import { loadSnapshot } from 'tldraw'
 import TldrawPlugin from 'src/plugin/TldrawPlugin'
 import { VIEW_TYPE_TLDRAW } from 'src/plugin/constants'
+import { ErrorHandler } from 'src/plugin/error-handler'
 import { BaseTldrawFileView, DataUpdate } from './BaseTldrawFileView'
 import TldrawStoreExistsIndexedDBModal, {
 	TldrawStoreConflictResolveCanceled,
@@ -20,9 +21,7 @@ export class TldrawView extends BaseTldrawFileView {
 
 	override onUpdated(update: DataUpdate) {
 		// Always save the data to the file.
-		update.saveFile().catch((e) => {
-			console.error(e)
-		})
+		update.saveFile().catch(ErrorHandler.log)
 	}
 
 	syncToMain() {
