@@ -1,6 +1,6 @@
 {
 	"name": "tldraw-in-obsidian",
-	"version": "1.34.0",
+	"version": "1.35.0",
 	"description": "Create whiteboards, diagrams, and drawings with the official tldraw plugin.",
 	"main": "dist/production/main.js",
 	"private": true,
