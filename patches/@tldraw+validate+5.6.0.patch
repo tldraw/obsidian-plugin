@@ -1,0 +1,90 @@
+diff --git a/node_modules/@tldraw/validate/dist-cjs/index.d.ts b/node_modules/@tldraw/validate/dist-cjs/index.d.ts
+index 8a9b5ea..f1d3823 100644
+--- a/node_modules/@tldraw/validate/dist-cjs/index.d.ts
++++ b/node_modules/@tldraw/validate/dist-cjs/index.d.ts
+@@ -247,13 +247,14 @@ declare function jsonDict(): DictValidator<string, JsonValue>;
+ declare const jsonValue: Validator<JsonValue>;
+ 
+ /**
+- * Validator for URLs that are safe to use as user-facing links. Accepts http, https, and mailto protocols.
++ * Validator for URLs that are safe to use as user-facing links. Accepts http, https, mailto, and obsidian protocols.
+  * This validator provides security by rejecting potentially dangerous protocols like javascript:.
+  *
+  * @example
+  * ```ts
+  * const link = T.linkUrl.validate("https://example.com") // Valid
+  * const email = T.linkUrl.validate("mailto:user@example.com") // Valid
++ * const obsidianLink = T.linkUrl.validate("obsidian://open?vault=my%20vault&file=Note.md") // Valid
+  * T.linkUrl.validate("") // Valid (empty string allowed)
+  * T.linkUrl.validate("javascript:alert(1)") // Throws ValidationError (unsafe protocol)
+  * ```
+diff --git a/node_modules/@tldraw/validate/dist-cjs/lib/validation.js b/node_modules/@tldraw/validate/dist-cjs/lib/validation.js
+index 7601962..bf869d8 100644
+--- a/node_modules/@tldraw/validate/dist-cjs/lib/validation.js
++++ b/node_modules/@tldraw/validate/dist-cjs/lib/validation.js
+@@ -1106,7 +1106,7 @@ function parseUrl(str) {
+     throw new ValidationError(`Expected a valid url, got ${JSON.stringify(str)}`);
+   }
+ }
+-const validLinkProtocols = /* @__PURE__ */ new Set(["http:", "https:", "mailto:"]);
++const validLinkProtocols = /* @__PURE__ */ new Set(["http:", "https:", "mailto:", "obsidian:"]);
+ const linkUrl = string.check((value) => {
+   if (value === "") return;
+   const url = parseUrl(value);
+diff --git a/node_modules/@tldraw/validate/dist-esm/index.d.mts b/node_modules/@tldraw/validate/dist-esm/index.d.mts
+index 8a9b5ea..f1d3823 100644
+--- a/node_modules/@tldraw/validate/dist-esm/index.d.mts
++++ b/node_modules/@tldraw/validate/dist-esm/index.d.mts
+@@ -247,13 +247,14 @@ declare function jsonDict(): DictValidator<string, JsonValue>;
+ declare const jsonValue: Validator<JsonValue>;
+ 
+ /**
+- * Validator for URLs that are safe to use as user-facing links. Accepts http, https, and mailto protocols.
++ * Validator for URLs that are safe to use as user-facing links. Accepts http, https, mailto, and obsidian protocols.
+  * This validator provides security by rejecting potentially dangerous protocols like javascript:.
+  *
+  * @example
+  * ```ts
+  * const link = T.linkUrl.validate("https://example.com") // Valid
+  * const email = T.linkUrl.validate("mailto:user@example.com") // Valid
++ * const obsidianLink = T.linkUrl.validate("obsidian://open?vault=my%20vault&file=Note.md") // Valid
+  * T.linkUrl.validate("") // Valid (empty string allowed)
+  * T.linkUrl.validate("javascript:alert(1)") // Throws ValidationError (unsafe protocol)
+  * ```
+diff --git a/node_modules/@tldraw/validate/dist-esm/lib/validation.mjs b/node_modules/@tldraw/validate/dist-esm/lib/validation.mjs
+index 576b76c..828eefe 100644
+--- a/node_modules/@tldraw/validate/dist-esm/lib/validation.mjs
++++ b/node_modules/@tldraw/validate/dist-esm/lib/validation.mjs
+@@ -1051,7 +1051,7 @@ function parseUrl(str) {
+     throw new ValidationError(`Expected a valid url, got ${JSON.stringify(str)}`);
+   }
+ }
+-const validLinkProtocols = /* @__PURE__ */ new Set(["http:", "https:", "mailto:"]);
++const validLinkProtocols = /* @__PURE__ */ new Set(["http:", "https:", "mailto:", "obsidian:"]);
+ const linkUrl = string.check((value) => {
+   if (value === "") return;
+   const url = parseUrl(value);
+diff --git a/node_modules/@tldraw/validate/src/lib/validation.ts b/node_modules/@tldraw/validate/src/lib/validation.ts
+index ae2a67e..f74c04b 100644
+--- a/node_modules/@tldraw/validate/src/lib/validation.ts
++++ b/node_modules/@tldraw/validate/src/lib/validation.ts
+@@ -1878,16 +1878,17 @@ function parseUrl(str: string) {
+ 	}
+ }
+ 
+-const validLinkProtocols = new Set(['http:', 'https:', 'mailto:'])
++const validLinkProtocols = new Set(['http:', 'https:', 'mailto:', 'obsidian:'])
+ 
+ /**
+- * Validator for URLs that are safe to use as user-facing links. Accepts http, https, and mailto protocols.
++ * Validator for URLs that are safe to use as user-facing links. Accepts http, https, mailto, and obsidian protocols.
+  * This validator provides security by rejecting potentially dangerous protocols like javascript:.
+  *
+  * @example
+  * ```ts
+  * const link = T.linkUrl.validate("https://example.com") // Valid
+  * const email = T.linkUrl.validate("mailto:user@example.com") // Valid
++ * const obsidianLink = T.linkUrl.validate("obsidian://open?vault=my%20vault&file=Note.md") // Valid
+  * T.linkUrl.validate("") // Valid (empty string allowed)
+  * T.linkUrl.validate("javascript:alert(1)") // Throws ValidationError (unsafe protocol)
+  * ```

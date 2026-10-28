@@ -1,0 +1,174 @@
+diff --git a/node_modules/tldraw/dist-cjs/lib/shapes/shared/HyperlinkButton.js b/node_modules/tldraw/dist-cjs/lib/shapes/shared/HyperlinkButton.js
+index 89a051c..3156470 100644
+--- a/node_modules/tldraw/dist-cjs/lib/shapes/shared/HyperlinkButton.js
++++ b/node_modules/tldraw/dist-cjs/lib/shapes/shared/HyperlinkButton.js
+@@ -46,6 +46,15 @@ function HyperlinkButton({ url }) {
+     },
+     [editor]
+   );
++  const handlePointerUp = (0, import_react.useCallback)(
++    (e) => {
++      markAsHandledOnShiftKey(e);
++      if (editor.inputs.getShiftKey()) return;
++      e.preventDefault();
++      (0, import_editor.openWindow)(url, "_blank");
++    },
++    [editor, markAsHandledOnShiftKey, url]
++  );
+   return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
+     "a",
+     {
+@@ -56,7 +65,7 @@ function HyperlinkButton({ url }) {
+       target: "_blank",
+       rel: "noopener noreferrer",
+       onPointerDown: markAsHandledOnShiftKey,
+-      onPointerUp: markAsHandledOnShiftKey,
++      onPointerUp: handlePointerUp,
+       title: url,
+       draggable: false,
+       children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
+diff --git a/node_modules/tldraw/dist-cjs/lib/ui/components/EditLinkDialog.js b/node_modules/tldraw/dist-cjs/lib/ui/components/EditLinkDialog.js
+index d07bfae..6e7d349 100644
+--- a/node_modules/tldraw/dist-cjs/lib/ui/components/EditLinkDialog.js
++++ b/node_modules/tldraw/dist-cjs/lib/ui/components/EditLinkDialog.js
+@@ -32,6 +32,10 @@ var import_TldrawUiButtonLabel = require("./primitives/Button/TldrawUiButtonLabe
+ var import_TldrawUiDialog = require("./primitives/TldrawUiDialog");
+ var import_TldrawUiInput = require("./primitives/TldrawUiInput");
+ function validateUrl(url) {
++  const withoutHttpsPrefix = url.replace(/^https?:\/\/(?=obsidian:\/\/)/i, "");
++  if (/^obsidian:\/\//i.test(withoutHttpsPrefix)) {
++    return { isValid: true, hasProtocol: true };
++  }
+   if (import_editor.T.linkUrl.isValid(url)) {
+     return { isValid: true, hasProtocol: true };
+   }
+@@ -81,7 +85,7 @@ const EditLinkDialogInner = (0, import_editor.track)(function EditLinkDialogInne
+     return { actual: safe, safe, valid: true };
+   });
+   const handleChange = (0, import_react.useCallback)((rawValue) => {
+-    const fixedRawValue = rawValue.replace(/https?:\/\/(https?:\/\/)/, "$1");
++    const fixedRawValue = rawValue.replace(/https?:\/\/(https?:\/\/)/, "$1").replace(/^https?:\/\/(?=obsidian:\/\/)/i, "");
+     setUrlInputState(getUrlInputState(fixedRawValue));
+   }, []);
+   const handleClear = (0, import_react.useCallback)(() => {
+diff --git a/node_modules/tldraw/dist-esm/lib/shapes/shared/HyperlinkButton.mjs b/node_modules/tldraw/dist-esm/lib/shapes/shared/HyperlinkButton.mjs
+index 675a8dd..f331638 100644
+--- a/node_modules/tldraw/dist-esm/lib/shapes/shared/HyperlinkButton.mjs
++++ b/node_modules/tldraw/dist-esm/lib/shapes/shared/HyperlinkButton.mjs
+@@ -1,5 +1,5 @@
+ import { jsx } from "react/jsx-runtime";
+-import { useEditor } from "@tldraw/editor";
++import { openWindow, useEditor } from "@tldraw/editor";
+ import classNames from "classnames";
+ import { useCallback } from "react";
+ import { useEfficientZoomThreshold } from "./useEfficientZoomThreshold.mjs";
+@@ -13,6 +13,15 @@ function HyperlinkButton({ url }) {
+     },
+     [editor]
+   );
++  const handlePointerUp = useCallback(
++    (e) => {
++      markAsHandledOnShiftKey(e);
++      if (editor.inputs.getShiftKey()) return;
++      e.preventDefault();
++      openWindow(url, "_blank");
++    },
++    [editor, markAsHandledOnShiftKey, url]
++  );
+   return /* @__PURE__ */ jsx(
+     "a",
+     {
+@@ -23,7 +32,7 @@ function HyperlinkButton({ url }) {
+       target: "_blank",
+       rel: "noopener noreferrer",
+       onPointerDown: markAsHandledOnShiftKey,
+-      onPointerUp: markAsHandledOnShiftKey,
++      onPointerUp: handlePointerUp,
+       title: url,
+       draggable: false,
+       children: /* @__PURE__ */ jsx(
+diff --git a/node_modules/tldraw/dist-esm/lib/ui/components/EditLinkDialog.mjs b/node_modules/tldraw/dist-esm/lib/ui/components/EditLinkDialog.mjs
+index a041e95..6c8d082 100644
+--- a/node_modules/tldraw/dist-esm/lib/ui/components/EditLinkDialog.mjs
++++ b/node_modules/tldraw/dist-esm/lib/ui/components/EditLinkDialog.mjs
+@@ -14,6 +14,10 @@ import {
+ } from "./primitives/TldrawUiDialog.mjs";
+ import { TldrawUiInput } from "./primitives/TldrawUiInput.mjs";
+ function validateUrl(url) {
++  const withoutHttpsPrefix = url.replace(/^https?:\/\/(?=obsidian:\/\/)/i, "");
++  if (/^obsidian:\/\//i.test(withoutHttpsPrefix)) {
++    return { isValid: true, hasProtocol: true };
++  }
+   if (T.linkUrl.isValid(url)) {
+     return { isValid: true, hasProtocol: true };
+   }
+@@ -63,7 +67,7 @@ const EditLinkDialogInner = track(function EditLinkDialogInner2({
+     return { actual: safe, safe, valid: true };
+   });
+   const handleChange = useCallback((rawValue) => {
+-    const fixedRawValue = rawValue.replace(/https?:\/\/(https?:\/\/)/, "$1");
++    const fixedRawValue = rawValue.replace(/https?:\/\/(https?:\/\/)/, "$1").replace(/^https?:\/\/(?=obsidian:\/\/)/i, "");
+     setUrlInputState(getUrlInputState(fixedRawValue));
+   }, []);
+   const handleClear = useCallback(() => {
+diff --git a/node_modules/tldraw/src/lib/shapes/shared/HyperlinkButton.tsx b/node_modules/tldraw/src/lib/shapes/shared/HyperlinkButton.tsx
+index ea257dd..e72460f 100644
+--- a/node_modules/tldraw/src/lib/shapes/shared/HyperlinkButton.tsx
++++ b/node_modules/tldraw/src/lib/shapes/shared/HyperlinkButton.tsx
+@@ -1,4 +1,4 @@
+-import { useEditor } from '@tldraw/editor'
++import { openWindow, useEditor } from '@tldraw/editor'
+ import classNames from 'classnames'
+ import { PointerEventHandler, useCallback } from 'react'
+ import { useEfficientZoomThreshold } from './useEfficientZoomThreshold'
+@@ -15,6 +15,15 @@ export function HyperlinkButton({ url }: { url: string }) {
+ 		},
+ 		[editor]
+ 	)
++	const handlePointerUp = useCallback<PointerEventHandler>(
++		(e) => {
++			markAsHandledOnShiftKey(e)
++			if (editor.inputs.getShiftKey()) return
++			e.preventDefault()
++			openWindow(url, '_blank')
++		},
++		[editor, markAsHandledOnShiftKey, url]
++	)
+ 	return (
+ 		<a
+ 			className={classNames('tl-hyperlink-button', {
+@@ -24,7 +33,7 @@ export function HyperlinkButton({ url }: { url: string }) {
+ 			target="_blank"
+ 			rel="noopener noreferrer"
+ 			onPointerDown={markAsHandledOnShiftKey}
+-			onPointerUp={markAsHandledOnShiftKey}
++			onPointerUp={handlePointerUp}
+ 			title={url}
+ 			draggable={false}
+ 		>
+diff --git a/node_modules/tldraw/src/lib/ui/components/EditLinkDialog.tsx b/node_modules/tldraw/src/lib/ui/components/EditLinkDialog.tsx
+index 13395ec..0014f31 100644
+--- a/node_modules/tldraw/src/lib/ui/components/EditLinkDialog.tsx
++++ b/node_modules/tldraw/src/lib/ui/components/EditLinkDialog.tsx
+@@ -17,6 +17,10 @@ import { TldrawUiInput } from './primitives/TldrawUiInput'
+ // A url can either be invalid, or valid with a protocol, or valid without a protocol.
+ // For example, "aol.com" would be valid with a protocol ()
+ function validateUrl(url: string) {
++	const withoutHttpsPrefix = url.replace(/^https?:\/\/(?=obsidian:\/\/)/i, '')
++	if (/^obsidian:\/\//i.test(withoutHttpsPrefix)) {
++		return { isValid: true, hasProtocol: true }
++	}
+ 	if (T.linkUrl.isValid(url)) {
+ 		return { isValid: true, hasProtocol: true }
+ 	}
+@@ -83,7 +87,9 @@ export const EditLinkDialogInner = track(function EditLinkDialogInner({
+ 
+ 	const handleChange = useCallback((rawValue: string) => {
+ 		// Just auto-correct double https:// from a bad paste.
+-		const fixedRawValue = rawValue.replace(/https?:\/\/(https?:\/\/)/, '$1')
++		const fixedRawValue = rawValue
++			.replace(/https?:\/\/(https?:\/\/)/, '$1')
++			.replace(/^https?:\/\/(?=obsidian:\/\/)/i, '')
+ 		setUrlInputState(getUrlInputState(fixedRawValue))
+ 	}, [])
+ 

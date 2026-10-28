@@ -1,2 +1,2 @@
 export const TLDRAW_LICENSE_KEY =
-	'tldraw-tldraw-2027-08-12/WyI5N2lFVC1WTiIsWyJeYXBwOi8vb2JzaWRpYW5cXC5tZChbOi9dfCQpIl0sNDEsIjIwMjctMDgtMTIiXQ.00JZlr2ebqjPfAmvg3cAq4yDUX6bYheyzH5w3wdCKA0gtptldg/bvEj0hboLD6rtAXwD/zgOicTHPhlXqmWXRw'
+	'tldraw-obsidian-2027-08-12/WyJ3c0I5MmtjViIsWyIqIl0sMjY1LCIyMDI3LTA4LTEyIl0.t2U+VLrPKH3niHhVpjUS8pw/8Gg+BdIgNXlcTgx7gJ+tXoMZs/tGHH0+hQfkH9vPnrhHVZ5uzrjHPRwk+gvveA'
