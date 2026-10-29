@@ -7,7 +7,6 @@ import {
 	TldrawImageSnapshotView,
 } from 'src/plugin/app/components/TldrawImageSnapshotView'
 import { TldrawInObsidianPluginProvider } from 'src/plugin/app/contexts/plugin'
-import { logClass } from 'src/utils/logging'
 
 /**
  * A {@linkcode Component} that contains tldraw view content.
@@ -27,12 +26,10 @@ export default class TldrawViewComponent extends Component {
 	}
 
 	onload(): void {
-		if (TLDRAW_COMPONENT_LOGGING) logClass(TldrawViewComponent, 'onload', this)
 		this.#setRoot(createRoot(this.containerEl))
 	}
 
 	onunload(): void {
-		if (TLDRAW_COMPONENT_LOGGING) logClass(TldrawViewComponent, 'onunload', this)
 		this.#setRoot(undefined)
 		this.containerEl.removeAttribute(TldrawViewComponent.readyAttribute)
 	}

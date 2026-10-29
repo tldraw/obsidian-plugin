@@ -1,7 +1,6 @@
 import { BlockCache } from 'obsidian'
 import { Notifier } from 'src/lib/notifier'
 import { createTrigger } from 'src/lib/trigger'
-import { LOGGING_ENABLED } from 'src/utils/logging'
 
 interface BaseDocumentMessage<T extends string = string> {
 	type: T
@@ -93,12 +92,6 @@ class BlockRefErrors {
 
 		if (!this.#isSameAssetError(prev, next)) {
 			shouldNotify = true
-		} else {
-			if (LOGGING_ENABLED)
-				console.debug('Same asset error; skipping notifying', {
-					a: prev,
-					b: next,
-				})
 		}
 
 		blockRefState.asset = next

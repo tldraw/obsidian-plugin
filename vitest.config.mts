@@ -19,8 +19,6 @@ const TLDRAW_VERSION = (() => {
 
 export default defineConfig({
 	define: {
-		TLDRAW_COMPONENT_LOGGING: 'false',
-		MARKDOWN_POST_PROCESSING_LOGGING: 'false',
 		TLDRAW_VERSION: JSON.stringify(TLDRAW_VERSION),
 	},
 	resolve: {

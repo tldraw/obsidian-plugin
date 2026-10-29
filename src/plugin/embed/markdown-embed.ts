@@ -1,7 +1,6 @@
 import { getCmViewWidget } from 'src/obsidian/helpers/cm-view'
 import { parseEmbedValues, updateEmbed, updateEmbedBounds } from 'src/plugin/embed/embeds'
 import toPageId from 'src/tldraw/helpers/string-to-page-id'
-import { logClass } from 'src/utils/logging'
 import { BoxLike, TLDeepLink } from 'tldraw'
 
 interface WorkspaceLeafIsShownCallback {
@@ -36,7 +35,6 @@ export class MarkdownEmbed {
 		}
 		return {
 			updateBounds: (page: string, bounds: BoxLike | undefined) => {
-				logClass(MarkdownEmbed, 'getUpdater', 'updateBounds', { page, bounds })
 				updateEmbedBounds(widget, { page, bounds }, widget.editor.editor)
 			},
 			updateSize: (size: { width: number; height: number }) =>

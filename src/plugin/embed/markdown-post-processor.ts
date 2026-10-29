@@ -1,6 +1,5 @@
 import { MarkdownPostProcessorContext, TFile } from 'obsidian'
 import TldrawPlugin from 'src/plugin/TldrawPlugin'
-import { ConsoleLogParams, logFn } from 'src/utils/logging'
 import { createEmbedTldraw } from 'src/plugin/embed/markdown-render-child'
 
 /**
@@ -15,9 +14,6 @@ export async function markdownPostProcessor(
 	element: HTMLElement,
 	context: MarkdownPostProcessorContext
 ) {
-	const log = (...args: ConsoleLogParams) => logFn(markdownPostProcessor, args[0], ...args.slice(1))
-	if (MARKDOWN_POST_PROCESSING_LOGGING) log()
-
 	// Inspired by: https://github.com/zsviczian/obsidian-excalidraw-plugin/blob/94fbac38bfc5036187a81c7883c03830a622bc1d/src/MarkdownPostProcessor.ts#L575
 
 	const file = plugin.app.vault.getAbstractFileByPath(context.sourcePath)
@@ -69,20 +65,12 @@ export async function markdownPostProcessor(
 		const codeblock = element.querySelector('code.language-json')
 
 		if (!codeblock) {
-			// log(`not tldraw json code block`);
-			// log('element', internalEmbedDiv);
-			// log('element', element);
-			// log('context', context);
 			if (element.parentElement === containerEl) {
 				containerEl.removeChild(element)
 			}
 			return
 		}
 
-		if (MARKDOWN_POST_PROCESSING_LOGGING) log('tldraw json code block')
-		if (MARKDOWN_POST_PROCESSING_LOGGING) log('element', internalEmbedDiv)
-		if (MARKDOWN_POST_PROCESSING_LOGGING) log('element', element)
-		if (MARKDOWN_POST_PROCESSING_LOGGING) log('context', context)
 
 		internalEmbedDiv.empty()
 

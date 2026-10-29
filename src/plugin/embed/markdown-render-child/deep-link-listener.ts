@@ -4,7 +4,6 @@ import { InternalEmbedWidget } from 'src/obsidian/helpers/cm-view'
 import { updateEmbedLinkText } from 'src/plugin/embed/embeds'
 import { MarkdownEmbed } from 'src/plugin/embed/markdown-embed'
 import { TLDeepLinkOptions } from 'tldraw'
-import { LOGGING_ENABLED, logFn } from 'src/utils/logging'
 
 export default function deepLinkListener(
 	plugin: TldrawPlugin,
@@ -25,7 +24,7 @@ export default function deepLinkListener(
 			const cmViewWidget = embed.getEditorWidget()
 			const pageId = editor.getCurrentPageId()
 			const internalLinkToken = getInternalLinkToken(cmViewWidget)
-			const markdownLinkText = updateEmbedLinkText(
+			updateEmbedLinkText(
 				internalLinkToken ?? {
 					// TODO: Utilize the parent document source path to resolve to a possibly shorter link text
 					// text: plugin.app.metadataCache.fileToLinktext(tFile, parentDocumentSource)
@@ -40,13 +39,6 @@ export default function deepLinkListener(
 					},
 				}
 			)
-			if (LOGGING_ENABLED) {
-				logFn(deepLinkListener, 'Deep link listener:', {
-					url,
-					editor,
-					markdownLink: `![[${markdownLinkText}]]`,
-				})
-			}
 		},
 	}
 }

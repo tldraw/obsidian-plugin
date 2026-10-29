@@ -17,7 +17,6 @@ export function migrateIfNecessary(
 	currentPluginVersion: string,
 	tldata: TLData
 ): TLExistingDataDocument {
-	const currAppVersion = TLDRAW_VERSION
 	const currFileVersion = tldata.meta['tldraw-version']
 
 	let tldataRes: undefined | TLDataMaybeSerializedStore
@@ -27,9 +26,6 @@ export function migrateIfNecessary(
 			store: tLDataToTLStore(tldata),
 		}
 	} else {
-		console.debug(
-			`Tldraw migration:\n\tCurrent file version: ${currFileVersion}\n\tCurrent app version: ${currAppVersion}`
-		)
 		tldataRes = {
 			raw: migrationOld(tldata.raw),
 		}

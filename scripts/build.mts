@@ -44,14 +44,15 @@ const context = await createEsbuildObsidianContext({
 		logLevel: 'info',
 		sourcemap: prod ? false : 'inline',
 		treeShaking: true,
+		// Whitespace and syntax only: the bundle stays under Obsidian Sync's 5 MB limit, but names stay readable.
+		minifyWhitespace: prod,
+		minifySyntax: prod,
 		loader: {
 			'.js': 'jsx',
 		},
 		outdir,
 		define: {
 			'process.env.NODE_ENV': JSON.stringify(prod ? 'production' : 'development'),
-			TLDRAW_COMPONENT_LOGGING: `${!prod}`,
-			MARKDOWN_POST_PROCESSING_LOGGING: `${!prod}`,
 			TLDRAW_VERSION: `"${TLDRAW_VERSION}"`,
 			// Workaround for import.meta in CommonJS builds
 			'import.meta': JSON.stringify({

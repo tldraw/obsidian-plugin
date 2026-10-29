@@ -9,7 +9,6 @@ import toPageId from 'src/tldraw/helpers/string-to-page-id'
 import BoundsSelectorTool, {
 	BoundsSelectorIndicatorOverlayUtil,
 } from 'src/tldraw/tools/bounds-selector-tool'
-import { logClass } from 'src/utils/logging'
 import { isObsidianThemeDark } from 'src/obsidian/helpers/theme'
 import { BoxLike, createDeepLinkString, Editor, TLDeepLink, TLPageId } from 'tldraw'
 import { showEmbedContextMenu } from '../show-embed-context-menu'
@@ -314,8 +313,6 @@ export class TldrawMarkdownRenderChild extends MarkdownRenderChild {
 		showBg: boolean
 		page?: string
 	}) {
-		if (TLDRAW_COMPONENT_LOGGING)
-			logClass(TldrawMarkdownRenderChild, 'updateEmbedValues', { bounds, imageSize })
 		const { options: currOptions } = this.#previewImage
 		if (
 			imageSize.height !== this.#previewImage.size.height ||
@@ -362,7 +359,6 @@ export class TldrawMarkdownRenderChild extends MarkdownRenderChild {
 	}
 
 	updateBounds(bounds?: BoxLike) {
-		if (TLDRAW_COMPONENT_LOGGING) logClass(TldrawMarkdownRenderChild, 'updateBounds')
 		this.#previewImage.setOptions({
 			...this.#previewImage.options,
 			bounds,
@@ -439,22 +435,12 @@ export class TldrawMarkdownRenderChild extends MarkdownRenderChild {
 	}
 
 	renderRoot() {
-		if (TLDRAW_COMPONENT_LOGGING)
-			logClass(TldrawMarkdownRenderChild, 'renderRoot', {
-				containerEl: this.containerEl,
-				parentEl: this.containerEl.parentElement,
-			})
 		const container = (this.#viewContentEl ??= this.#createViewContentEl())
 		this.#previewImage.observePreviewImage(container, (rect) => {
 			this.#setPlaceHolderSize(rect)
 		})
 
 		const component = (this.#viewComponent ??= (() => {
-			if (TLDRAW_COMPONENT_LOGGING)
-				logClass(TldrawMarkdownRenderChild, 'renderRoot', 'component init', {
-					containerEl: this.containerEl,
-					parentEl: this.containerEl.parentElement,
-				})
 			const viewComponent = new TldrawViewComponent(container)
 			this.addChild(viewComponent)
 			this.register(() => (this.#viewComponent = undefined))
@@ -463,11 +449,6 @@ export class TldrawMarkdownRenderChild extends MarkdownRenderChild {
 
 		// Wait for the component to be ready before rendering
 		window.setTimeout(() => {
-			if (TLDRAW_COMPONENT_LOGGING)
-				logClass(TldrawMarkdownRenderChild, 'renderRoot', 'timeout', {
-					containerEl: this.containerEl,
-					parentEl: this.containerEl.parentElement,
-				})
 			switch (this.#viewMode) {
 				case 'image':
 					component.renderImage(this.#snapshotPreviewStore)
@@ -500,11 +481,6 @@ export class TldrawMarkdownRenderChild extends MarkdownRenderChild {
 	}
 
 	async loadRoot() {
-		if (TLDRAW_COMPONENT_LOGGING)
-			logClass(TldrawMarkdownRenderChild, 'loadRoot', this, {
-				containerEl: this.containerEl,
-				parentEl: this.containerEl.parentElement,
-			})
 		this.#updateHasShape()
 		await this.#setUpObservers()
 		await this.lazyLoadStoreInstance()
@@ -512,7 +488,6 @@ export class TldrawMarkdownRenderChild extends MarkdownRenderChild {
 	}
 
 	unloadRoot() {
-		if (TLDRAW_COMPONENT_LOGGING) logClass(TldrawMarkdownRenderChild, 'unloadRoot', this)
 		this.#previewImage.clearRefreshTimeout()
 		this.#previewImage.observePreviewImageDisconnect()
 		this.#setPlaceHolderSize()
@@ -539,31 +514,12 @@ export class TldrawMarkdownRenderChild extends MarkdownRenderChild {
 	}
 
 	async #setUpObservers() {
-		if (TLDRAW_COMPONENT_LOGGING)
-			logClass(TldrawMarkdownRenderChild, this.#setUpObservers, this, 'before resolve', {
-				containerEl: this.containerEl,
-				parentEl: this.containerEl.parentElement,
-			})
 		// Quick hack to ensure the parent element is available.
 		await Promise.resolve()
-		if (TLDRAW_COMPONENT_LOGGING)
-			logClass(TldrawMarkdownRenderChild, this.#setUpObservers, this, 'after resolve', {
-				containerEl: this.containerEl,
-				parentEl: this.containerEl.parentElement,
-			})
 
 		this.#workspaceLeafObserverDisconnect?.()
 		const workspaceLeafObserverDisconnect = (this.#workspaceLeafObserverDisconnect =
 			this.embed.observeWorkspaceLeafIsShown((isShown) => {
-				if (TLDRAW_COMPONENT_LOGGING)
-					logClass(
-						TldrawMarkdownRenderChild,
-						this.#setUpObservers,
-						'workspace leaf isShown observer',
-						{
-							isShown,
-						}
-					)
 				if (!isShown) return
 				const _deferrables = [...this.#workspaceLeafDeferrables]
 				this.#workspaceLeafDeferrables.clear()
@@ -577,10 +533,6 @@ export class TldrawMarkdownRenderChild extends MarkdownRenderChild {
 		const embedValuesObserverDisconnect = (this.#embedValuesObserverDisconnect =
 			this.embed.observeEmbedValues(
 				(values) => {
-					if (TLDRAW_COMPONENT_LOGGING)
-						logClass(TldrawMarkdownRenderChild, this.#setUpObservers, 'embed values observer', {
-							values,
-						})
 					this.updateEmbedValues(values)
 				},
 				() => this.plugin.settingsManager.settings.embeds.showBg

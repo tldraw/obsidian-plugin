@@ -8,7 +8,6 @@ import React, {
 	useSyncExternalStore,
 } from 'react'
 import { ImageViewModeOptions } from 'src/plugin/embed/TldrawAppEmbedViewController'
-import { logFn } from 'src/utils/logging'
 import { Box, TldrawImage } from 'tldraw'
 
 export type TldrawImageSnapshot = ComponentProps<typeof TldrawImage>['snapshot']
@@ -128,12 +127,6 @@ function TldrawImageContextProviders({
 
 	const tldrawImageContextValue = useMemo((): ContextType<typeof TldrawImageContext> => {
 		const { bounds, padding, ...rest } = previewOptions
-		if (TLDRAW_COMPONENT_LOGGING)
-			logFn(TldrawImageContextProviders, {
-				bounds,
-				box: !bounds ? undefined : Box.From(bounds),
-				padding,
-			})
 		return {
 			props: {
 				bounds: bounds === undefined ? undefined : Box.From(bounds),

@@ -5,7 +5,7 @@
 	"minAppVersion": "1.10.0",
 	"description": "Create whiteboards, diagrams, and drawings with the official tldraw plugin.",
 	"author": "tldraw, Jonathan Mendez, Sam Alhaqab",
-	"authorUrl": "https://github.com/tldraw/obsidian-plugin",
+	"authorUrl": "https://github.com/tldraw",
 	"fundingUrl": "https://github.com/sponsors/jon-dez",
 	"isDesktopOnly": false
 }

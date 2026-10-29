@@ -1,0 +1,89 @@
+diff --git a/node_modules/react-dom/cjs/react-dom-client.production.js b/node_modules/react-dom/cjs/react-dom-client.production.js
+index 9c66e78..650270e 100644
+--- a/node_modules/react-dom/cjs/react-dom-client.production.js
++++ b/node_modules/react-dom/cjs/react-dom-client.production.js
+@@ -17117,55 +17117,9 @@ function preinitStyle(href, precedence, options) {
+ }
+ function preinitScript(src, options) {
+   previousDispatcher.X(src, options);
+-  var ownerDocument = globalDocument;
+-  if (ownerDocument && src) {
+-    var scripts = getResourcesFromRoot(ownerDocument).hoistableScripts,
+-      key = getScriptKey(src),
+-      resource = scripts.get(key);
+-    resource ||
+-      ((resource = ownerDocument.querySelector(getScriptSelectorFromKey(key))),
+-      resource ||
+-        ((src = assign({ src: src, async: !0 }, options)),
+-        (options = preloadPropsMap.get(key)) &&
+-          adoptPreloadPropsForScript(src, options),
+-        (resource = ownerDocument.createElement("script")),
+-        markNodeAsHoistable(resource),
+-        setInitialProperties(resource, "link", src),
+-        ownerDocument.head.appendChild(resource)),
+-      (resource = {
+-        type: "script",
+-        instance: resource,
+-        count: 1,
+-        state: null
+-      }),
+-      scripts.set(key, resource));
+-  }
+ }
+ function preinitModuleScript(src, options) {
+   previousDispatcher.M(src, options);
+-  var ownerDocument = globalDocument;
+-  if (ownerDocument && src) {
+-    var scripts = getResourcesFromRoot(ownerDocument).hoistableScripts,
+-      key = getScriptKey(src),
+-      resource = scripts.get(key);
+-    resource ||
+-      ((resource = ownerDocument.querySelector(getScriptSelectorFromKey(key))),
+-      resource ||
+-        ((src = assign({ src: src, async: !0, type: "module" }, options)),
+-        (options = preloadPropsMap.get(key)) &&
+-          adoptPreloadPropsForScript(src, options),
+-        (resource = ownerDocument.createElement("script")),
+-        markNodeAsHoistable(resource),
+-        setInitialProperties(resource, "link", src),
+-        ownerDocument.head.appendChild(resource)),
+-      (resource = {
+-        type: "script",
+-        instance: resource,
+-        count: 1,
+-        state: null
+-      }),
+-      scripts.set(key, resource));
+-  }
+ }
+ function getResource(type, currentProps, pendingProps, currentResource) {
+   var JSCompiler_inline_result = (JSCompiler_inline_result =
+@@ -17377,27 +17331,7 @@ function acquireResource(hoistableRoot, resource, props) {
+         insertStylesheet(instance$274, props.precedence, hoistableRoot);
+         return (resource.instance = instance$274);
+       case "script":
+-        instance$274 = getScriptKey(props.src);
+-        if (
+-          (styleProps = hoistableRoot.querySelector(
+-            getScriptSelectorFromKey(instance$274)
+-          ))
+-        )
+-          return (
+-            (resource.instance = styleProps),
+-            markNodeAsHoistable(styleProps),
+-            styleProps
+-          );
+-        instance = props;
+-        if ((styleProps = preloadPropsMap.get(instance$274)))
+-          (instance = assign({}, props)),
+-            adoptPreloadPropsForScript(instance, styleProps);
+-        hoistableRoot = hoistableRoot.ownerDocument || hoistableRoot;
+-        styleProps = hoistableRoot.createElement("script");
+-        markNodeAsHoistable(styleProps);
+-        setInitialProperties(styleProps, "link", instance);
+-        hoistableRoot.head.appendChild(styleProps);
+-        return (resource.instance = styleProps);
++        throw Error("<script> resources are not supported in this build.");
+       case "void":
+         return null;
+       default:

@@ -30,8 +30,6 @@ export default defineConfig(() => {
     define: {
       'process.env.NODE_ENV': JSON.stringify(prod ? 'production' : 'development'),
       TLDRAW_VERSION,
-      MARKDOWN_POST_PROCESSING_LOGGING: `${!prod}`,
-      TLDRAW_COMPONENT_LOGGING: `${!prod}`,
     },
     resolve: {
       alias: {

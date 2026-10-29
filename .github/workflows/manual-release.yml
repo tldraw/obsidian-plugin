@@ -27,6 +27,8 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      id-token: write
+      attestations: write
 
     steps:
       - name: Check out plugin repository
@@ -203,6 +205,16 @@ jobs:
         if: steps.validate_tag.outputs.is_prerelease == 'true'
         run: |
           echo "ℹ️  Prerelease detected - skipping manifest.json and versions.json copy to plugin repository"
+
+      # Signs the files with the identity of this workflow run, so anyone can check where a
+      # downloaded file came from: `gh attestation verify main.js --repo tldraw/obsidian-plugin`.
+      - name: Attest release files
+        uses: actions/attest-build-provenance@v4
+        with:
+          subject-path: |
+            ${{ steps.make_release_files.outputs.package_out_dir }}/main.js
+            ${{ steps.make_release_files.outputs.package_out_dir }}/styles.css
+            ${{ steps.make_release_files.outputs.package_out_dir }}/manifest.json
 
       - name: Update release draft
         env:

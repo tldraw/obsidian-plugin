@@ -72,6 +72,8 @@ Configuration is in `wdio.conf.mts`. Timeouts, the Obsidian installer version an
 A release is made in two steps:
 
 1. Open a pull request that bumps the version. Set the new version in `package.json` (and `package-lock.json`), then run `npm run version`. That copies the version into `release/manifest.json` and adds it to `release/versions.json` with the plugin's `minAppVersion`.
-2. After it is merged, run the **Manual Release** workflow in GitHub Actions on `main`. It tags the version from `package.json`, builds the release files, publishes the release, and commits the updated `manifest.json` and `versions.json` back to `main`.
+2. After it is merged, run the **Manual Release** workflow in GitHub Actions on `main`. It tags the version from `package.json`, builds the release files and attests them, publishes the release, and commits the updated `manifest.json` and `versions.json` back to `main`.
 
 See [Creating a Release](./release/README.md) for what the packaging scripts do.
+
+To check a published release, run the **Verify Release** workflow from the Actions tab, or `gh workflow run verify-release.yml -f tag=<version>`. It rebuilds the tag from a clean checkout and checks that the release's `main.js`, `styles.css` and `manifest.json` are identical and carry a build attestation.

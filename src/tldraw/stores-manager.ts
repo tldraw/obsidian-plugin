@@ -1,4 +1,3 @@
-import { logFn, TLDRAW_STORES_MANAGER_LOGGING } from 'src/utils/logging'
 import { createTLStore, HistoryEntry, TLRecord, TLStore } from 'tldraw'
 
 export type StoreInstanceInfo<T> = {
@@ -142,14 +141,6 @@ export default class TldrawStoresManager<MainData, InstanceData> {
 			syncToMain: (sync) => {
 				if (sync) {
 					_unregisterSyncToMain ??= (function registerSyncToMain() {
-						if (TLDRAW_STORES_MANAGER_LOGGING)
-							logFn(
-								registerSyncToMain,
-								'Registering store instance synchronization to the main store:',
-								info.instanceId,
-								'->',
-								storeGroup.getSharedId()
-							)
 						const unregister = sourceStore.listen(
 							(entry) => storeGroup.apply(info.instanceId, entry),
 							{
@@ -159,14 +150,6 @@ export default class TldrawStoresManager<MainData, InstanceData> {
 							}
 						)
 						return function unregisterSyncToMain() {
-							if (TLDRAW_STORES_MANAGER_LOGGING)
-								logFn(
-									unregisterSyncToMain,
-									'Unregistering store instance synchronization to the main store.',
-									info.instanceId,
-									'->',
-									storeGroup.getSharedId()
-								)
 							unregister()
 						}
 					})()
@@ -227,6 +210,5 @@ function createSourceStore<Group extends StoreGroup>(storeGroup: Group): TLStore
 }
 
 function syncToStore(target: TLStore, entry: HistoryEntry<TLRecord>) {
-	// logFn(syncToStore, 'Entry type -', entry.source);
 	target.applyDiff(entry.changes)
 }

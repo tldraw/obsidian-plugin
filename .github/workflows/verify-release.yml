@@ -1,0 +1,92 @@
+name: Verify Release
+
+# Checks a published release on demand: the files must be what a clean build of the tagged source
+# produces, and must carry a build attestation. It publishes nothing and changes nothing.
+#
+#   gh workflow run verify-release.yml -f tag=1.35.0
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Release tag to verify, for example 1.35.0'
+        required: true
+        type: string
+
+env:
+  CI: 1
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  verify:
+    name: Verify Release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Check out the release tag
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ inputs.tag }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'npm'
+          cache-dependency-path: 'package-lock.json'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Rebuild the release files
+        run: npm run make-release-files -- --package-out-dir="$RUNNER_TEMP/rebuilt"
+
+      - name: Download the published release files
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ${{ inputs.tag }}
+        run: |
+          gh release download "$TAG" --dir "$RUNNER_TEMP/published" \
+            --pattern main.js --pattern styles.css --pattern manifest.json
+
+      - name: Compare and verify attestations
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ${{ inputs.tag }}
+        run: |
+          failed=0
+          {
+            echo "### Release $TAG"
+            echo
+            echo "| File | Matches a clean rebuild | Attested |"
+            echo "| --- | --- | --- |"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+          for file in main.js styles.css manifest.json; do
+            published="$RUNNER_TEMP/published/$file"
+            rebuilt="$RUNNER_TEMP/rebuilt/$file"
+
+            if cmp -s "$published" "$rebuilt"; then match="✅"; else match="❌"; failed=1; fi
+            if gh attestation verify "$published" --repo "$GITHUB_REPOSITORY"; then attested="✅"; else attested="❌"; failed=1; fi
+            echo "| $file | $match | $attested |" >> "$GITHUB_STEP_SUMMARY"
+          done
+
+          # Obsidian requires the tag and the version in the released manifest to be the same.
+          manifest_version="$(jq -r .version "$RUNNER_TEMP/published/manifest.json")"
+          if [ "$manifest_version" != "$TAG" ]; then
+            echo "❌ manifest.json says $manifest_version but the tag is $TAG"
+            echo
+            echo "manifest.json says \`$manifest_version\`, expected \`$TAG\`." >> "$GITHUB_STEP_SUMMARY"
+            failed=1
+          fi
+
+          if [ "$failed" -ne 0 ]; then
+            echo "❌ Release $TAG did not verify. See the summary above."
+            exit 1
+          fi
+          echo "✅ Release $TAG matches a clean rebuild and is attested"

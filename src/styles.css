@@ -106,10 +106,6 @@ div[data-type='tldraw-read-only'] .view-content.tldraw-view-content {
 	/* gets rid of the padding so the canvas can bleed against the edges */
 	padding: 0;
 
-	@container style(--status-bar-position: fixed) {
-		/* creates a space at the bottom so that the status bar isn't covering the canvas */
-		/* padding-bottom: calc(var(--size-4-1) * 2 + var(--status-bar-font-size) + 8px); */
-	}
 }
 
 .tlui-main-toolbar {
